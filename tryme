@@ -1,0 +1,11 @@
+# usage: source tryme
+
+export sbp_path="${1:-${PWD}}"
+script="${sbp_path}/sbp.bash"
+if [[ -d "${sbp_path}" && -f "${script}" ]]; then
+  source "${script}"
+else
+  echo "Please pass the path to brujoand/sbp checkout."
+fi
+unset script
+
