@@ -93,7 +93,7 @@ function generate_prompt() {
     elif [[ "$i" -lt "$prompt_right_end" ]]; then
       prompt_right="${prompt_right}${segment}"
     elif [[ "$i" -eq "$prompt_right_end" ]]; then
-      prompt_right="${prompt_right}${segment}${color_reset}\n"
+      prompt_right="${prompt_right}${segment}$(reset_colors)\n"
     else
       prompt_line_two="${prompt_line_two}${segment}"
     fi
@@ -108,7 +108,7 @@ function generate_prompt() {
   prompt_filler=$(sed "s/_filler_/ ${padding}  /" <<< "$prompt_filler")
 
   # Print the prompt and reset colors
-  printf '%s' "${prompt_left}${prompt_filler}${prompt_right}${prompt_line_two}${color_reset}"
+  printf '%s' "${prompt_left}${prompt_filler}${prompt_right}${prompt_line_two}$(reset_colors)"
 }
 
 generate_prompt "$@"

@@ -27,6 +27,10 @@ function print_fg_color() {
   printf '%s' "${fg_escaped}"
 }
 
+function reset_colors() {
+  print_colorized  "$settings_default_fg" "$settings_default_bg"
+}
+
 function pretty_print_segment() {
   local segment_color_fg="$1"
   local segment_color_bg="$2"
@@ -64,5 +68,6 @@ function strip_escaped_colors() {
 export -f pretty_print_segment
 export -f pretty_print_seperator
 export -f print_colorized
+export -f reset_colors
 export -f print_bg_color
 export -f print_fg_color

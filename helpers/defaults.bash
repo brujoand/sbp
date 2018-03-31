@@ -9,7 +9,8 @@ settings_color_lgrey=250
 settings_color_green=148
 settings_color_dgreen=22
 settings_color_empty=-1
-color_reset='\[\e[00m\]'
+settings_default_bg=8
+settings_default_fg=241
 
 # Comment the follwing 4 lines to disable powerline characters
   settings_char_segment=''
