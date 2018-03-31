@@ -52,34 +52,21 @@ function generate_prompt() {
 
   local seperator_direction=''
 
-  if [[ "$settings_concurrency_enabled" == true ]]; then
-    # Concurrent evaluation of promt segments
-    tempdir=$(mktemp -d) && trap 'rm -rf "$tempdir"' EXIT;
-    for i in "${!prompt_segments[@]}"; do
-      execute_segment_script "${prompt_segments[i]}" "$command_exit_code" "$command_time" "$seperator_direction" > "$tempdir/$i" & pids[i]=$!
-      if [[ "$i" -lt "$prompt_left_end" ]]; then
-        seperator_direction='right'
-      elif [[ "$i" -eq "$prompt_left_end" ]]; then
-        seperator_direction='left'
-      elif [[ "$i" -eq "$prompt_right_end" ]]; then
-        seperator_direction=''
-      fi
-    done
-    for i in "${!pids[@]}"; do
-      wait "${pids[i]}" && prompt_segments[i]=$(<"$tempdir/$i");
-    done
-  else
-    for i in "${!prompt_segments[@]}"; do
-      prompt_segments["$i"]=$(execute_segment_script "${prompt_segments[i]}" "$command_exit_code" "$command_time" "$seperator_direction")
-      if [[ "$i" -lt "$prompt_left_end" ]]; then
-        seperator_direction='right'
-      elif [[ "$i" -eq "$prompt_left_end" ]]; then
-        seperator_direction='left'
-      elif [[ "$i" -eq "$prompt_right_end" ]]; then
-        seperator_direction=''
-      fi
-    done
-  fi
+  # Concurrent evaluation of promt segments
+  tempdir=$(mktemp -d) && trap 'rm -rf "$tempdir"' EXIT;
+  for i in "${!prompt_segments[@]}"; do
+    execute_segment_script "${prompt_segments[i]}" "$command_exit_code" "$command_time" "$seperator_direction" > "$tempdir/$i" & pids[i]=$!
+    if [[ "$i" -lt "$prompt_left_end" ]]; then
+      seperator_direction='right'
+    elif [[ "$i" -eq "$prompt_left_end" ]]; then
+      seperator_direction='left'
+    elif [[ "$i" -eq "$prompt_right_end" ]]; then
+      seperator_direction=''
+    fi
+  done
+  for i in "${!pids[@]}"; do
+    wait "${pids[i]}" && prompt_segments[i]=$(<"$tempdir/$i");
+  done
 
   # Format the segments
   for i in "${!prompt_segments[@]}"; do
