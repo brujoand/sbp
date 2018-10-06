@@ -87,7 +87,7 @@ function sbp() {
 function _sbp() {
   local cur words
   _get_comp_words_by_ref cur
-  words=('segments' 'hooks' 'colors' 'reload' 'help')
+  words=('segments' 'hooks' 'colors' 'reload' 'help' 'config')
   COMPREPLY=( $( compgen -W "${words[*]}" -- "$cur") )
 }
 
