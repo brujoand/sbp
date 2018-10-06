@@ -13,9 +13,9 @@ If something seems wrong, lacking or bad in some way; feel free to rant, review 
 ## Requirements
 If you want the fancy pointy segment seperators, you need the powerline fonts _installed_ and _enabled_. Both.
 You can get them [here](https://github.com/powerline/fonts).
-Then run the install.sh script. Now the hard_to_remember part. Change the settings of your terminal emulator. 
+Then run the install.sh script. Now the hard_to_remember part. Change the settings of your terminal emulator.
 Something like "Settings" and then "Fonts" will probably be the right place.
-All done? 
+All done?
 Great :)
 
 ## Installing
@@ -35,6 +35,7 @@ segments  - List all available segments
 hooks     - List all available hooks
 colors    - List all defined colors
 reload    - Reload SBP and user settings
+config    - Open the sbp config file in your $EDITOR
 ```
 
 ## Features
@@ -47,7 +48,7 @@ Segments are the parts that make up the prompt. So you can add/remove/swap etc.
 - Path; shows a if current path is read only
 - Exit; shows the value of the last exitcode
 - Filler; fills the space between the left and right part of the prompt, if you like that kind of thing
-- Command; shows the time spent on the last command, and turns red if it failed 
+- Command; shows the time spent on the last command, and turns red if it failed
 - Timestamp; shows a timestamp
 
 ### Hooks

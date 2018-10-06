@@ -1,6 +1,7 @@
 language: bash
 dist: trusty
 sudo: required
+email: false
 addons:
   apt:
     packages:
