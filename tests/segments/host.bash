@@ -1,5 +1,5 @@
 function pretty_print_segment() {
-  printf '%s' "${@}"
+  printf '%s' "$3"
 }
 
 export -f pretty_print_segment
