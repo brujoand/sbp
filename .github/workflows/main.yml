@@ -1,0 +1,9 @@
+name: A workflow for my Hello World file
+on: push
+jobs:
+  build:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: ./test-action
