@@ -20,7 +20,7 @@ function execute_segment_script() {
   local segment_script="${sbp_path}/segments/${segment}.bash"
 
   if [[ -x "$segment_script" ]]; then
-    "$segment_script" "$exit_code" "$time_start" "$segment_direction"
+    bash "$segment_script" "$exit_code" "$time_start" "$segment_direction"
   else
     >&2 echo "Could not execute $segment_script"
     >&2 echo "Make sure it exists, and is executable"
@@ -37,7 +37,7 @@ function generate_prompt() {
   for hook in "${settings_hooks[@]}"; do
     local hook_script="${sbp_path}/hooks/${hook}.bash"
     if [[ -x "$hook_script" ]]; then
-      "$hook_script" "$command_exit_code" "$command_time"
+      bash "$hook_script" "$command_exit_code" "$command_time"
     else
       >&2 echo "Could not execute $hook_script"
       >&2 echo "Make sure it exists, and is executable"
