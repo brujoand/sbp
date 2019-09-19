@@ -73,3 +73,6 @@ settings_timestamp_format="%H:%M:%S"
 settings_aws_color_bg=$settings_color_dgrey
 settings_aws_color_fg=$settings_color_dorange
 
+settings_openshift_color_bg=$settings_color_dgrey
+settings_openshift_color_fg=$settings_color_dorange
+settings_openshift_default_user="$USER"
