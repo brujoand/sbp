@@ -17,10 +17,11 @@ function execute_segment_script() {
   local exit_code=$2
   local time_start=$3
   local segment_direction=$4
+  local segment_max_length=$5
   local segment_script="${sbp_path}/segments/${segment}.bash"
 
   if [[ -x "$segment_script" ]]; then
-    bash "$segment_script" "$exit_code" "$time_start" "$segment_direction"
+    bash "$segment_script" "$exit_code" "$time_start" "$segment_direction" "$segment_max_length"
   else
     >&2 echo "Could not execute $segment_script"
     >&2 echo "Make sure it exists, and is executable"
@@ -51,13 +52,15 @@ function generate_prompt() {
   local prompt_left_end=$(( ${#settings_segments_left[@]} - 1 ))
   local prompt_right_end=$(( ${#settings_segments_right[@]} + prompt_left_end ))
   local prompt_segments=(${settings_segments_left[@]} ${settings_segments_right[@]} ${settings_segment_line_two[@]})
+  local number_of_top_segments=$(( ${#settings_segments_left[@]} + ${#settings_segments_right[@]} - 1))
+  local segment_max_length=$(( columns / number_of_top_segments ))
 
   local seperator_direction=''
 
   # Concurrent evaluation of promt segments
   tempdir=$(mktemp -d) && trap 'rm -rf "$tempdir"' EXIT;
   for i in "${!prompt_segments[@]}"; do
-    execute_segment_script "${prompt_segments[i]}" "$command_exit_code" "$command_time" "$seperator_direction" > "$tempdir/$i" & pids[i]=$!
+    execute_segment_script "${prompt_segments[i]}" "$command_exit_code" "$command_time" "$seperator_direction" "$segment_max_length" > "$tempdir/$i" & pids[i]=$!
     if [[ "$i" -lt "$prompt_left_end" ]]; then
       seperator_direction='right'
     elif [[ "$i" -eq "$prompt_left_end" && "$i" -ne "$prompt_right_end" ]]; then
