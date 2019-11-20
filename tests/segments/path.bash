@@ -1,5 +1,5 @@
 function pretty_print_segment() {
-  printf '%s' "${@}"
+  printf '%s' "$3"
 }
 
 export -f pretty_print_segment
@@ -9,7 +9,6 @@ function test_that_we_get_full_path() {
   local wdir=${PWD/$HOME/\~}
   local paths=${wdir//\//  }
   local clean_paths=$(echo "$paths" | perl -pe 's/^\s\s//')
-  export settings_path_max_length=50
-  result=$("${sbp_path}/segments/path.bash" 0 0)
+  result=$("${sbp_path}/segments/path.bash" 0 0 "right" 20)
   assert_equals " $clean_paths " "$result"
 }
