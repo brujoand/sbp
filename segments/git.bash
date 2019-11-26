@@ -1,6 +1,7 @@
 #! /usr/bin/env bash
 
 segment_direction=$3
+settings_git_max_length=$4
 
 path=${PWD}
 is_git=false
@@ -15,21 +16,43 @@ done
 [[ "$is_git" == "false" ]] && exit 0
 
 git_head=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-git_state=" $(git status --porcelain | sed -Ee 's/^(.M|M.|.R|R.) .*/\*/' -e 's/^(.A|A.) .*/\+/' -e 's/^(.D|D.) .*/\-/' | grep -oE '^(\*|\+|\?|\-)' | sort -u | tr -d '\n')"
-git_left_right=$(git rev-list --count --left-right '@{upstream}'...HEAD 2> /dev/null)
-git_left=$(sed -n -E 's/^([0-9]+).*[0-9]/\1/p' <<< "$git_left_right")
-git_right=$(sed -n -E 's/^[0-9]+.*([0-9])/\1/p' <<< "$git_left_right")
+if [[ $(( ${#git_head} + 6 )) -gt "$settings_git_max_length" ]]; then
+  git_head="${git_head:0:10}.."
+fi
+git_status="$(git status --porcelain)"
+git_status_additions=$(grep -Ec '^[ ]?A' <<< "${git_status}")
+git_status_modifications=$(grep -Ec '^[ ]?[MR]' <<< "${git_status}")
+git_status_deletions=$(grep -Ec '^[ ]?D' <<< "${git_status}")
+git_status_untracked=$(grep -Ec '^[ ]?\?' <<< "${git_status}")
 
-if [[ "$git_left" -gt 0 ]]; then
-  git_state="${git_state} <${git_left}"
-fi
-if [[ "$git_right" -gt 0 ]]; then
-  git_state="${git_state} >${git_right}"
+if [[ "$git_status_additions" -gt 0 ]]; then
+  git_state="${git_state}+${git_status_additions} "
 fi
 
-if [[ $(( ${#git_head} + ${#git_state} )) -gt "$settings_git_max_length" ]]; then
-  git_head_room=$(( settings_git_max_length - ${#git_state} - 2))
-  git_head="${git_head:0:$git_head_room}.."
+if [[ "$git_status_modifications" -gt 0 ]]; then
+  git_state="${git_state}~${git_status_modifications} "
 fi
-segment_value=" ${git_head}${git_state} "
+
+if [[ "$git_status_deletions" -gt 0 ]]; then
+  git_state="${git_state}-${git_status_deletions} "
+fi
+
+if [[ "$git_status_untracked" -gt 0 ]]; then
+  git_state="${git_state}?${git_status_untracked} "
+fi
+
+git_state="${git_state} ${git_head}"
+
+git_status_upstream="$(git rev-list --left-right "@{upstream}"...HEAD 2>/dev/null)"
+git_incoming_commits="$(grep -c '>' <<< "${git_status_upstream}")"
+git_outgoing_commits="$(grep -c '<' <<< "${git_status_upstream}")"
+
+if [[ "$git_incoming_commits" -gt 0 ]]; then
+  git_state="${git_state} ↓${git_incoming_commits}"
+fi
+if [[ "$git_outgoing_commits" -gt 0 ]]; then
+  git_state="${git_state} ↑${git_outgoing_commits}"
+fi
+
+segment_value=" ${git_state} "
 pretty_print_segment "$settings_git_color_fg" "$settings_git_color_bg" "${segment_value//  / }" "$segment_direction"
