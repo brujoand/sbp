@@ -1,7 +1,7 @@
 TMP_FOLDER="/tmp/bauta.$RANDOM"
 
 function pretty_print_segment() {
-  printf '%s' "${@}"
+  printf '%s' "${3}"
 }
 
 export -f pretty_print_segment
@@ -22,20 +22,12 @@ function cleanup() {
 }
 
 function test_that_we_get_master_branch() {
-  export settings_git_max_length=50
-  result=$("${sbp_path}/segments/git.bash" 0 0)
-  assert_equals ' master ' "$result"
+  result=$("${sbp_path}/segments/git.bash" 0 0 left 50)
+  assert_equals '  master ' "$result"
 }
 
 function test_that_we_see_dirty_dir() {
-  export settings_git_max_length=50
   touch "${TMP_FOLDER}/dirty"
-  result=$("${sbp_path}/segments/git.bash" 0 0)
-  assert_equals ' master ? ' "$result"
-}
-
-function test_that_we_abide_by_max_length() {
-  export settings_git_max_length=5
-  result=$("${sbp_path}/segments/git.bash" 0 0)
-  assert_length "$result" 7 # add to for the padding
+  result=$("${sbp_path}/segments/git.bash" 0 0 left 50)
+  assert_equals ' ?1  master ' "$result"
 }
