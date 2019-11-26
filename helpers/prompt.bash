@@ -5,6 +5,7 @@ source "${sbp_path}/helpers/formatting.bash"
 # shellcheck source=helpers/environment.bash
 source "${sbp_path}/helpers/environment.bash"
 
+
 function calculate_padding() {
   local string=$1
   local width=$2
