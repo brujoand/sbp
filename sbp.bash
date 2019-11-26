@@ -9,9 +9,9 @@ export sbp_path
 source "${sbp_path}/helpers/cli.bash"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  export date_cmd='gdate'
+  date_cmd='gdate'
 else
-  export date_cmd='date'
+  date_cmd='date'
 fi
 
 function _sbp_timer_start() {
@@ -24,9 +24,6 @@ function _sbp_timer_tick() {
   >&2 echo "${timer_spent}ms: $1"
   timer_start=$("$date_cmd" +'%s%3N')
 }
-
-export -f _sbp_timer_start
-export -f _sbp_timer_tick
 
 function _sbp_set_prompt {
   local command_exit_code=$?
