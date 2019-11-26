@@ -28,8 +28,13 @@ function _sbp_list_segments() {
     if printf '%s.bash\n' "${active_segments[@]}" | grep -qo "${segment_name}"; then
       status='enabled'
     fi
-    echo "${segment_name}: ${status}"
-  done | column -t -c ':'
+
+    _sbp_timer_start
+    (bash "$segment" 0 0 left 0 &>/dev/null)
+    duration=$(_sbp_timer_tick 2>&1 | tr -d ':')
+
+    echo "${segment_name}: ${status}" "$duration"
+  done | column -t -c " "
 }
 
 function _sbp_list_hooks() {
