@@ -29,26 +29,29 @@ function execute_segment_script() {
   fi
 }
 
-function generate_prompt() {
-  load_config
-  local columns=$1
-  local command_exit_code=$2
-  local command_time=$3
-
-  # Execute hooks
+function execute_prompt_hooks() {
   for hook in "${settings_hooks[@]}"; do
     local hook_script="${sbp_path}/hooks/${hook}.bash"
     if [[ -x "$hook_script" ]]; then
-      bash "$hook_script" "$command_exit_code" "$command_time"
+      bash "$hook_script" "$command_exit_code" "$command_time" &
     else
       >&2 echo "Could not execute $hook_script"
       >&2 echo "Make sure it exists, and is executable"
     fi
   done
 
+}
+
+function generate_prompt() {
+  load_config
+  local columns=$1
+  local command_exit_code=$2
+  local command_time=$3
+
+  execute_prompt_hooks "$command_exit_code" "$command_time"
+
   local prompt_left="\n"
-  local prompt_filler
-  local prompt_right
+  local prompt_filler prompt_right
   local prompt_line_two=
   local prompt_left_end=$(( ${#settings_segments_left[@]} - 1 ))
   local prompt_right_end=$(( ${#settings_segments_right[@]} + prompt_left_end ))
