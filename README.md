@@ -1,17 +1,20 @@
 # SBP - Simple Bash Prompt
 [![Build Status](https://travis-ci.org/brujoand/sbp.svg?branch=master)](https://travis-ci.org/brujoand/sbp)
 
+Breaking Change: The filler segment is no longer needed, and should be removed
+from the sbp.conf.
+
 Simple Bash Prompt (SBP) is a bash prompt, which was simple once.
 This started out as a pure ripoff from powerline-shell, which is great, but written in python.
 SBP is all bash, which makes it fast and fun.
 
-I've tried making the code as readable and extendable as possible.
+I've tried making the code as readable and extensible as possible.
 If something seems wrong, lacking or bad in some way; feel free to rant, review and create a pull request.
 
 ![Screenshot](https://raw.githubusercontent.com/brujoand/sbp/master/resources/timer.png)
 
 ## Requirements
-If you want the fancy pointy segment seperators, you need the powerline fonts _installed_ and _enabled_. Both.
+If you want the fancy pointy segment separators, you need the powerline fonts _installed_ and _enabled_. Both.
 You can get them [here](https://github.com/powerline/fonts).
 Then run the install.sh script. Now the hard_to_remember part. Change the settings of your terminal emulator.
 Something like "Settings" and then "Fonts" will probably be the right place.
@@ -36,6 +39,7 @@ hooks     - List all available hooks
 colors    - List all defined colors
 reload    - Reload SBP and user settings
 config    - Open the sbp config file in your $EDITOR
+debug     - Adds a timer to see how long it takes to render the prompt
 ```
 
 ## Features
@@ -54,10 +58,5 @@ Segments are the parts that make up the prompt. So you can add/remove/swap etc.
 ### Hooks
 Hooks will run once before each prompt is presented. They can also be enabled/disabled at will from the settings file.
 - Alert; will trigger an alert if the previous command took more than some value you specified in the settings
-- Timer; will time the previous command
-
-## FAQ (singular)
-Can I not use powerline fonts?
-  - Yes, just change the 'settings_char_*' settings.
 
 ![Screenshot](https://raw.githubusercontent.com/brujoand/sbp/master/resources/powerline-toggle.png)

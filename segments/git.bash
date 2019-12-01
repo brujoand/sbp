@@ -7,19 +7,18 @@ path=${PWD}
 is_git=false
 while [[ $path ]]; do
   if [[ -d "${path}/.git" ]]; then
-    is_git=true
+    git_folder="${path}/.git"
     break
   fi
   path=${path%/*}
 done
 
-[[ "$is_git" == "false" ]] && exit 0
+[[ -z "$git_folder" ]] && exit 0
+type git &>/dev/null || exit 0
 
 git_head=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-if [[ $(( ${#git_head} + 6 )) -gt "$settings_git_max_length" ]]; then
-  git_head="${git_head:0:10}.."
-fi
-git_status="$(git status --porcelain)"
+
+git_status="$(git status --porcelain 2>/dev/null)"
 git_status_additions=$(grep -Ec '^[ ]?A' <<< "${git_status}")
 git_status_modifications=$(grep -Ec '^[ ]?[MR]' <<< "${git_status}")
 git_status_deletions=$(grep -Ec '^[ ]?D' <<< "${git_status}")
@@ -39,6 +38,10 @@ fi
 
 if [[ "$git_status_untracked" -gt 0 ]]; then
   git_state="${git_state}?${git_status_untracked} "
+fi
+
+if [[ $(( ${#git_head} + ${#git_state} )) -gt "$settings_git_max_length" ]]; then
+  git_head="${git_head:0:10}.."
 fi
 
 git_state="${git_state} ${git_head}"

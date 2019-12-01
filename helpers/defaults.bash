@@ -29,7 +29,7 @@ settings_hooks=('alert')
 # Segments are generated bofere each prompt and can
 # be added, removed and reordered
 # Run 'sbp segments' to list all available segments
-settings_segments_left=('host' 'path' 'python_env' 'git' 'filler')
+settings_segments_left=('host' 'path' 'python_env' 'git' )
 settings_segments_right=('command' 'timestamp')
 settings_segment_line_two=('prompt_ready')
 
@@ -38,9 +38,6 @@ settings_command_color_fg=$settings_color_dgrey
 settings_command_color_fg_error=-$settings_color_lgrey
 settings_command_color_bg_error=$settings_color_red
 settings_command_color_bg=$settings_color_lgrey
-
-settings_filler_color_bg=$settings_color_empty
-settings_filler_color_fg=$settings_color_empty
 
 settings_git_color_bg=$settings_color_green
 settings_git_color_fg=$settings_color_dgrey
