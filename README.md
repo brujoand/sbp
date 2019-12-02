@@ -34,8 +34,8 @@ If all is well you can use the ```sbp``` command:
 Usage: sbp <command>
 
 Commands:
-segments  - List all available segments
-hooks     - List all available hooks
+segments  - List all available segments, their enabled status and time to execute
+hooks     - List all available hooks and enabled status
 colors    - List all defined colors
 reload    - Reload SBP and user settings
 config    - Open the sbp config file in your $EDITOR
@@ -54,9 +54,13 @@ Segments are the parts that make up the prompt. So you can add/remove/swap etc.
 - Filler; fills the space between the left and right part of the prompt, if you like that kind of thing
 - Command; shows the time spent on the last command, and turns red if it failed
 - Timestamp; shows a timestamp
+- Rescuetime: Shows Productivity score and logged time for the day. Requires the
+rescuetime hook to be enabled.
 
 ### Hooks
-Hooks will run once before each prompt is presented. They can also be enabled/disabled at will from the settings file.
+Hooks will be triggered asynchronously as a new prompt is generated. They can also be enabled/disabled at will from the settings file.
 - Alert; will trigger an alert if the previous command took more than some value you specified in the settings
+- Rescuetime; Will fetch the Productivity score and logged time for the day, to
+be use with the Rescuetime segment.
 
 ![Screenshot](https://raw.githubusercontent.com/brujoand/sbp/master/resources/powerline-toggle.png)

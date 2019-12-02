@@ -13,7 +13,6 @@ function _sbp_print_usage() {
   debug     - Toggle debug mode
   config    - Opens the config in $EDITOR
 EOF
-  return 1
 }
 
 function _sbp_load_config() {
@@ -65,7 +64,11 @@ function _sbp_reload() {
 }
 
 function _sbp_edit_config() {
-  $EDITOR "${HOME}/.config/sbp/sbp.conf"
+  if [[ -n "$EDITOR" ]]; then
+    $EDITOR "${HOME}/.config/sbp/sbp.conf"
+  else
+    log_error "No \$EDITOR set, unable to open config"
+  fi
 }
 
 function _sbp_toggle_debug() {
@@ -97,7 +100,7 @@ function sbp() {
       _sbp_toggle_debug
       ;;
     *)
-      _sbp_print_usage
+      _sbp_print_usage && return 1
       ;;
   esac
 }

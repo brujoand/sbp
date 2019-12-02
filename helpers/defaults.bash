@@ -26,7 +26,7 @@ color_reset='\[\e[00m\]'
 # Run 'sbp hooks' to list all available hooks
 settings_hooks=('alert')
 
-# Segments are generated bofere each prompt and can
+# Segments are generated before each prompt and can
 # be added, removed and reordered
 # Run 'sbp segments' to list all available segments
 settings_segments_left=('host' 'path' 'python_env' 'git' )
@@ -41,7 +41,6 @@ settings_command_color_bg=$settings_color_lgrey
 
 settings_git_color_bg=$settings_color_green
 settings_git_color_fg=$settings_color_dgrey
-settings_git_max_length=20
 
 settings_host_color_bg=$settings_color_dgrey
 settings_host_color_fg=$settings_color_lgrey
@@ -50,7 +49,6 @@ settings_path_color_bg=$settings_color_blue
 settings_path_color_fg=$settings_color_white
 settings_path_color_sep=$settings_color_grey
 settings_path_disable_sep=0
-settings_path_max_length=30
 
 settings_path_color_readonly_fg=$settings_color_white
 settings_path_color_readonly_bg=$settings_color_red
@@ -73,3 +71,7 @@ settings_aws_color_fg=$settings_color_dorange
 settings_openshift_color_bg=$settings_color_dgrey
 settings_openshift_color_fg=$settings_color_dorange
 settings_openshift_default_user="$USER"
+
+settings_rescuetime_bg=$settings_color_dgreen
+settings_rescuetime_fg=$settings_color_white
+settings_rescuetime_sep_fg=$settings_color_grey

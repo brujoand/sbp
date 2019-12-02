@@ -2,7 +2,7 @@
 
 function log_error() {
   local context="${BASH_SOURCE[1]}:${FUNCNAME[1]}"
-  >&2 echo "${context}: ${*}"
+  >&2 printf '%s: \e[38;5;196m%s\e[00m\n' "${context}" "${*}"
 }
 
 function load_config() {
