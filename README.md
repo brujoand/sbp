@@ -61,6 +61,6 @@ rescuetime hook to be enabled.
 Hooks will be triggered asynchronously as a new prompt is generated. They can also be enabled/disabled at will from the settings file.
 - Alert; will trigger an alert if the previous command took more than some value you specified in the settings
 - Rescuetime; Will fetch the Productivity score and logged time for the day, to
-be use with the Rescuetime segment.
+be used with the Rescuetime segment. Set RESCUETIME_API_KEY to use this hook.
 
 ![Screenshot](https://raw.githubusercontent.com/brujoand/sbp/master/resources/powerline-toggle.png)
