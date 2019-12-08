@@ -1,15 +1,7 @@
 # Global settings not related to segments
-settings_color_blue=31
-settings_color_red=196
-settings_color_white=15
-settings_color_grey=244
-settings_color_dgrey=238
-settings_color_dorange=172
-settings_color_lgrey=250
-settings_color_green=148
-settings_color_dgreen=22
+source "${sbp_path}/themes/default.bash"
 settings_color_empty=-1
-color_reset='\[\e[00m\]'
+color_reset='\[\e[0m\]'
 
 # Comment the follwing 4 lines to disable powerline characters
   settings_char_segment=''
@@ -34,44 +26,44 @@ settings_segments_right=('command' 'timestamp')
 settings_segment_line_two=('prompt_ready')
 
 # Default segment configuration
-settings_command_color_fg=$settings_color_dgrey
-settings_command_color_fg_error=-$settings_color_lgrey
-settings_command_color_bg_error=$settings_color_red
-settings_command_color_bg=$settings_color_lgrey
+settings_command_color_fg=$color08
+settings_command_color_fg_error=$color03
+settings_command_color_bg_error=$color1
+settings_command_color_bg=$color03
 
-settings_git_color_bg=$settings_color_green
-settings_git_color_fg=$settings_color_dgrey
+settings_git_color_bg=$color10
+settings_git_color_fg=$color08
 
-settings_host_color_bg=$settings_color_dgrey
-settings_host_color_fg=$settings_color_lgrey
+settings_host_color_bg=$color08
+settings_host_color_fg=$color03
 
-settings_path_color_bg=$settings_color_blue
-settings_path_color_fg=$settings_color_white
-settings_path_color_sep=$settings_color_grey
+settings_path_color_bg=$color14
+settings_path_color_fg=$color15
+settings_path_color_sep=$color07
 settings_path_disable_sep=0
 
-settings_path_color_readonly_fg=$settings_color_white
-settings_path_color_readonly_bg=$settings_color_red
+settings_path_color_readonly_fg=$color15
+settings_path_color_readonly_bg=$color1
 
-settings_prompt_ready_color=238
+settings_prompt_ready_color=$color03
 
-settings_python_virtual_env_bg=$settings_color_dgreen
-settings_python_virtual_env_fg=$settings_color_white
+settings_python_virtual_env_bg=$color02
+settings_python_virtual_env_fg=$color15
 
-settings_return_code_bg=$settings_color_red
-settings_return_code_fg=$settings_color_white
+settings_return_code_bg=$color1
+settings_return_code_fg=$color15
 
-settings_timestamp_color_bg=$settings_color_dgrey
-settings_timestamp_color_fg=$settings_color_lgrey
+settings_timestamp_color_bg=$color08
+settings_timestamp_color_fg=$color03
 settings_timestamp_format="%H:%M:%S"
 
-settings_aws_color_bg=$settings_color_dgrey
-settings_aws_color_fg=$settings_color_dorange
+settings_aws_color_bg=$color08
+settings_aws_color_fg=$color09
 
-settings_openshift_color_bg=$settings_color_dgrey
-settings_openshift_color_fg=$settings_color_dorange
+settings_openshift_color_bg=$color08
+settings_openshift_color_fg=$color09
 settings_openshift_default_user="$USER"
 
-settings_rescuetime_bg=$settings_color_dgreen
-settings_rescuetime_fg=$settings_color_white
-settings_rescuetime_sep_fg=$settings_color_grey
+settings_rescuetime_bg=$color02
+settings_rescuetime_fg=$color15
+settings_rescuetime_sep_fg=$color07
