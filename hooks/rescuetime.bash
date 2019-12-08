@@ -25,10 +25,16 @@ if [[ -z $RESCUETIME_API_KEY ]]; then
 fi
 
 endpoint="https://www.rescuetime.com/anapi/data?key=$RESCUETIME_API_KEY&format=csv&rs=day&rk=productivity"
-result=$(curl -s "$endpoint" | tail -n 5)
+result=$(curl -s "$endpoint" | grep -v '^Rank')
 exit_code=$?
 if [[ "$exit_code" -gt 0 ]]; then
   log_error "Could not reach rescuetime endpoint"
+  exit 0
+fi
+
+if [[ -z "$result" ]]; then
+  # No data, so no logging of time today
+  rm -f "$cache_file"
   exit 0
 fi
 

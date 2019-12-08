@@ -8,8 +8,7 @@ if [[ -f "$cache_file" ]]; then
   pulse="${cache/;*}"
   time="${cache/*;}"
 else
-  pulse="0%"
-  time="0h:0m"
+  exit 0
 fi
 
 if [[ "$segment_direction" = 'right' ]]; then
