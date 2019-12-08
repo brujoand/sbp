@@ -36,8 +36,8 @@ function _sbp_set_prompt {
   last_history=$(HISTTIMEFORMAT='%s ' history 1)
 
   if [[ -z "$_sbp_previous_history" || "$last_history" == "$_sbp_previous_history" ]]; then
-    command_exit_code=-1
-    command_time=-1
+    command_exit_code=
+    command_time=
   else
     command_ended=$(date +'%s')
     command_started=$(awk '{print $2}' <<< "$last_history")

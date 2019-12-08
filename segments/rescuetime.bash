@@ -12,9 +12,9 @@ else
 fi
 
 if [[ "$segment_direction" = 'right' ]]; then
-  segment_seperator=$(pretty_print_segment "$settings_rescuetime_sep_fg" "$settings_rescuetime_bg" "$settings_char_path")
+  segment_seperator=$(pretty_print_segment "$settings_rescuetime_splitter_color" "$settings_rescuetime_bg" "$settings_segment_splitter_right")
 else
-  segment_seperator=$(pretty_print_segment "$settings_rescuetime_sep_fg" "$settings_rescuetime_bg" "$settings_char_pathrev")
+  segment_seperator=$(pretty_print_segment "$settings_rescuetime_splitter_color" "$settings_rescuetime_bg" "$settings_segment_splitter_left")
 fi
 
 time_segment=$(pretty_print_segment "$settings_rescuetime_fg" "$settings_rescuetime_bg" "${time}")

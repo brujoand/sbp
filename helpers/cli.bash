@@ -1,5 +1,3 @@
-# shellcheck source=helpers/environment.bash
-source "${sbp_path}/helpers/environment.bash"
 
 function _sbp_print_usage() {
   cat << EOF
@@ -17,6 +15,8 @@ EOF
 }
 
 function _sbp_load_config() {
+  # shellcheck source=helpers/environment.bash
+  source "${sbp_path}/helpers/environment.bash"
   load_config
 }
 

@@ -13,8 +13,13 @@ if [[ "${#wdir}" -gt "$segment_max_length" ]]; then
 fi
 
 IFS=/ read -r -a wdir_array <<<"${wdir}"
-if [[ $settings_path_disable_sep -eq 0 && "${#wdir_array[@]}" -gt 1 ]]; then
-  segment_seperator=$(pretty_print_segment "$settings_path_color_sep" "$settings_path_color_bg" "$settings_char_path")
+if [[ $settings_path_splitter_disable -eq 0 && "${#wdir_array[@]}" -gt 1 ]]; then
+  if [[ "$segment_direction" == 'right' ]]; then
+    segment_seperator=$(pretty_print_segment "$settings_path_splitter_color" "$settings_path_color_bg" "$settings_segment_splitter_right")
+  else
+    segment_seperator=$(pretty_print_segment "$settings_path_splitter_color" "$settings_path_color_bg" "$settings_segment_splitter_left")
+  fi
+
   for i in "${!wdir_array[@]}"; do
     dir=${wdir_array["$i"]}
     if [[ -n "$dir" ]]; then

@@ -3,7 +3,7 @@
 segment_direction=$3
 
 return_code=$1
-if (( return_code == -1 )); then
+if [[ -z "$return_code" ]]; then
   return_code=0
 fi
 

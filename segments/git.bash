@@ -4,7 +4,6 @@ segment_direction=$3
 settings_git_max_length=$4
 
 path=${PWD}
-is_git=false
 while [[ $path ]]; do
   if [[ -d "${path}/.git" ]]; then
     git_folder="${path}/.git"
@@ -44,7 +43,7 @@ if [[ $(( ${#git_head} + ${#git_state} )) -gt "$settings_git_max_length" ]]; the
   git_head="${git_head:0:10}.."
 fi
 
-git_state="${git_state} ${git_head}"
+git_state="${git_state} ${settings_git_icon} ${git_head}"
 
 git_status_upstream="$(git rev-list --left-right "@{upstream}"...HEAD 2>/dev/null)"
 git_incoming_commits="$(grep -c '<' <<< "${git_status_upstream}")"

@@ -1,24 +1,5 @@
 #! /usr/bin/env bash
 
-function print_colorized() { # prints ansi escape codes for fg and bg (optional)
-  local fg_code=$1
-  local bg_code=$2
-
-  if [[ "$bg_code" == -1 ]]; then
-    bg_escaped="\[\e[49m\]"
-  else
-    bg_escaped="\[\e[48;2;${bg_code}m\]"
-  fi
-
-  if [[ "$fg_code" == -1 ]]; then
-    fg_escaped="\[\e[39m\]"
-  else
-    fg_escaped="\[\e[38;2;${fg_code}m\]"
-  fi
-
-  printf '%s' "${fg_escaped}${bg_escaped}"
-}
-
 function get_complement_rgb() {
   input_colors=()
   output_colors=()
@@ -30,9 +11,16 @@ function get_complement_rgb() {
   printf '%s;%s;%s' "${output_colors[0]}" "${output_colors[1]}" "${output_colors[2]}"
 }
 
+function print_colors() { # prints ansi escape codes for fg and bg (optional)
+  local fg_code=$1
+  local bg_code=$2
+
+  printf '%s%s' "$(print_fg_color "$fg_code")" "$(print_bg_color "$bg_code")"
+}
+
 function print_bg_color() {
   local bg_code=$1
-  if [[ "$bg_code" == -1 ]]; then
+  if [[ -z "$bg_code" ]]; then
     bg_escaped="\[\e[49m\]"
   else
     bg_escaped="\[\e[48;2;${bg_code}m\]"
@@ -43,7 +31,7 @@ function print_bg_color() {
 
 function print_fg_color() {
   local fg_code=$1
-  if [[ "$fg_code" == -1 ]]; then
+  if [[ -z "$fg_code" ]]; then
     fg_escaped="\[\e[39m\]"
   else
     fg_escaped="\[\e[38;2;${fg_code}m\]"
@@ -61,7 +49,7 @@ function pretty_print_segment() {
   [[ -z "$segment_value" ]] && return 0
 
   seperator="$(pretty_print_seperator "$segment_color_bg" "$segment_direction")"
-  segment="$(print_colorized "$segment_color_fg" "$segment_color_bg")${segment_value}"
+  segment="$(print_colors "$segment_color_fg" "$segment_color_bg")${segment_value}"
   prepare_color="$(print_fg_color "$segment_color_bg")"
   full_output="${seperator}${segment}${prepare_color}"
   printf '%s' "$full_output"
@@ -74,10 +62,10 @@ function pretty_print_seperator() {
 
   case $direction in
     right)
-      printf '%s' "$(print_bg_color "$to_color")$settings_char_segment"
+      printf '%s' "$(print_bg_color "$to_color")${settings_segment_separator_right}"
     ;;
     left)
-      printf '%s' "$(print_fg_color "$to_color")$settings_char_segrev"
+      printf '%s' "$(print_fg_color "$to_color")${settings_segment_separator_left}"
       ;;
   esac
 }
@@ -89,8 +77,7 @@ function strip_escaped_colors() {
 
 export -f pretty_print_segment
 export -f pretty_print_seperator
-export -f print_colorized
+export -f print_colors
 export -f print_bg_color
 export -f print_fg_color
 export -f get_complement_rgb
-
