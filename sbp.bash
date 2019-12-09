@@ -3,13 +3,32 @@
 #################################
 #   Simple Bash Prompt (SBP)    #
 #################################
+
 export sbp_path
-# shellcheck source=helpers/environment.bash
-source "${sbp_path}/helpers/environment.bash"
 # shellcheck source=helpers/cli.bash
 source "${sbp_path}/helpers/cli.bash"
 
 _sbp_previous_history=
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  export date_cmd='gdate'
+else
+  export date_cmd='date'
+fi
+
+function _sbp_timer_start() {
+  timer_start=$("$date_cmd" +'%s%3N')
+}
+
+function _sbp_timer_tick() {
+  timer_stop=$("$date_cmd" +'%s%3N')
+  timer_spent=$(( timer_stop - timer_start))
+  >&2 echo "${timer_spent}ms: $1"
+  timer_start=$("$date_cmd" +'%s%3N')
+}
+
+export -f _sbp_timer_start
+export -f _sbp_timer_tick
 
 options_file=$(sbp extra_options)
 if [[ -f "$options_file" ]]; then
