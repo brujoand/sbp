@@ -38,6 +38,9 @@ settings_path_color_readonly_fg=$color15
 settings_path_color_readonly_bg=$color1
 
 settings_prompt_ready_color=$color03
+settings_prompt_ready_vi_mode=0
+settings_prompt_ready_vi_insert_color=$color03
+settings_prompt_ready_vi_command_color=$color14
 settings_prompt_ready_icon='➜'
 
 settings_python_virtual_env_bg=$color02

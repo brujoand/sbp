@@ -71,8 +71,7 @@ function pretty_print_seperator() {
 }
 
 function strip_escaped_colors() {
-  sed -E 's/\\\[\\e\[([38\|48]+;2;)?[0-9]+(;[0-9]+;[0-9]+)?m\\\]//g' <<< "$1"
-
+  sed -E 's/\\\[\\e\[([0-9]|;)+m\\\]//g' <<< "$1"
 }
 
 export -f pretty_print_segment
