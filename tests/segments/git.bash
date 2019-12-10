@@ -22,11 +22,13 @@ function cleanup() {
 }
 
 function test_that_we_get_master_branch() {
+  export settings_git_icon=''
   result=$("${sbp_path}/segments/git.bash" 0 0 left 50)
   assert_equals '  master ' "$result"
 }
 
 function test_that_we_see_dirty_dir() {
+  export settings_git_icon=''
   touch "${TMP_FOLDER}/dirty"
   result=$("${sbp_path}/segments/git.bash" 0 0 left 50)
   assert_equals ' ?1  master ' "$result"
