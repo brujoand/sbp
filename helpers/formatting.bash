@@ -52,7 +52,9 @@ function pretty_print_segment() {
   segment="$(print_colors "$segment_color_fg" "$segment_color_bg")${segment_value}"
   prepare_color="$(print_fg_color "$segment_color_bg")"
   full_output="${seperator}${segment}${prepare_color}"
+  uncolored=$(strip_escaped_colors "$full_output")
   printf '%s' "$full_output"
+  return "${#uncolored}"
 }
 
 
@@ -71,11 +73,12 @@ function pretty_print_seperator() {
 }
 
 function strip_escaped_colors() {
-  sed -E 's/\\\[\\e\[([0-9]|;)+m\\\]//g' <<< "$1"
+  sed -E 's/\\\[\\e\[[0123456789]([0123456789;])+m\\\]//g' <<< "$1"
 }
 
 export -f pretty_print_segment
 export -f pretty_print_seperator
+export -f strip_escaped_colors
 export -f print_colors
 export -f print_bg_color
 export -f print_fg_color

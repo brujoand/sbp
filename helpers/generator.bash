@@ -7,7 +7,7 @@ source "${sbp_path}/helpers/environment.bash"
 
 load_config
 
-color_reset='\[\e[0m\]'
+color_reset='\[\e[00m\]'
 
 function generate_extra_options() {
   if [[ "$settings_prompt_ready_vi_mode" -eq 1 ]]; then
@@ -156,14 +156,20 @@ function generate_prompt() {
 
   done
 
+  total_empty_space="$columns"
+
   for i in "${!pids[@]}"; do
     wait "${pids[i]}"
+    segment_length=$?
     segment=$(<"$tempdir/$i");
-    empty_space=$(calculate_padding "${prompt_left}${prompt_right}${segment}" "$columns")
+    #empty_space=$(calculate_padding "${prompt_left}${prompt_right}${segment}" "$columns")
+    empty_space=$(( total_empty_space - segment_length ))
     if [[ -n "${pid_left["$i"]}"  && "$empty_space" -gt 0 ]]; then
       prompt_left="${prompt_left}${segment}"
+      total_empty_space="$empty_space"
     elif [[ -n "${pid_right["$i"]}" && "$empty_space" -gt 0  ]]; then
       prompt_right="${prompt_right}${segment}"
+      total_empty_space="$empty_space"
     elif [[ -n "${pid_two["$i"]}" ]]; then
       prompt_line_two="${segment}"
     fi
