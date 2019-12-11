@@ -162,7 +162,6 @@ function generate_prompt() {
     wait "${pids[i]}"
     segment_length=$?
     segment=$(<"$tempdir/$i");
-    #empty_space=$(calculate_padding "${prompt_left}${prompt_right}${segment}" "$columns")
     empty_space=$(( total_empty_space - segment_length ))
     if [[ -n "${pid_left["$i"]}"  && "$empty_space" -gt 0 ]]; then
       prompt_left="${prompt_left}${segment}"
@@ -176,7 +175,7 @@ function generate_prompt() {
   done
 
   # Generate the filler segment
-  prompt_uncolored=$(calculate_padding "${prompt_left}${prompt_right}" "$columns")
+  prompt_uncolored="$(( total_empty_space - 1 ))" # Account for the filler seperator
   padding=$(printf "%*s" "$prompt_uncolored")
   prompt_filler="$(pretty_print_segment "" "" "$padding" "right")"
 

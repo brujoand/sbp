@@ -35,7 +35,7 @@ if [[ -f "$options_file" ]]; then
   source "$options_file"
 fi
 
-trap 'echo $COLUMNS' WINCH
+#trap 'printf "\e[0n"' WINCH
 
 function _sbp_set_prompt {
   local command_exit_code=$?
@@ -55,7 +55,7 @@ function _sbp_set_prompt {
 
   _sbp_previous_history=$last_history
   unset last_history
-  echo -e '\033]2;'"${PWD##*/}"'\007'
+  printf '\e]2;%s\007' "${PWD##*/}"
 
   PS1=$(bash "${sbp_path}/helpers/generator.bash" 'generate_prompt' "$COLUMNS" "$command_exit_code" "$command_time")
   [[ -n "$SBP_DEBUG" ]] &&_sbp_timer_tick "Done"

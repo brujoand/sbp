@@ -63,3 +63,5 @@ settings_openshift_default_user="$USER"
 settings_rescuetime_bg=$color02
 settings_rescuetime_fg=$color15
 settings_rescuetime_splitter_color=$color07
+settings_rescuetime_refresh_rate=600
+
