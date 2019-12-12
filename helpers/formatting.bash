@@ -1,14 +1,22 @@
 #! /usr/bin/env bash
 
+export colors_ids=( 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 )
+
 function get_complement_rgb() {
   input_colors=()
   output_colors=()
-  mapfile -t input_colors < <(tr ';' '\n' <<< "$1")
-  for color_value in "${input_colors[@]}"; do
-    output_colors+=("$(( 255 - color_value ))")
-  done
 
-  printf '%s;%s;%s' "${output_colors[0]}" "${output_colors[1]}" "${output_colors[2]}"
+  if [[ -z "${1//[0123456789]}" ]]; then
+    # This is not accurate
+    printf '%s' "$(( 255 - $1 ))"
+  else
+    mapfile -t input_colors < <(tr ';' '\n' <<< "$1")
+    for color_value in "${input_colors[@]}"; do
+      output_colors+=("$(( 255 - color_value ))")
+    done
+
+    printf '%s;%s;%s' "${output_colors[0]}" "${output_colors[1]}" "${output_colors[2]}"
+  fi
 }
 
 function print_colors() { # prints ansi escape codes for fg and bg (optional)
@@ -20,24 +28,40 @@ function print_colors() { # prints ansi escape codes for fg and bg (optional)
 
 function print_bg_color() {
   local bg_code=$1
+  local escaped=$2
+
   if [[ -z "$bg_code" ]]; then
-    bg_escaped="\[\e[49m\]"
+    bg_escaped="\e[49m"
+  elif [[ -z "${bg_code//[0123456789]}" ]]; then
+    bg_escaped="\e[48;5;${bg_code}m"
   else
-    bg_escaped="\[\e[48;2;${bg_code}m\]"
+    bg_escaped="\e[48;2;${bg_code}m"
   fi
 
-  printf '%s' "${bg_escaped}"
+  if [[ -z "$escaped" ]]; then
+    printf '\[%s\]' "${bg_escaped}"
+  else
+    printf '%s' "${bg_escaped}"
+  fi
 }
 
 function print_fg_color() {
   local fg_code=$1
+  local escaped=$2
+
   if [[ -z "$fg_code" ]]; then
-    fg_escaped="\[\e[39m\]"
+    fg_escaped="\e[39m"
+  elif [[ -z "${fg_code//[0123456789]}" ]]; then
+    fg_escaped="\e[38;5;${fg_code}m"
   else
-    fg_escaped="\[\e[38;2;${fg_code}m\]"
+    fg_escaped="\e[38;2;${fg_code}m"
   fi
 
-  printf '%s' "${fg_escaped}"
+  if [[ -z "$escaped" ]]; then
+    printf '\[%s\]' "${fg_escaped}"
+  else
+    printf '%s' "${fg_escaped}"
+  fi
 }
 
 function pretty_print_segment() {
