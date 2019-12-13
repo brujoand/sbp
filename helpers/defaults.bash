@@ -25,6 +25,8 @@ settings_command_color_bg=$color03
 settings_git_color_bg=$color10
 settings_git_color_fg=$color08
 settings_git_icon=''
+settings_git_incoming_icon='↓'
+settings_git_outgoing_icon='↑'
 
 settings_host_color_bg=$color08
 settings_host_color_fg=$color03

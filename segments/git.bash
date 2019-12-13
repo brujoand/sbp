@@ -3,6 +3,9 @@
 segment_direction=$3
 settings_git_max_length=$4
 
+incoming_icon="$settings_git_incoming_icon"
+outgoing_icon="$settings_git_outgoing_icon"
+
 path=${PWD}
 while [[ $path ]]; do
   if [[ -d "${path}/.git" ]]; then
@@ -15,28 +18,54 @@ done
 [[ -z "$git_folder" ]] && exit 0
 type git &>/dev/null || exit 0
 
-git_head=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
 
-git_status="$(git status --porcelain 2>/dev/null)"
-git_status_additions=$(grep -Ec '^[ ]?A' <<< "${git_status}")
-git_status_modifications=$(grep -Ec '^[ ]?[MR]' <<< "${git_status}")
-git_status_deletions=$(grep -Ec '^[ ]?D' <<< "${git_status}")
-git_status_untracked=$(grep -Ec '^[ ]?\?' <<< "${git_status}")
+git_status="$(git status --porcelain --branch 2>/dev/null)"
 
-if [[ "$git_status_additions" -gt 0 ]]; then
-  git_state="${git_state}+${git_status_additions} "
-fi
+additions=0
+modifications=0
+deletions=0
+untracked=0
 
-if [[ "$git_status_modifications" -gt 0 ]]; then
-  git_state="${git_state}~${git_status_modifications} "
-fi
+while read -r line; do
+  compacted=${line// }
+  action=${compacted:0:1}
+  case $action in
+    A)
+      additions_icon=' +'
+      additions=$(( additions + 1 ))
+      ;;
+    M|R)
+      modifications_icon=' ~'
+      modifications=$(( modifications + 1 ))
+      ;;
+    D)
+      deletions_icon=' -'
+      deletions=$(( deletions + 1 ))
+      ;;
+    \?)
+      untracked_icon=' ?'
+      untracked=$(( untracked + 1 ))
+      ;;
+    \#)
+      branch_line=${line/\#\# /}
+      branch_data=${branch_line/% *}
+      branch="${branch_data/...*/}"
+      upstream_data="${branch_line#* }"
+      upstream_stripped="${upstream_data//[\[|\]]}"
+      if [[ "$upstream_data" != "$upstream_stripped" ]]; then
+        outgoing_filled="${upstream_stripped/ahead /${outgoing_icon}}"
+        upstream_status="${outgoing_filled/behind /${incoming_icon}}"
+      fi
+  esac
+done <<< "$git_status"
 
-if [[ "$git_status_deletions" -gt 0 ]]; then
-  git_state="${git_state}-${git_status_deletions} "
-fi
+git_state="${additions_icon}${additions/#0/}${modifications_icon}${modifications/#0/}${deletions_icon}${deletions/#0/}${untracked_icon}${untracked/#0/}"
 
-if [[ "$git_status_untracked" -gt 0 ]]; then
-  git_state="${git_state}?${git_status_untracked} "
+# git status does not support detached head
+if [[ "$branch" != 'HEAD' ]]; then
+  git_head="$branch"
+else
+  git_head=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
 fi
 
 if [[ $(( ${#git_head} + ${#git_state} )) -gt "$settings_git_max_length" ]]; then
@@ -45,16 +74,8 @@ fi
 
 git_state="${git_state} ${settings_git_icon} ${git_head}"
 
-git_status_upstream="$(git rev-list --left-right "@{upstream}"...HEAD 2>/dev/null)"
-git_incoming_commits="$(grep -c '<' <<< "${git_status_upstream}")"
-git_outgoing_commits="$(grep -c '>' <<< "${git_status_upstream}")"
+git_state="${git_state} ${upstream_status}"
 
-if [[ "$git_incoming_commits" -gt 0 ]]; then
-  git_state="${git_state} ↓${git_incoming_commits}"
-fi
-if [[ "$git_outgoing_commits" -gt 0 ]]; then
-  git_state="${git_state} ↑${git_outgoing_commits}"
-fi
 
 segment_value=" ${git_state} "
 pretty_print_segment "$settings_git_color_fg" "$settings_git_color_bg" "${segment_value//  / }" "$segment_direction"
