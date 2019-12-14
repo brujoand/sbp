@@ -11,14 +11,18 @@ else
   exit 0
 fi
 
-if [[ "$segment_direction" = 'right' ]]; then
-  segment_seperator=$(pretty_print_segment "$settings_rescuetime_splitter_color" "$settings_rescuetime_bg" "$settings_segment_splitter_right")
+if [[ "$segment_direction" == 'right' ]]; then
+  splitter_character="$settings_segment_splitter_right"
 else
-  segment_seperator=$(pretty_print_segment "$settings_rescuetime_splitter_color" "$settings_rescuetime_bg" "$settings_segment_splitter_left")
+  splitter_character="$settings_segment_splitter_left"
 fi
 
-time_segment=$(pretty_print_segment "$settings_rescuetime_fg" "$settings_rescuetime_bg" "${time}")
-segment_value="${pulse} ${segment_seperator} ${time_segment}"
+splitter_on_color=$(print_fg_color "$settings_rescuetime_splitter_color")
+splitter_off_color=$(print_fg_color "$settings_rescuetime_fg")
+splitter_segment="${splitter_on_color}${splitter_character}${splitter_off_color}"
+
+
+segment_value="${pulse} ${splitter_segment} ${time}"
 
 pretty_print_segment "$settings_rescuetime_fg" "$settings_rescuetime_bg" " ${segment_value} " "$segment_direction"
 
