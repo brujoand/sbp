@@ -55,7 +55,14 @@ function _sbp_set_prompt {
 
   _sbp_previous_history=$last_history
   unset last_history
-  printf '\e]2;%s\007' "${PWD##*/}"
+
+  title="${PWD##*/}"
+
+  # TODO move this somewhere else
+  if [[ -n "$SSH_CLIENT" ]]; then
+    title="${HOSTNAME:-ssh}:${title}"
+  fi
+  printf '\e]2;%s\007' "$title"
 
   PS1=$(bash "${sbp_path}/helpers/generator.bash" 'generate_prompt' "$COLUMNS" "$command_exit_code" "$command_time")
   [[ -n "$SBP_DEBUG" ]] &&_sbp_timer_tick "Done"

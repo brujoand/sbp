@@ -18,7 +18,6 @@ done
 [[ -z "$git_folder" ]] && exit 0
 type git &>/dev/null || exit 0
 
-
 git_status="$(git status --porcelain --branch 2>/dev/null)"
 
 additions=0
