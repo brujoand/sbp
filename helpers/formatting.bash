@@ -30,6 +30,10 @@ print_bg_color() {
   local bg_code=$1
   local escaped=$2
 
+  if [[ "$settings_segment_enable_bg_color" -eq 0 ]]; then
+    return 0
+  fi
+
   if [[ -z "$bg_code" ]]; then
     bg_escaped="\e[49m"
   elif [[ -z "${bg_code//[0123456789]}" ]]; then
@@ -72,10 +76,22 @@ pretty_print_segment() {
 
   [[ -z "$segment_value" ]] && return 0
 
-  seperator="$(pretty_print_seperator "$segment_color_bg" "$segment_direction")"
-  segment="$(print_colors "$segment_color_fg" "$segment_color_bg")${segment_value}"
-  prepare_color="$(print_fg_color "$segment_color_bg")"
-  full_output="${seperator}${segment}${prepare_color}"
+  if [[ "$settings_segment_enable_bg_color" -eq 0 ]]; then
+    segment_color_bg=""
+    color="$(print_fg_color "$segment_color_fg")"
+
+    if [[ -z "${segment_value// /}" || -z "$segment_direction" ]]; then
+      full_output="${color}${segment_value}"
+    else
+      full_output="${color}${settings_segment_separator_right}${segment_value}${settings_segment_separator_left}"
+    fi
+  else
+    prepare_color="$(print_fg_color "$segment_color_bg")"
+    seperator="$(pretty_print_seperator "$segment_color_bg" "$segment_direction")"
+    segment="$(print_colors "$segment_color_fg" "$segment_color_bg")${segment_value}"
+    full_output="${seperator}${segment}${prepare_color}"
+  fi
+
   uncolored=$(strip_escaped_colors "$full_output")
   printf '%s' "$full_output"
   return "${#uncolored}"

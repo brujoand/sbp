@@ -16,11 +16,11 @@ else
   export date_cmd='date'
 fi
 
-function _sbp_timer_start() {
+_sbp_timer_start() {
   timer_start=$("$date_cmd" +'%s%3N')
 }
 
-function _sbp_timer_tick() {
+_sbp_timer_tick() {
   timer_stop=$("$date_cmd" +'%s%3N')
   timer_spent=$(( timer_stop - timer_start))
   >&2 echo "${timer_spent}ms: $1"
@@ -37,7 +37,7 @@ fi
 
 #trap 'printf "\e[0n"' WINCH
 
-function _sbp_set_prompt {
+_sbp_set_prompt() {
   local command_exit_code=$?
   [[ -n "$SBP_DEBUG" ]] && _sbp_timer_start
   local last_history command_started command_ended command_time

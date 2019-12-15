@@ -10,17 +10,17 @@ log_info() {
   >&2 printf '%s: \e[38;5;76m%s\e[00m\n' "${context}" "${*}"
 }
 
-set_theme() {
+set_colors() {
   local theme_name=$1
   if [[ -z "$theme_name" ]]; then
     log_error "No theme name set"
     log_info "Using the default theme"
-    source "${sbp_path}/themes/default.bash"
+    source "${sbp_path}/themes/colors/default.bash"
     return 1
   fi
 
-  user_theme="${config_dir}/themes/${theme_name}.bash"
-  sbp_theme="${sbp_path}/themes/${theme_name}.bash"
+  user_theme="${config_dir}/themes/colors/${theme_name}.bash"
+  sbp_theme="${sbp_path}/themes/colors/${theme_name}.bash"
 
   if [[ -f "$user_theme" ]]; then
     source "$user_theme"
@@ -30,35 +30,68 @@ set_theme() {
     log_error "Could not find theme file: ${user_theme}"
     log_error "Could not find theme file: ${sbp_theme}"
     log_info "Using the default theme"
-    source "${sbp_path}/themes/default.bash"
+    source "${sbp_path}/themes/colors/default.bash"
+  fi
+}
+
+set_layout() {
+  local layout_name=$1
+  if [[ -z "$layout_name" ]]; then
+    log_error "No layout name set"
+    log_info "Using the default layout"
+    source "${sbp_path}/themes/layouts/default.bash"
+    return 1
+  fi
+
+  user_layout="${config_dir}/themes/layouts/${layout_name}.bash"
+  sbp_layout="${sbp_path}/themes/layouts/${layout_name}.bash"
+
+  if [[ -f "$user_layout" ]]; then
+    source "$user_layout"
+  elif [[ -f "$sbp_layout" ]]; then
+    source "$sbp_layout"
+  else
+    log_error "Could not find theme file: ${user_layout}"
+    log_error "Could not find theme file: ${sbp_layout}"
+    log_info "Using the default theme"
+    source "${sbp_path}/themes/layouts/default.bash"
   fi
 }
 
 load_config() {
   config_dir="${HOME}/.config/sbp"
-  config_file="${config_dir}/sbp.conf"
+  config_file="${config_dir}/settings.conf"
+  colors_file="${config_dir}/colors.conf"
+  default_config_file="${sbp_path}/helpers/settings.conf"
+  default_colors_file="${sbp_path}/helpers/colors.conf"
   cache_folder="${config_dir}/cache"
-  mkdir -p "$cache_folder"
-  default_config_file="${sbp_path}/helpers/defaults.bash"
+  [[ -d "$cache_folder" ]] || mkdir -p "$cache_folder"
 
-  # Load the users settings if it exists
-  if [[ -f "$config_file" ]]; then
-    set -a
-    # shellcheck source=/dev/null
-    source "$config_file"
-    set +a
-  else
-    set -a
-    # shellcheck source=helpers/defaults.bash
-    source "$default_config_file"
-    set +a
-    mkdir -p "$config_dir"
+  if [[ ! -f "$config_file" ]]; then
+    log_info "Config file note found: ${config_file}"
+    log_info "Creating it.."
     cp "$default_config_file" "$config_file"
   fi
+
+  if [[ ! -f "$colors_file" ]]; then
+    log_info "Config file note found: ${colors_file}"
+    log_info "Creating it.."
+    cp "$default_colors_file" "$colors_file"
+  fi
+
+  set -a
+  # shellcheck source=/dev/null
+  source "$config_file"
+  set_layout "$SBP_THEME"
+  set_colors "$SBP_COLOR_SCHEME"
+  # shellcheck source=/dev/null
+  source "$colors_file"
+  set +a
 }
 
 export -f log_error
 export -f log_info
 export -f load_config
-export -f set_theme
+export -f set_layout
+export -f set_colors
 export cache_folder

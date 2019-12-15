@@ -20,7 +20,7 @@ _sbp_reload() {
 
 _sbp_edit_config() {
   if [[ -n "$EDITOR" ]]; then
-    $EDITOR "${HOME}/.config/sbp/sbp.conf"
+    $EDITOR "${HOME}/.config/sbp/settings.conf"
   else
     log_error "No \$EDITOR set, unable to open config"
   fi
@@ -35,7 +35,7 @@ _sbp_toggle_debug() {
 }
 
 sbp() {
-  themed_helper="${sbp_path}/helpers/themed_cli_helper.bash"
+  themed_helper="${sbp_path}/helpers/cli_helpers.bash"
   case $1 in
     segments) # Show all available segments
       "$themed_helper" 'list_segments'

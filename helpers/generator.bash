@@ -79,6 +79,12 @@ generate_prompt() {
 
   total_empty_space="$columns"
 
+  if [[ -n "${settings_prompt_prefix_upper}" ]]; then
+    total_empty_space=$(( total_empty_space - ${#settings_prompt_prefix_upper} - 1 ))
+    prefix_color="$(print_fg_color "$settings_prompt_ready_color")"
+    prompt_left="${prompt_left} ${prefix_color}${settings_prompt_prefix_upper}"
+  fi
+
   for i in "${!pids[@]}"; do
     wait "${pids[i]}"
     segment_length=$?
@@ -103,6 +109,7 @@ generate_prompt() {
   fi
   padding=$(printf "%*s" "$prompt_uncolored")
   prompt_filler="$(pretty_print_segment "" "" "$padding" "right")"
+
 
   if [[ "${settings_prompt_ready_newline}" -eq 1 ]]; then
     prompt_ready="\n${prompt_ready}"

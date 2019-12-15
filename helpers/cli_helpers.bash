@@ -10,6 +10,7 @@ load_config
 generate_extra_options() {
   if [[ "$settings_prompt_ready_vi_mode" -eq 1 ]]; then
     local cache_file="${cache_folder}/extra_options.bash"
+    rm -f "$cache_file"
     if [[ -n "$settings_prompt_ready_icon" ]]; then
       local insert_color="$settings_prompt_ready_vi_insert_color"
       local command_color="$settings_prompt_ready_vi_command_color"
@@ -59,6 +60,7 @@ list_hooks() {
 
 list_colors() {
   for n in "${colors_ids[@]}"; do
+    settings_segment_enable_bg_color=1
     color="color${n}"
     text_color_value=$(get_complement_rgb "${!color}")
     text_color="$(print_fg_color "$text_color_value" 'false')"
@@ -70,7 +72,8 @@ list_colors() {
 }
 
 list_themes() {
-  for theme in "$sbp_path"/themes/*.bash; do
+  for theme in "$sbp_path"/themes/colors/*.bash; do
+    settings_segment_enable_bg_color=1
     source "$theme"
     printf '\n%s \n' "${theme##*/}"
     for n in "${colors_ids[@]}"; do
