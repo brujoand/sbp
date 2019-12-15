@@ -13,8 +13,16 @@ settings_hooks=('alert')
 # Segments are generated before each prompt and can
 # be added, removed and reordered
 # Run 'sbp segments' to list all available segments
-settings_segments_left=('host' 'path' 'python_env' 'git' )
-settings_segments_right=('command' 'timestamp')
+# Maybe you don't want to run all segments when in
+# a multiplexer?
+if [[ "$TERM" = "screen" || -n "$TMUX" ]]; then
+  # We're inside tmux or screen
+  settings_segments_left=('path' 'python_env' 'git' )
+  settings_segments_right=('command')
+else
+  settings_segments_left=('host' 'path' 'python_env' 'git' )
+  settings_segments_right=('command' 'timestamp')
+fi
 
 # Default segment configuration
 settings_command_color_fg=$color08
@@ -44,6 +52,7 @@ settings_prompt_ready_vi_mode=0
 settings_prompt_ready_vi_insert_color=$color03
 settings_prompt_ready_vi_command_color=$color14
 settings_prompt_ready_icon='➜'
+settings_prompt_ready_newline=1
 
 settings_python_virtual_env_bg=$color02
 settings_python_virtual_env_fg=$color15

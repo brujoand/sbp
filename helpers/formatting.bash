@@ -2,7 +2,7 @@
 
 export colors_ids=( 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 )
 
-function get_complement_rgb() {
+get_complement_rgb() {
   input_colors=()
   output_colors=()
 
@@ -19,14 +19,14 @@ function get_complement_rgb() {
   fi
 }
 
-function print_colors() { # prints ansi escape codes for fg and bg (optional)
+print_colors() { # prints ansi escape codes for fg and bg (optional)
   local fg_code=$1
   local bg_code=$2
 
   printf '%s%s' "$(print_fg_color "$fg_code")" "$(print_bg_color "$bg_code")"
 }
 
-function print_bg_color() {
+print_bg_color() {
   local bg_code=$1
   local escaped=$2
 
@@ -45,7 +45,7 @@ function print_bg_color() {
   fi
 }
 
-function print_fg_color() {
+print_fg_color() {
   local fg_code=$1
   local escaped=$2
 
@@ -64,7 +64,7 @@ function print_fg_color() {
   fi
 }
 
-function pretty_print_segment() {
+pretty_print_segment() {
   local segment_color_fg="$1"
   local segment_color_bg="$2"
   local segment_value="$3"
@@ -82,7 +82,7 @@ function pretty_print_segment() {
 }
 
 
-function pretty_print_seperator() {
+pretty_print_seperator() {
   local to_color=$1
   local direction=$2
 
@@ -96,7 +96,7 @@ function pretty_print_seperator() {
   esac
 }
 
-function strip_escaped_colors() {
+strip_escaped_colors() {
   sed -E 's/\\\[\\e\[[0123456789]([0123456789;])+m\\\]//g' <<< "$1"
 }
 

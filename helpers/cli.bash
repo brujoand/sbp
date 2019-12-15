@@ -1,4 +1,4 @@
-function _sbp_print_usage() {
+_sbp_print_usage() {
   cat << EOF
   Usage: sbp <command>
 
@@ -13,12 +13,12 @@ function _sbp_print_usage() {
 EOF
 }
 
-function _sbp_reload() {
+_sbp_reload() {
   # shellcheck source=/dev/null
   source "$sbp_path"/sbp.bash
 }
 
-function _sbp_edit_config() {
+_sbp_edit_config() {
   if [[ -n "$EDITOR" ]]; then
     $EDITOR "${HOME}/.config/sbp/sbp.conf"
   else
@@ -26,7 +26,7 @@ function _sbp_edit_config() {
   fi
 }
 
-function _sbp_toggle_debug() {
+_sbp_toggle_debug() {
   if [[ -z "$SBP_DEBUG" ]]; then
     SBP_DEBUG=true
   else
@@ -34,20 +34,20 @@ function _sbp_toggle_debug() {
   fi
 }
 
-function sbp() {
-  generator="${sbp_path}/helpers/generator.bash"
+sbp() {
+  themed_helper="${sbp_path}/helpers/themed_cli_helper.bash"
   case $1 in
     segments) # Show all available segments
-      "$generator" 'list_segments'
+      "$themed_helper" 'list_segments'
       ;;
     hooks) # Show all available hooks
-      "$generator" 'list_hooks'
+      "$themed_helper" 'list_hooks'
       ;;
     colors) # Show currently defined colors
-      "$generator" 'list_colors'
+      "$themed_helper" 'list_colors'
       ;;
     themes) # Show all defined colors themes
-      "$generator" 'list_themes'
+      "$themed_helper" 'list_themes'
       ;;
     reload) # Reload settings and SBP
       _sbp_reload
@@ -59,15 +59,15 @@ function sbp() {
       _sbp_toggle_debug
       ;;
     extra_options) # Woho, hiddden function
-      "$generator" 'generate_extra_options'
+      "$themed_helper" 'generate_extra_options'
       ;;
     *)
-      _sbp_print_usage && exit 1
+      _sbp_print_usage && return 1
       ;;
   esac
 }
 
-function _sbp() {
+_sbp() {
   local cur words
   _get_comp_words_by_ref cur
   words=('segments' 'hooks' 'colors' 'themes' 'reload' 'help' 'config' 'debug')

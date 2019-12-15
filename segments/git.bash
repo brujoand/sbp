@@ -71,10 +71,6 @@ if [[ $(( ${#git_head} + ${#git_state} )) -gt "$settings_git_max_length" ]]; the
   git_head="${git_head:0:10}.."
 fi
 
-git_state="${git_state} ${settings_git_icon} ${git_head}"
+segment_value=" ${git_state} ${settings_git_icon} ${git_head} ${upstream_status} "
 
-git_state="${git_state} ${upstream_status}"
-
-
-segment_value=" ${git_state} "
 pretty_print_segment "$settings_git_color_fg" "$settings_git_color_bg" "${segment_value//  / }" "$segment_direction"

@@ -1,16 +1,16 @@
 #! /usr/bin/env bash
 
-function log_error() {
+log_error() {
   local context="${BASH_SOURCE[1]}:${FUNCNAME[1]}"
   >&2 printf '%s: \e[38;5;196m%s\e[00m\n' "${context}" "${*}"
 }
 
-function log_info() {
+log_info() {
   local context="${BASH_SOURCE[1]}:${FUNCNAME[1]}"
   >&2 printf '%s: \e[38;5;76m%s\e[00m\n' "${context}" "${*}"
 }
 
-function set_theme() {
+set_theme() {
   local theme_name=$1
   if [[ -z "$theme_name" ]]; then
     log_error "No theme name set"
@@ -34,7 +34,7 @@ function set_theme() {
   fi
 }
 
-function load_config() {
+load_config() {
   config_dir="${HOME}/.config/sbp"
   config_file="${config_dir}/sbp.conf"
   cache_folder="${config_dir}/cache"
