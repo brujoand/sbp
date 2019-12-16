@@ -19,7 +19,7 @@ set_colors() {
     return 1
   fi
 
-  user_theme="${config_dir}/themes/colors/${theme_name}.bash"
+  user_theme="${config_folder}/themes/colors/${theme_name}.bash"
   sbp_theme="${sbp_path}/themes/colors/${theme_name}.bash"
 
   if [[ -f "$user_theme" ]]; then
@@ -43,7 +43,7 @@ set_layout() {
     return 1
   fi
 
-  user_layout="${config_dir}/themes/layouts/${layout_name}.bash"
+  user_layout="${config_folder}/themes/layouts/${layout_name}.bash"
   sbp_layout="${sbp_path}/themes/layouts/${layout_name}.bash"
 
   if [[ -f "$user_layout" ]]; then
@@ -59,12 +59,12 @@ set_layout() {
 }
 
 load_config() {
-  config_dir="${HOME}/.config/sbp"
-  config_file="${config_dir}/settings.conf"
-  colors_file="${config_dir}/colors.conf"
+  config_folder="${HOME}/.config/sbp"
+  config_file="${config_folder}/settings.conf"
+  colors_file="${config_folder}/colors.conf"
   default_config_file="${sbp_path}/helpers/settings.conf"
   default_colors_file="${sbp_path}/helpers/colors.conf"
-  cache_folder="${config_dir}/cache"
+  cache_folder="${config_folder}/cache"
   [[ -d "$cache_folder" ]] || mkdir -p "$cache_folder"
 
   if [[ ! -f "$config_file" ]]; then
@@ -95,3 +95,4 @@ export -f load_config
 export -f set_layout
 export -f set_colors
 export cache_folder
+export config_folder

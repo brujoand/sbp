@@ -15,6 +15,10 @@ execute_segment_script() {
   local segment_max_length=$3
   local segment_script="${sbp_path}/segments/${segment}.bash"
 
+  if [[ -f "${config_folder}/peekaboo/${segment_name}" ]]; then
+    return 0
+  fi
+
   if [[ -x "$segment_script" ]]; then
     bash "$segment_script" "$command_exit_code" "$command_time" "$segment_direction" "$segment_max_length"
   else
@@ -25,6 +29,10 @@ execute_segment_script() {
 
 execute_prompt_hooks() {
   for hook in "${settings_hooks[@]}"; do
+    if [[ -f "${config_folder}/peekaboo/${segment_name}" ]]; then
+      return 0
+    fi
+
     local hook_script="${sbp_path}/hooks/${hook}.bash"
     if [[ -x "$hook_script" ]]; then
       (nohup bash "$hook_script" "$command_exit_code" "$command_time" &>/dev/null &)

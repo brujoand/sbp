@@ -5,6 +5,7 @@ _sbp_print_usage() {
   Commands:
   segments  - List all available segments
   hooks     - List all available hooks
+  peekaboo  - Toggle enabled segments or hooks
   colors    - List the currently defined colors
   themes    - List all available color themes
   reload    - Reload SBP and user settings
@@ -34,6 +35,24 @@ _sbp_toggle_debug() {
   fi
 }
 
+_sbp_peekaboo() {
+  local feature=$1
+  feature_hook="${sbp_path}/hooks/${feature}.bash"
+  feature_segment="${sbp_path}/segments/${feature}.bash"
+  peekaboo_folder="${HOME}/.config/sbp/peekaboo"
+  mkdir -p "${peekaboo_folder}"
+  peekaboo_file="${peekaboo_folder}/${feature}"
+
+
+  if [[ -f "$feature_hook" || -f "$feature_segment" ]]; then
+    if [[ -f "$peekaboo_file" ]]; then
+      rm "$peekaboo_file"
+    else
+      touch "$peekaboo_file"
+    fi
+  fi
+}
+
 sbp() {
   themed_helper="${sbp_path}/helpers/cli_helpers.bash"
   case $1 in
@@ -42,6 +61,10 @@ sbp() {
       ;;
     hooks) # Show all available hooks
       "$themed_helper" 'list_hooks'
+      ;;
+    peekaboo)
+      [[ -z "$2" ]] && _sbp_print_usage
+      _sbp_peekaboo "$2"
       ;;
     colors) # Show currently defined colors
       "$themed_helper" 'list_colors'
@@ -69,8 +92,18 @@ sbp() {
 
 _sbp() {
   local cur words
-  _get_comp_words_by_ref cur
-  words=('segments' 'hooks' 'colors' 'themes' 'reload' 'help' 'config' 'debug')
+  #_get_comp_words_by_ref cur
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  words=()
+  if [[ "${COMP_WORDS[1]}" == 'peekaboo' ]]; then
+    for feature in hooks/*.bash segments/*.bash; do
+      file=${feature##*/}
+      words+=("${file/.bash}")
+    done
+  else
+    words=('segments' 'hooks' 'peekaboo' 'colors' 'themes' 'reload' 'help' 'config' 'debug')
+  fi
+
   COMPREPLY=( $( compgen -W "${words[*]}" -- "$cur") )
 }
 

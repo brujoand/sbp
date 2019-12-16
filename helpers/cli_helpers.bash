@@ -36,7 +36,11 @@ list_segments() {
     local status='disabled'
     local segment_name="${segment##*/}"
     if printf '%s.bash\n' "${active_segments[@]}" | grep -qo "${segment_name}"; then
-      status='enabled'
+      if [[ -f "${config_folder}/peekaboo/${segment_name/.bash/}" ]]; then
+        status='hidden'
+      else
+        status='enabled'
+      fi
     fi
 
     _sbp_timer_start
@@ -52,7 +56,11 @@ list_hooks() {
     script="${hook##*/}"
     status='disabled'
     if printf '%s.bash\n' "${settings_hooks[@]}" | grep -qo "${script}"; then
-      status='enabled'
+      if [[ -f "${config_folder}/peekaboo/${script/.bash/}" ]]; then
+        status='paused'
+      else
+        status='enabled'
+      fi
     fi
     echo "${script/.bash/}: ${status}" | column -t
   done
