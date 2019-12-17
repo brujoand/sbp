@@ -73,4 +73,4 @@ fi
 
 segment_value=" ${git_state} ${settings_git_icon} ${git_head} ${upstream_status} "
 
-pretty_print_segment "$settings_git_color_fg" "$settings_git_color_bg" "${segment_value//  / }" "$segment_direction"
+pretty_print_segment "$settings_git_color_primary" "$settings_git_color_secondary" "${segment_value//  / }" "$segment_direction"

@@ -4,5 +4,5 @@ segment_direction=$3
 
 if [[ ! -w "$PWD" ]] ; then
   segment_value=""
-  pretty_print_segment "$settings_path_color_readonly_fg" "$settings_path_color_readonly_bg" " ${segment_value}" "$segment_direction"
+  pretty_print_segment "$settings_path_readonly_color_primary" "$settings_path_readonly_color_secondary" " ${segment_value}" "$segment_direction"
 fi

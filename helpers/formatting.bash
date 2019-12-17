@@ -69,14 +69,15 @@ print_fg_color() {
 }
 
 pretty_print_segment() {
-  local segment_color_fg="$1"
-  local segment_color_bg="$2"
+  local segment_color_bg="$1"
+  local segment_color_fg="$2"
   local segment_value="$3"
   local segment_direction="$4"
 
   [[ -z "$segment_value" ]] && return 0
 
   if [[ "$settings_segment_enable_bg_color" -eq 0 ]]; then
+    segment_color_fg="$segment_color_bg"
     segment_color_bg=""
     color="$(print_fg_color "$segment_color_fg")"
 

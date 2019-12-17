@@ -21,7 +21,7 @@ if [[ $settings_path_splitter_disable -ne 1 && "${#wdir_array[@]}" -gt 1 ]]; the
   fi
 
   splitter_on_color=$(print_fg_color "$settings_path_splitter_color")
-  splitter_off_color=$(print_fg_color "$settings_path_color_fg")
+  splitter_off_color=$(print_fg_color "$settings_path_color_secondary")
   splitter_segment="${splitter_on_color}${splitter_character}${splitter_off_color}"
 
   for i in "${!wdir_array[@]}"; do
@@ -36,4 +36,4 @@ else
   path_value=" $wdir "
 fi
 
-pretty_print_segment "$settings_path_color_fg" "$settings_path_color_bg" "${path_value}" "$segment_direction"
+pretty_print_segment "$settings_path_color_primary" "$settings_path_color_secondary" "${path_value}" "$segment_direction"

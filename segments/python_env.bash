@@ -16,5 +16,5 @@ else
 fi
 
 if [[ -n "$segment_value" ]]; then
-  pretty_print_segment "$settings_python_virtual_env_fg" "$settings_python_virtual_env_bg" " ${segment_value} " "$segment_direction"
+  pretty_print_segment "$settings_python_virtual_env_color_primary" "$settings_python_virtual_env_color_secondary" " ${segment_value} " "$segment_direction"
 fi
