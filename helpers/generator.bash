@@ -89,7 +89,7 @@ generate_prompt() {
 
   if [[ -n "${settings_prompt_prefix_upper}" ]]; then
     total_empty_space=$(( total_empty_space - ${#settings_prompt_prefix_upper} - 1 ))
-    prefix_color="$(print_fg_color "$settings_prompt_ready_color")"
+    prefix_color="$(print_fg_color "$settings_prompt_ready_color_primary")"
     prompt_left="${prompt_left} ${prefix_color}${settings_prompt_prefix_upper}"
   fi
 

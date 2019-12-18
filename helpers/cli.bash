@@ -83,10 +83,12 @@ sbp() {
     'color') # Show currently defined colors
       _sbp_require_argument "$2" '[color]'
       export SBP_THEME_COLORS="$2"
+      _sbp_reload
       ;;
     'layout')
       _sbp_require_argument "$2" '[layout]'
       export SBP_THEME_LAYOUT="$2"
+      _sbp_reload
       ;;
     'themes') # Show all defined colors and layouts
       "$themed_helper" 'list_themes'

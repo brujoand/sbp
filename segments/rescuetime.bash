@@ -11,16 +11,7 @@ else
   exit 0
 fi
 
-if [[ "$segment_direction" == 'right' ]]; then
-  splitter_character="$settings_segment_splitter_right"
-else
-  splitter_character="$settings_segment_splitter_left"
-fi
-
-splitter_on_color=$(print_fg_color "$settings_rescuetime_splitter_color")
-splitter_off_color=$(print_fg_color "$settings_rescuetime_color_secondary")
-splitter_segment="${splitter_on_color}${splitter_character}${splitter_off_color}"
-
+splitter_segment="$(pretty_print_splitter "$settings_rescuetime_color_primary" "$settings_rescuetime_color_secondary" "$settings_rescuetime_splitter_color" "$segment_direction")"
 
 segment_value="${pulse} ${splitter_segment} ${time}"
 

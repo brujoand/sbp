@@ -68,28 +68,51 @@ print_fg_color() {
   fi
 }
 
+pretty_print_splitter() {
+  local primary_color=$1
+  local secondary_color=$2
+  local splitter_color=$3
+  local direction=$4
+
+  if [[ "$direction" == 'right' ]]; then
+    splitter_character="$settings_segment_splitter_right"
+  else
+    splitter_character="$settings_segment_splitter_left"
+  fi
+
+  if [[ "$settings_segment_enable_bg_color" -eq 0 ]]; then
+    segment_color="$primary_color"
+  else
+    segment_color="$secondary_color"
+  fi
+
+  splitter_on_color=$(print_fg_color "$splitter_color")
+  splitter_off_color=$(print_fg_color "$segment_color")
+  printf '%s' "${splitter_on_color}${splitter_character}${splitter_off_color}"
+}
+
 pretty_print_segment() {
-  local segment_color_bg="$1"
-  local segment_color_fg="$2"
+  local primary_color="$1"
+  local secondary_color="$2"
   local segment_value="$3"
-  local segment_direction="$4"
+  local direction="$4"
 
   [[ -z "$segment_value" ]] && return 0
 
   if [[ "$settings_segment_enable_bg_color" -eq 0 ]]; then
-    segment_color_fg="$segment_color_bg"
-    segment_color_bg=""
-    color="$(print_fg_color "$segment_color_fg")"
+    secondary_color="$primary_color"
+    primary_color=""
+    color="$(print_fg_color "$secondary_color")"
 
-    if [[ -z "${segment_value// /}" || -z "$segment_direction" ]]; then
+    if [[ -z "${segment_value// /}" || -z "$direction" ]]; then
       full_output="${color}${segment_value}"
     else
       full_output="${color}${settings_segment_separator_right}${segment_value}${settings_segment_separator_left}"
     fi
   else
-    prepare_color="$(print_fg_color "$segment_color_bg")"
-    seperator="$(pretty_print_seperator "$segment_color_bg" "$segment_direction")"
-    segment="$(print_colors "$segment_color_fg" "$segment_color_bg")${segment_value}"
+    prepare_color="$(print_fg_color "$primary_color")"
+    seperator="$(pretty_print_seperator "$primary_color" "$direction")"
+    segment="$(print_colors "$secondary_color" "$primary_color")${segment_value}"
     full_output="${seperator}${segment}${prepare_color}"
   fi
 
@@ -118,6 +141,7 @@ strip_escaped_colors() {
 }
 
 export -f pretty_print_segment
+export -f pretty_print_splitter
 export -f pretty_print_seperator
 export -f strip_escaped_colors
 export -f print_colors
