@@ -66,9 +66,16 @@ list_hooks() {
   done
 }
 
-list_colors() {
+list_layouts() {
+  for layout in "$sbp_path"/themes/layouts/*.bash; do
+    file="${layout##*/}"
+    printf '  %s\n' "${file/.bash/}"
+  done
+}
+
+show_current_colors() {
+  settings_segment_enable_bg_color=1
   for n in "${colors_ids[@]}"; do
-    settings_segment_enable_bg_color=1
     color="color${n}"
     text_color_value=$(get_complement_rgb "${!color}")
     text_color="$(print_fg_color "$text_color_value" 'false')"
@@ -76,23 +83,29 @@ list_colors() {
     printf '%b%b %b%b ' "$bg_color" "$text_color" " $n " "\e[00m"
   done
   printf '\n'
+}
 
+list_colors() {
+  for color in "$sbp_path"/themes/colors/*.bash; do
+    source "$color"
+    file="${color##*/}"
+    printf '\n%s \n' "${file/.bash/}"
+    show_current_colors
+  done
 }
 
 list_themes() {
-  for theme in "$sbp_path"/themes/colors/*.bash; do
-    settings_segment_enable_bg_color=1
-    source "$theme"
-    printf '\n%s \n' "${theme##*/}"
-    for n in "${colors_ids[@]}"; do
-      color="color${n}"
-      text_color_value=$(get_complement_rgb "${!color}")
-      text_color="$(print_fg_color "$text_color_value" 'false')"
-      bg_color="$(print_bg_color "${!color}" 'false')"
-      printf '%b%b %b%b ' "$bg_color" "$text_color" " $n " "\e[00m"
-    done
-    printf '\n'
-  done
+  printf '\n%s:\n' "Colors"
+  list_colors
+  printf '\n%s:\n' "Layouts"
+  list_layouts
+}
+
+show_status() {
+  printf '%s: %s\n' 'Color' "$SBP_THEME_COLORS"
+  printf '%s: %s\n' 'Layout' "$SBP_THEME_LAYOUT"
+  printf '\n%s\n' "Current colors:"
+  show_current_colors
 }
 
 "$@"

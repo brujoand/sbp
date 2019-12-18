@@ -1,17 +1,30 @@
 _sbp_print_usage() {
   cat << EOF
-  Usage: sbp <command>
+  Usage: sbp [command]
 
   Commands:
   segments  - List all available segments
   hooks     - List all available hooks
-  peekaboo  - Toggle enabled segments or hooks
-  colors    - List the currently defined colors
-  themes    - List all available color themes
+  peekaboo  - Toggle visibility of [segment] or [hook]
+  color     - Set [color] for the current session
+  layout    - Set [layout] for the current session
+  themes    - List all available color themes and layouts
   reload    - Reload SBP and user settings
   debug     - Toggle debug mode
-  config    - Opens the config in $EDITOR
+  status    - Show the current configuration
+  config    - Opens the config in \$EDITOR ($EDITOR)
 EOF
+}
+
+_sbp_require_argument() {
+  local argument=$1
+  local name=$2
+
+  if [[ -z "$argument" ]]; then
+    echo "Value for required argument '$name' is missing"
+    _sbp_print_usage
+    return 1
+  fi
 }
 
 _sbp_reload() {
@@ -23,7 +36,8 @@ _sbp_edit_config() {
   if [[ -n "$EDITOR" ]]; then
     $EDITOR "${HOME}/.config/sbp/settings.conf"
   else
-    log_error "No \$EDITOR set, unable to open config"
+    echo "No \$EDITOR set, unable to open config"
+    echo "You can edit it here: ${HOME}/.config/sbp/settings.conf"
   fi
 }
 
@@ -56,33 +70,41 @@ _sbp_peekaboo() {
 sbp() {
   themed_helper="${sbp_path}/helpers/cli_helpers.bash"
   case $1 in
-    segments) # Show all available segments
+    'segments') # Show all available segments
       "$themed_helper" 'list_segments'
       ;;
-    hooks) # Show all available hooks
+    'hooks') # Show all available hooks
       "$themed_helper" 'list_hooks'
       ;;
-    peekaboo)
-      [[ -z "$2" ]] && _sbp_print_usage
+    'peekaboo')
+      _sbp_require_argument "$2" '[segment|hook]'
       _sbp_peekaboo "$2"
       ;;
-    colors) # Show currently defined colors
-      "$themed_helper" 'list_colors'
+    'color') # Show currently defined colors
+      _sbp_require_argument "$2" '[color]'
+      export SBP_THEME_COLORS="$2"
       ;;
-    themes) # Show all defined colors themes
+    'layout')
+      _sbp_require_argument "$2" '[layout]'
+      export SBP_THEME_LAYOUT="$2"
+      ;;
+    'themes') # Show all defined colors and layouts
       "$themed_helper" 'list_themes'
       ;;
-    reload) # Reload settings and SBP
+    'reload') # Reload settings and SBP
       _sbp_reload
       ;;
-    config) # Open the config file
+    'config') # Open the config file
       _sbp_edit_config
       ;;
-    debug) # Toggle debug mode
+    'debug') # Toggle debug mode
       _sbp_toggle_debug
       ;;
-    extra_options) # Woho, hiddden function
+    'extra_options') # Woho, hiddden function
       "$themed_helper" 'generate_extra_options'
+      ;;
+    'status')
+      "$themed_helper" 'show_status'
       ;;
     *)
       _sbp_print_usage && return 1
@@ -94,15 +116,32 @@ _sbp() {
   local cur words
   #_get_comp_words_by_ref cur
   cur="${COMP_WORDS[COMP_CWORD]}"
+  prev="${COMP_WORDS[1]}"
+
   words=()
-  if [[ "${COMP_WORDS[1]}" == 'peekaboo' ]]; then
-    for feature in hooks/*.bash segments/*.bash; do
-      file=${feature##*/}
-      words+=("${file/.bash}")
-    done
-  else
-    words=('segments' 'hooks' 'peekaboo' 'colors' 'themes' 'reload' 'help' 'config' 'debug')
-  fi
+  case "$prev" in
+    'peekaboo')
+      for feature in "${sbp_path}/hooks/"*.bash "${sbp_path}segments/"*.bash; do
+        file=${feature##*/}
+        words+=("${file/.bash}")
+      done
+      ;;
+    'color')
+      for color in "${sbp_path}/themes/colors/"*.bash; do
+        file=${color##*/}
+        words+=("${file/.bash}")
+      done
+      ;;
+    'layout')
+      for layout in "${sbp_path}/themes/layouts/"*.bash; do
+        file=${layout##*/}
+        words+=("${file/.bash}")
+      done
+      ;;
+    *)
+      words=('segments' 'hooks' 'peekaboo' 'color' 'layout' 'themes' 'reload' 'help' 'config' 'status' 'debug')
+      ;;
+  esac
 
   COMPREPLY=( $( compgen -W "${words[*]}" -- "$cur") )
 }
