@@ -22,8 +22,7 @@ _sbp_require_argument() {
 
   if [[ -z "$argument" ]]; then
     echo "Value for required argument '$name' is missing"
-    _sbp_print_usage
-    return 1
+    _sbp_print_usage && return 1
   fi
 }
 

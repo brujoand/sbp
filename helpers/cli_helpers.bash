@@ -8,6 +8,8 @@ source "${sbp_path}/helpers/environment.bash"
 load_config
 
 generate_extra_options() {
+  # TODO this should probably be rewritten to better check
+  # if we are messing with any previous settings
   if [[ "$settings_prompt_ready_vi_mode" -eq 1 ]]; then
     local cache_file="${cache_folder}/extra_options.bash"
     rm -f "$cache_file"
@@ -30,11 +32,12 @@ EOF
 }
 
 list_segments() {
-  local active_segments=( ${settings_segments_left[@]} ${settings_segments_right[@]} ${settings_segment_line_two[@]} )
-
-  for segment in "$sbp_path"/segments/*.bash; do
+  local active_segments=( "${settings_segments_left[@]}" "${settings_segments_right[@]}" )
+  IFS=" " read -r -a segments <<< "$(shopt -s nullglob; echo "$local_segments_folder"/*.bash "$global_segments_folder"/*.bash)"
+  for segment in "${segments[@]}"; do
     local status='disabled'
-    local segment_name="${segment##*/}"
+    local segment_file="${segment##*/}"
+    local segment_name="${segment_file/.bash/}"
     if printf '%s.bash\n' "${active_segments[@]}" | grep -qo "${segment_name}"; then
       if [[ -f "${config_folder}/peekaboo/${segment_name/.bash/}" ]]; then
         status='hidden'
@@ -52,22 +55,25 @@ list_segments() {
 }
 
 list_hooks() {
-  for hook in "$sbp_path"/hooks/*.bash; do
-    script="${hook##*/}"
+  IFS=" " read -r -a hooks <<< "$(shopt -s nullglob; echo "$local_hooks_folder"/*.bash "$global_hooks_folder"/*.bash)"
+  for hook in "${hooks[@]}"; do
+    hook_file="${hook##*/}"
+    hook_name="${hook_file/.bash/}"
     status='disabled'
-    if printf '%s.bash\n' "${settings_hooks[@]}" | grep -qo "${script}"; then
-      if [[ -f "${config_folder}/peekaboo/${script/.bash/}" ]]; then
+    if printf '%s.bash\n' "${settings_hooks[@]}" | grep -qo "${hook_name}"; then
+      if [[ -f "${config_folder}/peekaboo/${hook_name}" ]]; then
         status='paused'
       else
         status='enabled'
       fi
     fi
-    echo "${script/.bash/}: ${status}" | column -t
+    echo "${hook_name}: ${status}" | column -t
   done
 }
 
 list_layouts() {
-  for layout in "$sbp_path"/themes/layouts/*.bash; do
+  IFS=" " read -r -a layouts <<< "$(shopt -s nullglob; echo "$local_layouts_folder"/*.bash "$global_layouts_folder"/*.bash)"
+  for layout in "${layouts[@]}"; do
     file="${layout##*/}"
     printf '  %s\n' "${file/.bash/}"
   done
@@ -86,7 +92,8 @@ show_current_colors() {
 }
 
 list_colors() {
-  for color in "$sbp_path"/themes/colors/*.bash; do
+  IFS=" " read -r -a colors <<< "$(shopt -s nullglob; echo "$local_colors_folder"/*.bash "$global_colors_folder"/*.bash)"
+  for color in "${colors[@]}"; do
     source "$color"
     file="${color##*/}"
     printf '\n%s \n' "${file/.bash/}"

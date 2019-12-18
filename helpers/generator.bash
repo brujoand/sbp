@@ -13,32 +13,42 @@ execute_segment_script() {
   local segment=$1
   local segment_direction=$2
   local segment_max_length=$3
-  local segment_script="${sbp_path}/segments/${segment}.bash"
+  local local_segment_script="${local_segments_folder}/${segment}.bash"
+  local global_segment_script="${global_segments_folder}/${segment}.bash"
 
   if [[ -f "${config_folder}/peekaboo/${segment_name}" ]]; then
     return 0
   fi
 
-  if [[ -x "$segment_script" ]]; then
-    bash "$segment_script" "$command_exit_code" "$command_time" "$segment_direction" "$segment_max_length"
+  if [[ -x "$local_segment_script" ]]; then
+    bash "$local_segment_script" "$command_exit_code" "$command_time" "$segment_direction" "$segment_max_length"
+  elif [[ -x "$global_segment_script" ]]; then
+    bash "$global_segment_script" "$command_exit_code" "$command_time" "$segment_direction" "$segment_max_length"
   else
-    >&2 echo "Could not execute $segment_script"
-    >&2 echo "Make sure it exists, and is executable"
+    log_error "Could not execute $local_segment_script"
+    log_error "Could not execute $global_segment_script"
+    log_error "Make sure it exists, and is executable"
   fi
 }
 
 execute_prompt_hooks() {
+
   for hook in "${settings_hooks[@]}"; do
-    if [[ -f "${config_folder}/peekaboo/${segment_name}" ]]; then
+    local local_hook_script="${local_hooks_folder}/${hook}.bash"
+    local global_hook_script="${global_hooks_folder}/${hook}.bash"
+
+    if [[ -f "${config_folder}/peekaboo/${hook}" ]]; then
       return 0
     fi
 
-    local hook_script="${sbp_path}/hooks/${hook}.bash"
-    if [[ -x "$hook_script" ]]; then
-      (nohup bash "$hook_script" "$command_exit_code" "$command_time" &>/dev/null &)
+    if [[ -x "$local_hook_script" ]]; then
+      (nohup bash "$local_hook_script" "$command_exit_code" "$command_time" &>/dev/null &)
+    elif [[ -x "$global_hook_script" ]]; then
+      (nohup bash "$global_hook_script" "$command_exit_code" "$command_time" &>/dev/null &)
     else
-      >&2 echo "Could not execute $hook_script"
-      >&2 echo "Make sure it exists, and is executable"
+      log_error "Could not execute ${local_hook_script}"
+      log_error "Could not execute ${global_hook_script}"
+      log_error "Make sure it exists, and is executable"
     fi
   done
 }
