@@ -1,9 +1,3 @@
-function pretty_print_segment() {
-  printf '%s' "${@}"
-}
-
-export -f pretty_print_segment
-
 function test_that_we_get_the_right_time() {
   local result timestamp
   timestamp=$(date +'%H:%M:%S')

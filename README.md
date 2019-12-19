@@ -1,5 +1,6 @@
 # SBP - Simple Bash Prompt
 [![Build Status](https://travis-ci.org/brujoand/sbp.svg?branch=master)](https://travis-ci.org/brujoand/sbp)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/brujoand/sbp/main)
 
 Breaking Change: The filler segment is no longer needed, and should be removed
 from the sbp.conf.

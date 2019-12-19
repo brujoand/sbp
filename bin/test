@@ -16,4 +16,12 @@ fi
 
 echo "Running tests"
 sbp_path=$( cd "$( dirname "${BASH_SOURCE[0]}")/.." && pwd )
-sbp_path="$sbp_path" "${test_script}" "${test_dir}"
+
+function pretty_print_segment() {
+  printf '%s' "${@}"
+}
+
+export -f pretty_print_segment
+export sbp_path
+
+"$test_script" "$test_dir"

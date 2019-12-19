@@ -1,9 +1,3 @@
-function pretty_print_segment() {
-  printf '%s' "${@}"
-}
-
-export -f pretty_print_segment
-
 function test_that_we_get_the_right_spent_time() {
   local result
   result=$("${sbp_path}/segments/command.bash" 0 5)
@@ -12,8 +6,8 @@ function test_that_we_get_the_right_spent_time() {
 
 function test_that_we_get_a_failed_color() {
   local result color
-  export settings_command_color_bg_error=32
-  export settings_command_color_fg_error=24
+  export settings_command_color_error_primary=32
+  export settings_command_color_error_secondary=24
   result=$("${sbp_path}/segments/command.bash" 1 0)
   local colors="${settings_command_color_fg_error}${settings_command_color_bg_error}"
   assert_equals "${colors} last: 0m 0s " "$result"
