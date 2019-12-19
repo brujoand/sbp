@@ -9,8 +9,8 @@ else
 fi
 
 if [[ "$(id -u)" -eq 0 ]]; then
-  host_color_primary="0"
-  host_color_secondary="1"
+  host_color_primary="$settings_host_root_color_primary"
+  host_color_secondary="$settings_host_root_color_secondary"
 else
   host_color_primary="$settings_host_color_primary"
   host_color_secondary="$settings_host_color_secondary"
