@@ -1,6 +1,6 @@
 # SBP - Simple Bash Prompt
 [![Build Status](https://travis-ci.org/brujoand/sbp.svg?branch=master)](https://travis-ci.org/brujoand/sbp)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/brujoand/sbp/Bauta Unit Tests)
+[![GitHub Workflow Status]](https://img.shields.io/github/workflow/status/brujoand/sbp/Bauta Unit Tests)
 
 Simple Bash Prompt (SBP) is a bash prompt, which was simple once.
 This started out as a pure ripoff from powerline-shell, which is great, but written in python.
@@ -16,8 +16,7 @@ If you want the fancy pointy segment separators, you need the powerline fonts _i
 You can get them [here](https://github.com/powerline/fonts).
 Then run the install.sh script. Now the hard_to_remember part. Change the settings of your terminal emulator.
 Something like "Settings" and then "Fonts" will probably be the right place.
-All done?
-Great :)
+If you don't like powerline then use the 'plain' theme or create your own.
 
 ## Installing
 There is an install script. It will copy the default
@@ -64,4 +63,5 @@ make your own in the [Hooks Folder](/hooks).
 ### Themes
 Themes let you decide how the prompt is drawn, both in terms of layout and the
 colors used. Read more about those and how to make your own in the [Themes
-Folder](/themes).
+Folder](/themes). SBP supports both truecolors through RGB values and 256 colors
+by using ansi codes.

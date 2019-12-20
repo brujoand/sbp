@@ -81,7 +81,7 @@ sbp() {
       ;;
     'color') # Show currently defined colors
       _sbp_require_argument "$2" '[color]'
-      export SBP_THEME_COLORS="$2"
+      export SBP_THEME_COLOR="$2"
       _sbp_reload
       ;;
     'layout')

@@ -94,8 +94,8 @@ load_config() {
   set -a
   # shellcheck source=/dev/null
   source "$config_file"
-  set_layout "$SBP_THEME_LAYOUT"
-  set_colors "$SBP_THEME_COLORS"
+  set_layout "${SBP_THEME_LAYOUT:-$settings_theme_layout}"
+  set_colors "${SBP_THEME_COLOR:-$settings_theme_color}"
   # shellcheck source=/dev/null
   source "$colors_file"
   set +a
