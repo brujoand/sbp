@@ -1,3 +1,3 @@
 #!/bin/sh -l
 
-sh -c "./bin/test"
+sh -c "./test"

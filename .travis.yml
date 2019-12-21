@@ -6,4 +6,4 @@ addons:
   apt:
     packages:
     - bc
-script: ./bin/test
+script: ./test

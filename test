@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 set -e
 bauta_url='https://raw.githubusercontent.com/brujoand/bauta/master/bin/bauta'
-test_dir=$( cd "$( dirname "${BASH_SOURCE[0]}")/../tests" && pwd )
+test_dir=$( cd "$( dirname "${BASH_SOURCE[0]}")/tests" && pwd )
 test_script="${test_dir}/bauta"
 
 if [[ ! -f "$test_script" ]]; then
@@ -15,7 +15,7 @@ if [[ ! -x "$test_script" ]]; then
 fi
 
 echo "Running tests"
-sbp_path=$( cd "$( dirname "${BASH_SOURCE[0]}")/.." && pwd )
+sbp_path=$( cd "$( dirname "${BASH_SOURCE[0]}")" && pwd )
 
 function pretty_print_segment() {
   printf '%s' "${@}"
