@@ -9,46 +9,44 @@ load_config
 
 color_reset='\[\e[00m\]'
 
-execute_segment_script() {
-  local segment=$1
-  local segment_direction=$2
-  local segment_max_length=$3
-  local local_segment_script="${config_folder}/segments/${segment}.bash"
-  local global_segment_script="${sbp_path}/segments/${segment}.bash"
+get_executable_script() {
+  local type=$1
+  local feature=$2
+  local local_script="${config_folder}/${type}s/${feature}.bash"
+  local global_script="${sbp_path}/${type}s/${feature}.bash"
 
   if [[ -f "${config_folder}/peekaboo/${segment_name}" ]]; then
     return 0
   fi
 
-  if [[ -x "$local_segment_script" ]]; then
-    bash "$local_segment_script" "$command_exit_code" "$command_time" "$segment_direction" "$segment_max_length"
-  elif [[ -x "$global_segment_script" ]]; then
-    bash "$global_segment_script" "$command_exit_code" "$command_time" "$segment_direction" "$segment_max_length"
+  if [[ -x "$local_script" ]]; then
+    printf '%s' "$local_script"
+  elif [[ -x "$global_script" ]]; then
+    printf '%s' "$global_script"
   else
-    log_error "Could not execute $local_segment_script"
-    log_error "Could not execute $global_segment_script"
+    log_error "Could not execute $local_script"
+    log_error "Could not execute $global_script"
     log_error "Make sure it exists, and is executable"
   fi
 }
 
+execute_segment_script() {
+  local segment=$1
+  local segment_direction=$2
+  local segment_max_length=$3
+  local segment_script="$(get_executable_script 'segment' "$segment")"
+
+  if [[ -n "$segment_script" ]]; then
+    bash "$segment_script" "$command_exit_code" "$command_time" "$segment_direction" "$segment_max_length"
+  fi
+}
+
 execute_prompt_hooks() {
-
   for hook in "${settings_hooks[@]}"; do
-    local local_hook_script="${config_folder}/hooks/${hook}.bash"
-    local global_hook_script="${sbp_path}/hooks/${hook}.bash"
+    local hook_script="$(get_executable_script 'hook' "$hook")"
 
-    if [[ -f "${config_folder}/peekaboo/${hook}" ]]; then
-      return 0
-    fi
-
-    if [[ -x "$local_hook_script" ]]; then
-      (nohup bash "$local_hook_script" "$command_exit_code" "$command_time" &>/dev/null &)
-    elif [[ -x "$global_hook_script" ]]; then
-      (nohup bash "$global_hook_script" "$command_exit_code" "$command_time" &>/dev/null &)
-    else
-      log_error "Could not execute ${local_hook_script}"
-      log_error "Could not execute ${global_hook_script}"
-      log_error "Make sure it exists, and is executable"
+    if [[ -n "$hook_script" ]]; then
+      (nohup bash "$hook_script" "$command_exit_code" "$command_time" &>/dev/null &)
     fi
   done
 }
