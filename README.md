@@ -11,6 +11,15 @@ If something seems wrong, lacking or bad in some way; feel free to rant, review 
 
 ![Screenshot](/resources/sbp_screenshot.png)
 
+For a live demo of this magic [head over
+here](https://asciinema.org/a/0efgJrqQJY2vH1XguXjX3xV1c)
+
+## A note on the recent changes
+I wanted to add support for trueculors instead of relying on "just" 256 colors.
+To do this I had to break the configuration, and when the flood gates had been
+opened, a lot of things started changing. Suddenly layout changes was pretty
+easy too.
+
 ## Soft Requirements
 If you want the fancy pointy segment separators, you need the powerline fonts _installed_ and _enabled_. Both.
 You can get them [here](https://github.com/powerline/fonts).
@@ -23,7 +32,7 @@ There is an install script. It will copy the default
 settings to `~/.config/sbp/settings.conf` along with the default color assignments
 to `~/.config/sbp/colors.conf` and add two lines to your `$HOME/.bashrc`:
 ```
-  sbp_path=/the/path/to/sbp
+  sbp_path=/the/path/to/sbp/
   source ${sbp_path}/sbp.bash
 ```
 
