@@ -14,17 +14,9 @@ fi
 
 IFS=/ read -r -a wdir_array <<<"${wdir}"
 if [[ $settings_path_splitter_disable -ne 1 && "${#wdir_array[@]}" -gt 1 ]]; then
-  if [[ "$segment_direction" == 'right' ]]; then
-    splitter_character="$settings_segment_splitter_right"
-  else
-    splitter_character="$settings_segment_splitter_left"
-  fi
-
   splitter_on_color=$(print_fg_color "$settings_path_splitter_color")
   splitter_off_color=$(print_fg_color "$settings_path_color_secondary")
-  splitter_segment="${splitter_on_color}${splitter_character}${splitter_off_color}"
   splitter_segment="$(pretty_print_splitter "$settings_path_color_primary" "$settings_path_color_secondary" "$settings_path_splitter_color" "$segment_direction")"
-
 
   for i in "${!wdir_array[@]}"; do
     dir=${wdir_array["$i"]}

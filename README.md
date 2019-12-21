@@ -1,5 +1,5 @@
 # SBP - Simple Bash Prompt
-[![GitHub Workflow Status]](https://img.shields.io/github/workflow/status/brujoand/sbp/Bauta%20Unit%20Tests)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/brujoand/sbp/Bauta%20Unit%20Tests)
 
 Simple Bash Prompt (SBP) is a bash prompt, which was simple once.
 This started out as a pure ripoff from powerline-shell, which is great, but written in python.
