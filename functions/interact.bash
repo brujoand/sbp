@@ -1,3 +1,5 @@
+_sbp_themed_helper="${sbp_path}/functions/interact_themed.bash"
+
 _sbp_print_usage() {
   cat << EOF
   Usage: sbp [command]
@@ -67,13 +69,12 @@ _sbp_peekaboo() {
 }
 
 sbp() {
-  themed_helper="${sbp_path}/helpers/cli_helpers.bash"
   case $1 in
     'segments') # Show all available segments
-      "$themed_helper" 'list_segments'
+      "$_sbp_themed_helper" 'list_segments'
       ;;
     'hooks') # Show all available hooks
-      "$themed_helper" 'list_hooks'
+      "$_sbp_themed_helper" 'list_hooks'
       ;;
     'peekaboo')
       _sbp_require_argument "$2" '[segment|hook]'
@@ -90,7 +91,7 @@ sbp() {
       _sbp_reload
       ;;
     'themes') # Show all defined colors and layouts
-      "$themed_helper" 'list_themes'
+      "$_sbp_themed_helper" 'list_themes'
       ;;
     'reload') # Reload settings and SBP
       _sbp_reload
@@ -102,10 +103,10 @@ sbp() {
       _sbp_toggle_debug
       ;;
     'extra_options') # Woho, hiddden function
-      "$themed_helper" 'generate_extra_options'
+      "$_sbp_themed_helper" 'generate_extra_options'
       ;;
     'status')
-      "$themed_helper" 'show_status'
+      "$_sbp_themed_helper" 'show_status'
       ;;
     *)
       _sbp_print_usage && return 1
@@ -122,21 +123,22 @@ _sbp() {
   words=()
   case "$prev" in
     'peekaboo')
-      for feature in "${sbp_path}/hooks/"*.bash "${sbp_path}segments/"*.bash; do
-        file=${feature##*/}
-        words+=("${file/.bash}")
+      for hook in $($_sbp_themed_helper list_words 'hooks'); do
+        words+=("$hook")
+      done
+
+      for segment in $($_sbp_themed_helper list_words 'segments'); do
+        words+=("$segment")
       done
       ;;
     'color')
-      for color in "${sbp_path}/themes/colors/"*.bash; do
-        file=${color##*/}
-        words+=("${file/.bash}")
+      for color in $($_sbp_themed_helper list_words 'themes/colors'); do
+        words+=("$color")
       done
       ;;
     'layout')
-      for layout in "${sbp_path}/themes/layouts/"*.bash; do
-        file=${layout##*/}
-        words+=("${file/.bash}")
+      for layout in $($_sbp_themed_helper list_words 'themes/layouts'); do
+        words+=("$layout")
       done
       ;;
     *)

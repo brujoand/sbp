@@ -1,9 +1,9 @@
 #! /usr/bin/env bash
 
-# shellcheck source=helpers/formatting.bash
-source "${sbp_path}/helpers/formatting.bash"
-# shellcheck source=helpers/environment.bash
-source "${sbp_path}/helpers/environment.bash"
+# shellcheck source=functions/decorate.bash
+source "${sbp_path}/functions/decorate.bash"
+# shellcheck source=functions/configure.bash
+source "${sbp_path}/functions/configure.bash"
 
 load_config
 
@@ -33,8 +33,7 @@ EOF
 
 list_segments() {
   local active_segments=( "${settings_segments_left[@]}" "${settings_segments_right[@]}" )
-  IFS=" " read -r -a segments <<< "$(shopt -s nullglob; echo "$local_segments_folder"/*.bash "$global_segments_folder"/*.bash)"
-  for segment in "${segments[@]}"; do
+  for segment in $(list_feature_files 'segments'); do
     local status='disabled'
     local segment_file="${segment##*/}"
     local segment_name="${segment_file/.bash/}"
@@ -55,8 +54,7 @@ list_segments() {
 }
 
 list_hooks() {
-  IFS=" " read -r -a hooks <<< "$(shopt -s nullglob; echo "$local_hooks_folder"/*.bash "$global_hooks_folder"/*.bash)"
-  for hook in "${hooks[@]}"; do
+  for hook in $(list_feature_files 'hooks'); do
     hook_file="${hook##*/}"
     hook_name="${hook_file/.bash/}"
     status='disabled'
@@ -72,8 +70,7 @@ list_hooks() {
 }
 
 list_layouts() {
-  IFS=" " read -r -a layouts <<< "$(shopt -s nullglob; echo "$local_layouts_folder"/*.bash "$global_layouts_folder"/*.bash)"
-  for layout in "${layouts[@]}"; do
+  for layout in $(list_feature_files 'themes/layouts'); do
     file="${layout##*/}"
     printf '  %s\n' "${file/.bash/}"
   done
@@ -92,8 +89,7 @@ show_current_colors() {
 }
 
 list_colors() {
-  IFS=" " read -r -a colors <<< "$(shopt -s nullglob; echo "$local_colors_folder"/*.bash "$global_colors_folder"/*.bash)"
-  for color in "${colors[@]}"; do
+  for color in $(list_feature_files 'themes/colors'); do
     source "$color"
     file="${color##*/}"
     printf '\n%s \n' "${file/.bash/}"
@@ -108,9 +104,23 @@ list_themes() {
   list_layouts
 }
 
+list_words() {
+  list_feature_names "$1"
+}
+
 show_status() {
-  printf '%s: %s\n' 'Color' "$SBP_THEME_COLORS"
-  printf '%s: %s\n' 'Layout' "$SBP_THEME_LAYOUT"
+  read -r -d '' splash <<'EOF'
+
+' _____________________________
+ /   _____/\______   \______   \
+ \_____  \  |    |  _/|     ___/
+ /        \ |    |   \|    |
+/_______  / |______  /|____|
+        \/         \/
+EOF
+  printf '%s\n' "${splash}"
+  printf '%s: %s\n' 'Color' "${SBP_THEME_LAYOUT:-$settings_theme_layout}"
+  printf '%s: %s\n' 'Layout' "${SBP_THEME_COLOR:-$settings_theme_color}"
   printf '\n%s\n' "Current colors:"
   show_current_colors
 }

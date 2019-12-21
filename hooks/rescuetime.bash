@@ -24,7 +24,7 @@ if [[ -z $RESCUETIME_API_KEY ]]; then
   exit 0
 fi
 
-endpoint="https://www.rescuetime.com/anapi/data?key=$RESCUETIME_API_KEY&format=csv&rs=day&rk=productivity"
+endpoint="https://www.rescuetime.com/anapi/data?key=${RESCUETIME_API_KEY}&format=csv&rs=day&rk=productivity"
 result=$(curl -s "$endpoint" | grep -v '^Rank')
 exit_code=$?
 if [[ "$exit_code" -gt 0 ]]; then

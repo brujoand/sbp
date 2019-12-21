@@ -1,9 +1,9 @@
 #! /usr/bin/env bash
 
-# shellcheck source=helpers/formatting.bash
-source "${sbp_path}/helpers/formatting.bash"
-# shellcheck source=helpers/environment.bash
-source "${sbp_path}/helpers/environment.bash"
+# shellcheck source=functions/decorate.bash
+source "${sbp_path}/functions/decorate.bash"
+# shellcheck source=functions/configure.bash
+source "${sbp_path}/functions/configure.bash"
 
 load_config
 
@@ -13,8 +13,8 @@ execute_segment_script() {
   local segment=$1
   local segment_direction=$2
   local segment_max_length=$3
-  local local_segment_script="${local_segments_folder}/${segment}.bash"
-  local global_segment_script="${global_segments_folder}/${segment}.bash"
+  local local_segment_script="${config_folder}/segments/${segment}.bash"
+  local global_segment_script="${sbp_path}/segments/${segment}.bash"
 
   if [[ -f "${config_folder}/peekaboo/${segment_name}" ]]; then
     return 0
@@ -34,8 +34,8 @@ execute_segment_script() {
 execute_prompt_hooks() {
 
   for hook in "${settings_hooks[@]}"; do
-    local local_hook_script="${local_hooks_folder}/${hook}.bash"
-    local global_hook_script="${global_hooks_folder}/${hook}.bash"
+    local local_hook_script="${config_folder}/hooks/${hook}.bash"
+    local global_hook_script="${sbp_path}/hooks/${hook}.bash"
 
     if [[ -f "${config_folder}/peekaboo/${hook}" ]]; then
       return 0

@@ -1,25 +1,33 @@
 #! /usr/bin/env bash
-set +a
-global_themes_folder="${sbp_path}/themes"
-global_layouts_folder="${global_themes_folder}/layouts"
-global_colors_folder="${global_themes_folder}/colors"
-global_hooks_folder="${sbp_path}/hooks"
-global_segments_folder="${sbp_path}/segments"
-local_themes_folder="${config_folder}/themes"
-local_layouts_folder="${local_themes_folder}/layouts"
-local_colors_folder="${local_themes_folder}/colors"
-local_hooks_folder="${config_folder}/hooks"
-local_segments_folder="${config_folder}/segments"
-set -a
 
-log_error() {
-  local context="${BASH_SOURCE[1]}:${FUNCNAME[1]}"
-  >&2 printf '%s: \e[38;5;196m%s\e[00m\n' "${context}" "${*}"
+export config_folder="${HOME}/.config/sbp"
+config_file="${config_folder}/settings.conf"
+colors_file="${config_folder}/colors.conf"
+default_config_file="${sbp_path}/config/settings.conf"
+default_colors_file="${sbp_path}/config/colors.conf"
+export cache_folder="${config_folder}/cache"
+
+list_feature_files() {
+  local feature_type=$1
+  config_folder="${HOME}/.config/sbp"
+  IFS=" " read -r -a features <<< "$(\
+    shopt -s nullglob; \
+    echo "${sbp_path}/${feature_type}"/*.bash \
+      "${config_folder}/${feature_type}"/*.bash; \
+  )"
+
+  for file in "${features[@]}"; do
+    printf '%s\n' "$file"
+  done
 }
 
-log_info() {
-  local context="${BASH_SOURCE[1]}:${FUNCNAME[1]}"
-  >&2 printf '%s: \e[38;5;76m%s\e[00m\n' "${context}" "${*}"
+list_feature_names() {
+  local feature_type=$1
+  for file in $(list_feature_files "$feature_type"); do
+    file_name="${file##*/}"
+    name="${file_name/.bash/}"
+    printf '%s\n' "$name"
+  done
 }
 
 set_colors() {
@@ -71,12 +79,6 @@ set_layout() {
 }
 
 load_config() {
-  config_folder="${HOME}/.config/sbp"
-  config_file="${config_folder}/settings.conf"
-  colors_file="${config_folder}/colors.conf"
-  default_config_file="${sbp_path}/config/settings.conf"
-  default_colors_file="${sbp_path}/config/colors.conf"
-  cache_folder="${config_folder}/cache"
   [[ -d "$cache_folder" ]] || mkdir -p "$cache_folder"
 
   if [[ ! -f "$config_file" ]]; then
@@ -101,10 +103,6 @@ load_config() {
   set +a
 }
 
-export -f log_error
-export -f log_info
 export -f load_config
 export -f set_layout
 export -f set_colors
-export cache_folder
-export config_folder

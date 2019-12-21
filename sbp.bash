@@ -5,8 +5,10 @@
 #################################
 
 export sbp_path
-# shellcheck source=helpers/cli.bash
-source "${sbp_path}/helpers/cli.bash"
+# shellcheck source=functions/log.bash
+source "${sbp_path}/functions/log.bash"
+# shellcheck source=functions/interact.bash
+source "${sbp_path}/functions/interact.bash"
 
 _sbp_previous_history=
 
@@ -64,7 +66,7 @@ _sbp_set_prompt() {
   fi
   printf '\e]2;%s\007' "$title"
 
-  PS1=$(bash "${sbp_path}/helpers/generator.bash" "$COLUMNS" "$command_exit_code" "$command_time")
+  PS1=$(bash "${sbp_path}/functions/generate.bash" "$COLUMNS" "$command_exit_code" "$command_time")
   [[ -n "$SBP_DEBUG" ]] &&_sbp_timer_tick "Done"
 }
 
