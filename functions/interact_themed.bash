@@ -119,8 +119,8 @@ show_status() {
         \/         \/
 EOF
   printf '%s\n' "${splash}"
-  printf '%s: %s\n' 'Color' "${SBP_THEME_LAYOUT:-$settings_theme_layout}"
-  printf '%s: %s\n' 'Layout' "${SBP_THEME_COLOR:-$settings_theme_color}"
+  printf '%s: %s\n' 'Color' "${SBP_THEME_COLOR:-$settings_theme_color}"
+  printf '%s: %s\n' 'Layout' "${SBP_THEME_LAYOUT:-$settings_theme_layout}"
   printf '\n%s\n' "Current colors:"
   show_current_colors
 }

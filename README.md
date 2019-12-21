@@ -1,5 +1,5 @@
 # SBP - Simple Bash Prompt
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/brujoand/sbp/Bauta%20Unit%20Tests)
+[![Build Status](https://travis-ci.org/brujoand/sbp.svg?branch=master)](https://travis-ci.org/brujoand/sbp)
 
 Simple Bash Prompt (SBP) is a bash prompt, which was simple once.
 This started out as a pure ripoff from powerline-shell, which is great, but written in python.
@@ -73,3 +73,24 @@ Themes let you decide how the prompt is drawn, both in terms of layout and the
 colors used. Read more about those and how to make your own in the [Themes
 Folder](/themes). SBP supports both truecolors through RGB values and 256 colors
 by using ansi codes.
+
+#### Beta - VI mode
+The setting `settings_prompt_ready_vi_mode=1` will use the `prompt_ready` icon
+with the configured colors and change it's color depending on the current VI
+mode if enabled. The cursor will also change from blinking to solid block if
+your terminal supports it.
+
+### FAQ
+
+#### Is this really just bash?
+Yes, but actually no. At the time of writing there are 2 awk, and 4 sed
+invocations in addition to a few date calls. I want to get rid of awk and sed,
+but I haven't been able to yet.
+
+#### My prompt doesn't show any colors, whats wrong?
+You are using a terminal that doesn't support truecolors. You can write your own
+ansi theme, or use one of the two provided ones, default-256 & xresources. The
+latter only uses the 16 base colors.
+
+#### I don't want to install any fancy fonts, can I still have nice things?
+Why yes! Simply use the 'plain' layout. No fonts needed.
