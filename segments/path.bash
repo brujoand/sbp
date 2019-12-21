@@ -8,8 +8,8 @@ wdir=${PWD/${HOME}/\~}
 
 if [[ "${#wdir}" -gt "$segment_max_length" ]]; then
   folder=${wdir##*/}
-  IFS='/' wdir=$(for p in ${wdir}; do printf '/%s' "${p:0:1}"; done;)
-  wdir="${wdir}${folder:1}"
+  IFS='/' wdir=$(for p in ${wdir}; do printf '%s/' "${p:0:1}"; done;)
+  wdir="${wdir%/*}${folder:1}"
 fi
 
 IFS=/ read -r -a wdir_array <<<"${wdir}"
