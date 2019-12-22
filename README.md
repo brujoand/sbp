@@ -80,6 +80,51 @@ with the configured colors and change it's color depending on the current VI
 mode if enabled. The cursor will also change from blinking to solid block if
 your terminal supports it.
 
+
+#### Speed
+I've been comparing the speed of SBP to fancy prompts like
+[powerline9k](https://github.com/Powerlevel9k/powerlevel9k), but there has been
+an improvement recently in the form of
+[powerlevel10k](https://github.com/romkatv/powerlevel10k). The latter version
+feels a lot snappier and does deliver on speed. However in my benchmarks SBP is
+still faster. I ran 50 invocation of the prompt in succession, with the
+following enabled for all prompts: host, path, git, time, last command time and
+last command exit status. I measured the display time on my trusted old mac mini
+running Ubuntu using the following function:
+
+```
+precmd() {
+  export second=$(date +'%s%3N')
+
+  if [[ -n "$first" ]]; then
+    echo $(( first - second ))ms >> ${HOME}/${ZSH_THEME##*/}.stats
+  fi
+  export first=$(date +'%s%3N')
+}
+```
+Since bash doesn't support the `precmd` function I used `$PROMPT_COMMAND` instead, and by
+taking the average of each stats file and ignoring the first unrealistic values
+I ended up with pretty similar results.
+
+|Rank| prompt       | average time |
+|----|--------------|--------------|
+| 1  | SBP          | 48ms         |
+| 2  | Powerlevel10k| 81ms         |
+| 3  | Powerlevel9k | 179ms        |
+
+I'm not quite sure why these numbers differ so much from the ones in the
+Powerlevel10k readme, but I suspect it might be because the benchmarking script
+used doesn't actually measure rendering but rather generation time. Another
+point of course is the different hardware used, which will affect the time spent
+but shouldn't affect the relation between the times much. There will also be a
+ton of other things that will slow each prompt down differently depending on
+implementation. SBP for instance cached data to files which can be slower on
+some systems. Also feel free to educate me if there are better ways of measuring
+the speed difference here. On a related note though, on thing that tends to slow
+these prompts down are large git repositories. Powerlevel10k has a special
+binary for this and I expect it will perform much better in these cases.
+
+
 ### FAQ
 
 #### Is this really just bash?
