@@ -81,7 +81,7 @@ mode if enabled. The cursor will also change from blinking to solid block if
 your terminal supports it.
 
 
-#### Speed
+### Speed
 I've been comparing the speed of SBP to fancy prompts like
 [powerline9k](https://github.com/Powerlevel9k/powerlevel9k), but there has been
 an improvement recently in the form of
