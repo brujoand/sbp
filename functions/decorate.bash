@@ -116,8 +116,8 @@ pretty_print_segment() {
     full_output="${seperator}${segment}${prepare_color}"
   fi
 
-  uncolored=$(strip_escaped_colors "$full_output")
   printf '%s' "$full_output"
+  uncolored=$(strip_escaped_colors "$full_output")
   return "${#uncolored}"
 }
 
