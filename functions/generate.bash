@@ -24,9 +24,9 @@ get_executable_script() {
   elif [[ -x "$global_script" ]]; then
     printf '%s' "$global_script"
   else
-    log_error "Could not execute $local_script"
-    log_error "Could not execute $global_script"
-    log_error "Make sure it exists, and is executable"
+    log_error "Could not find $local_script"
+    log_error "Could not find $global_script"
+    log_error "Make sure it exists"
   fi
 }
 
