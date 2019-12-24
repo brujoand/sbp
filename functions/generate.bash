@@ -75,6 +75,7 @@ generate_prompt() {
   for i in "${!prompt_segments[@]}"; do
     segment_name="${prompt_segments[i]}"
     [[ -z "$segment_name" ]] && continue
+    mkfifo "${tempdir}/${i}"
     if [[ "$i" -eq 0 ]]; then
       seperator_direction=''
       pid_left["$i"]="$i"
@@ -89,7 +90,7 @@ generate_prompt() {
       pid_two["$i"]="$i"
     fi
 
-    execute_segment_script "$segment_name" "$seperator_direction" "$segment_max_length" > "$tempdir/$i" & pids[i]=$!
+    execute_segment_script "$segment_name" "$seperator_direction" "$segment_max_length" > "${tempdir}/${i}" & pids[i]=$!
 
   done
 
@@ -102,9 +103,9 @@ generate_prompt() {
   fi
 
   for i in "${!pids[@]}"; do
+    segment=$(<"$tempdir/$i");
     wait "${pids[i]}"
     segment_length=$?
-    segment=$(<"$tempdir/$i");
     empty_space=$(( total_empty_space - segment_length ))
     if [[ -n "${pid_left["$i"]}"  && "$empty_space" -gt 0 ]]; then
       prompt_left="${prompt_left}${segment}"

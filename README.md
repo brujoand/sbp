@@ -128,7 +128,7 @@ binary for this and I expect it will perform much better in these cases.
 ### FAQ
 
 #### Is this really just bash?
-Yes, but actually no. At the time of writing there are 2 awk, and 4 sed
+Yes, but actually no. At the time of writing there are 4 sed
 invocations in addition to a few date calls. I want to get rid of awk and sed,
 but I haven't been able to yet.
 
