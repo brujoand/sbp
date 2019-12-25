@@ -73,7 +73,7 @@ generate_prompt() {
   # Concurrent evaluation of promt segments
   systemd_tmp="/run/user/${UID}/"
   if [[ -d "${systemd_tmp}" ]]; then
-    tempdir=$(mktemp -d --tempdir="$systemd_tmp") && trap 'rm -rf "$tempdir"' EXIT;
+    tempdir=$(mktemp -d --tmpdir="$systemd_tmp") && trap 'rm -rf "$tempdir"' EXIT;
   else
     tempdir=$(mktemp -d) && trap 'rm -rf "$tempdir"' EXIT;
   fi
