@@ -12,12 +12,13 @@ color_reset='\[\e[00m\]'
 get_executable_script() {
   local type=$1
   local feature=$2
-  local local_script="${config_folder}/${type}s/${feature}.bash"
-  local global_script="${sbp_path}/${type}s/${feature}.bash"
 
   if [[ -f "${config_folder}/peekaboo/${segment_name}" ]]; then
     return 0
   fi
+
+  local local_script="${config_folder}/${type}s/${feature}.bash"
+  local global_script="${sbp_path}/${type}s/${feature}.bash"
 
   if [[ -x "$local_script" ]]; then
     printf '%s' "$local_script"
