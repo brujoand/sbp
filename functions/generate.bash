@@ -73,10 +73,11 @@ generate_prompt() {
   # Concurrent evaluation of promt segments
   systemd_tmp="/run/user/${UID}/"
   if [[ -d "${systemd_tmp}" ]]; then
-    export TMPDIR="$systemd_tmp"
+    tempdir=$(mktemp -d --tempdir="$systemd_tmp") && trap 'rm -rf "$tempdir"' EXIT;
+  else
+    tempdir=$(mktemp -d) && trap 'rm -rf "$tempdir"' EXIT;
   fi
 
-  tempdir=$(mktemp -d) && trap 'rm -rf "$tempdir"' EXIT;
   for i in "${!prompt_segments[@]}"; do
     segment_name="${prompt_segments[i]}"
     [[ -z "$segment_name" ]] && continue
