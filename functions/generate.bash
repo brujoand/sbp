@@ -59,7 +59,7 @@ generate_prompt() {
   execute_prompt_hooks
 
   local prompt_left="\n"
-  local prompt_filler prompt_right prompt_ready seperator_direction
+  local prompt_filler prompt_right prompt_ready seperator_direction base_dir
   local prompt_left_end=$(( ${#settings_segments_left[@]} - 1 ))
   local prompt_right_end=$(( ${#settings_segments_right[@]} + prompt_left_end ))
   local prompt_segments=("${settings_segments_left[@]}" "${settings_segments_right[@]}" 'prompt_ready')
@@ -71,6 +71,11 @@ generate_prompt() {
   declare -A pid_two
 
   # Concurrent evaluation of promt segments
+  systemd_tmp="/run/user/${UID}/"
+  if [[ -d "${systemd_tmp}" ]]; then
+    export TMPDIR="$systemd_tmp"
+  fi
+
   tempdir=$(mktemp -d) && trap 'rm -rf "$tempdir"' EXIT;
   for i in "${!prompt_segments[@]}"; do
     segment_name="${prompt_segments[i]}"
