@@ -1,6 +1,6 @@
-FROM alpine
+FROM ubuntu
 
-RUN apk -U add git bash curl
+RUN apt-get update && apt-get install -y git bash curl
 
 ADD . /sbp
 
