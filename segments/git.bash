@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 segment_direction=$3
-settings_git_max_length=$4
+segment_max_length=$4
 
 incoming_icon="$settings_git_incoming_icon"
 outgoing_icon="$settings_git_outgoing_icon"
@@ -67,8 +67,15 @@ else
   git_head=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
 fi
 
-if [[ $(( ${#git_head} + ${#git_state} )) -gt "$settings_git_max_length" ]]; then
-  git_head="${git_head:0:10}.."
+git_size=$(( ${#git_state} + ${#settings_git_icon} + ${#git_head} + ${#upstream_status} ))
+
+if [[ "$git_size" -gt "$segment_max_length" ]]; then
+  available_space=$(( segment_max_length - ${#git_state} - ${#settings_git_icon} + ${#upstream_status} ))
+  if [[ "$available_space" -gt 0 ]]; then
+    git_head="${git_head:0:$available_space}.."
+  else
+    git_head=""
+  fi
 fi
 
 segment_value=" ${git_state} ${settings_git_icon} ${git_head} ${upstream_status} "
