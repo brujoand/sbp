@@ -46,14 +46,17 @@ _sbp_set_prompt() {
   local command_exit_code=$?
   [[ -n "$SBP_DEBUG" ]] && _sbp_timer_start
   local last_history command_started command_ended command_time
-  last_history=$(HISTTIMEFORMAT='%s ' history 1)
-  last_history=${last_history##*  }
+  # We need to re-evaluate this to remove excess spaces, so no quotes
+  last_history=$( echo $(HISTTIMEFORMAT='%s ' history 1))
+  # Remove the history index
+  last_history=${last_history#* }
 
   if [[ -z "$_sbp_previous_history" || "$last_history" == "$_sbp_previous_history" ]]; then
     command_exit_code=
     command_time=
   else
     command_ended=$(( SHELL_BIRTH + SECONDS ))
+    # Pick the timestamp only which is first
     command_started=${last_history/ *}
     command_time=$(( command_ended - command_started ))
   fi
