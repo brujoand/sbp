@@ -1,11 +1,11 @@
 #! /usr/bin/env bash
 
-export config_folder="${HOME}/.config/sbp"
+config_folder="${HOME}/.config/sbp"
 config_file="${config_folder}/settings.conf"
 colors_file="${config_folder}/colors.conf"
 default_config_file="${SBP_PATH}/config/settings.conf"
 default_colors_file="${SBP_PATH}/config/colors.conf"
-export cache_folder="${config_folder}/cache"
+cache_folder="${config_folder}/cache"
 
 configure::list_feature_files() {
   local feature_type=$1

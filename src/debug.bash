@@ -11,9 +11,9 @@ debug::log_info() {
 }
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  export date_cmd='gdate'
+  date_cmd='gdate'
 else
-  export date_cmd='date'
+  date_cmd='date'
 fi
 
 debug::start_timer() {
