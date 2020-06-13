@@ -17,11 +17,11 @@ COMMAND_DURATION=$2
 main::main() {
   execute::execute_prompt_hooks
 
-  # Concurrent evaluation of promt segments
   tempdir=$_SBP_CACHE
 
   declare -a fillers
   declare -a newlines
+  declare -a pids
 
   local segment_position='left'
   local last_newline=0
@@ -68,7 +68,8 @@ main::main() {
       pre_filler="${pre_filler}\n"
     else
       wait "${pids[i]}"
-      segment_output=$(<"$tempdir/$i")
+      read -r segment_output < "${tempdir}/${i}"
+
       segment=${segment_output##*;;}
       segment_length=${segment_output%;;*}
       # Make fillers and newlines part of the theme?

@@ -4,7 +4,7 @@ segments::rescuetime() {
   local cache_file="${cache_folder}/rescuetime.csv"
 
   if [[ -f "$cache_file" ]]; then
-    cache=$(<"$cache_file")
+    read -r cache < "$cache_file"
     pulse="${cache/;*}"
     time="${cache/*;}"
   else

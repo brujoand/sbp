@@ -7,7 +7,7 @@ segments::python_env() {
     path=${PWD}
     while [[ $path ]]; do
       if [[ -f "${path}/.python-version" ]]; then
-        segment_value=$(< "${path}/.python-version")
+        read -r segment_value < "${path}/.python-version"
         break
       fi
       path=${path%/*}
