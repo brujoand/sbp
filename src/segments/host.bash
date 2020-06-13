@@ -9,7 +9,6 @@ segments::host() {
   fi
 
   if [[ "$(id -u)" -eq 0 ]]; then
-    return 3
     print_themed_segment 'highlight' "$host_value"
   else
     print_themed_segment 'normal' "$host_value"

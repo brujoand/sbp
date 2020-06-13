@@ -15,7 +15,9 @@ print_themed_filler() {
   SEGMENT_POSITION='left'
   SEGMENT_LINE_POSITION=2
   prompt_filler_output="$(print_themed_segment 'normal' "$padding")"
-  return_value=${prompt_filler_output##*;;}
+  mapfile -t segment_output <<< "$prompt_filler_output"
+
+  return_value=${segment_output[1]}
 }
 
 print_themed_segment() {
@@ -87,5 +89,5 @@ print_themed_segment() {
   local prepare_color=
   decorate::print_colors 'prepare_color' "$PRIMARY_COLOR" "$PRIMARY_COLOR"
   themed_segment="${themed_segment_colors}${themed_segment}${prepare_color}"
-  printf '%s;;%s' "$segment_length" "$themed_segment"
+  printf '%s\n%s' "$segment_length" "$themed_segment"
 }

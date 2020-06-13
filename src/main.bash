@@ -1,13 +1,13 @@
 #! /usr/bin/env bash
 
+# shellcheck source=src/debug.bash
+source "${SBP_PATH}/src/debug.bash"
 # shellcheck source=src/decorate.bash
 source "${SBP_PATH}/src/decorate.bash"
 # shellcheck source=src/configure.bash
 source "${SBP_PATH}/src/configure.bash"
 # shellcheck source=src/execute.bash
 source "${SBP_PATH}/src/execute.bash"
-# shellcheck source=src/debug.bash
-source "${SBP_PATH}/src/debug.bash"
 
 configure::load_config
 
@@ -68,10 +68,10 @@ main::main() {
       pre_filler="${pre_filler}\n"
     else
       wait "${pids[i]}"
-      read -r segment_output < "${tempdir}/${i}"
+      mapfile -t segment_output < "${tempdir}/${i}"
 
-      segment=${segment_output##*;;}
-      segment_length=${segment_output%;;*}
+      segment=${segment_output[1]}
+      segment_length=${segment_output[0]}
       # Make fillers and newlines part of the theme?
       empty_space=$(( total_empty_space - segment_length ))
 
@@ -86,7 +86,6 @@ main::main() {
     fi
   done
   prompt="${pre_filler}${post_filler}"
-
 
   # Print the prompt and reset colors
   printf '%s' "$prompt"
