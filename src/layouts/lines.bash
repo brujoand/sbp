@@ -6,6 +6,8 @@ SETTINGS_PROMPT_PREFIX_UPPER='┍'
 SETTINGS_PROMPT_PREFIX_LOWER='└'
 SETTINGS_PROMPT_READY_ICON="${SETTINGS_PROMPT_PREFIX_LOWER}${SETTINGS_PROMPT_READY_ICON}"
 SETTINGS_GIT_ICON=''
+SETTINGS_PATH_SPLITTER_DISABLE=1
+
 
 print_themed_filler() {
   local -n return_value=$1
@@ -31,7 +33,7 @@ print_themed_segment() {
     PRIMARY_COLOR="$PRIMARY_COLOR_HIGHLIGHT"
   fi
 
-  if [[ -z "${segment_value// /}" || "$segment_value" == "$SETTINGS_PROMPT_READY_ICON" ]]; then
+  if [[ -z "${segment_parts// /}" || "${segment_parts}" == "$SETTINGS_PROMPT_READY_ICON" ]]; then
     SETTINGS_SEGMENT_SEPARATOR_RIGHT=''
     SETTINGS_SEGMENT_SEPARATOR_LEFT=''
   fi
@@ -43,18 +45,18 @@ print_themed_segment() {
     part_length="${#part}"
 
     if [[ -n "$themed_parts" ]]; then
-      themed_parts="${themed_parts}${part_splitter_themed}${part}"
-      segment_length=$(( segment_length + part_length ))
+      themed_parts="${themed_parts} ${part}"
+      segment_length=$(( segment_length + part_length + 1 ))
     else
-      segment_length="$(( segment_length + part_length))"
+      segment_length="$(( segment_length + part_length ))"
       themed_parts="${part}"
     fi
   done
 
 
   if [[ "$SEGMENT_LINE_POSITION" == 1 ]]; then
-    if [[ "$segment_value" == "$SETTINGS_PROMPT_READY_ICON" ]]; then
-      segment_value="${segment_value} "
+    if [[ "$segment_parts" == "$SETTINGS_PROMPT_READY_ICON" ]]; then
+      themed_parts="${themed_parts} "
       segment_length=$(( segment_length + 1 ))
     else
       prefix="$SETTINGS_PROMPT_PREFIX_UPPER"
@@ -66,7 +68,7 @@ print_themed_segment() {
   local color
   decorate::print_fg_color 'color' "$PRIMARY_COLOR"
 
-  full_output="${prefix}${color}${SETTINGS_SEGMENT_SEPARATOR_RIGHT}${segment_value}${SETTINGS_SEGMENT_SEPARATOR_LEFT}"
+  full_output="${prefix}${color}${SETTINGS_SEGMENT_SEPARATOR_RIGHT}${themed_parts}${SETTINGS_SEGMENT_SEPARATOR_LEFT}"
   segment_length=$(( segment_length + seperator_size + prefix_size ))
 
   printf '%s\n%s' "$segment_length" "$full_output"
