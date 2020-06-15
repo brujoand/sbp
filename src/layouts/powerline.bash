@@ -4,7 +4,7 @@ SETTINGS_SEGMENT_SPLITTER_LEFT=''
 SETTINGS_SEGMENT_SPLITTER_RIGHT=''
 SETTINGS_PROMPT_PREFIX_UPPER=''
 SETTINGS_PROMPT_PREFIX_LOWER=''
-SETTINGS_GIT_ICON='  '
+SETTINGS_GIT_ICON=''
 
 print_themed_filler() {
   local -n return_value=$1
@@ -72,6 +72,7 @@ print_themed_segment() {
   local themed_parts
 
   for part in "${@}"; do
+    [[ -z "$part" ]] && continue
     part_length="${#part}"
 
     if [[ -n "$themed_parts" ]]; then

@@ -78,7 +78,8 @@ segments::git() {
     fi
   fi
 
-  segment_value="${git_state/ /}${SETTINGS_GIT_ICON}${git_head}${upstream_status}"
 
-  print_themed_segment 'normal' "$segment_value"
+  SETTINGS_SEGMENT_SPLITTER_LEFT=''
+  SETTINGS_SEGMENT_SPLITTER_RIGHT=''
+  print_themed_segment 'normal' "${git_state/ /}" "$SETTINGS_GIT_ICON" "${git_head/ /}" "${upstream_status/ /}"
 }

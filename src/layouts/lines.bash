@@ -5,7 +5,7 @@ SETTINGS_SEGMENT_SPLITTER_RIGHT='-'
 SETTINGS_PROMPT_PREFIX_UPPER='┍'
 SETTINGS_PROMPT_PREFIX_LOWER='└'
 SETTINGS_PROMPT_READY_ICON="${SETTINGS_PROMPT_PREFIX_LOWER}${SETTINGS_PROMPT_READY_ICON}"
-SETTINGS_GIT_ICON=' '
+SETTINGS_GIT_ICON=''
 
 print_themed_filler() {
   local -n return_value=$1
@@ -22,8 +22,9 @@ print_themed_filler() {
 print_themed_segment() {
   local color_type=$1
   shift
-  local segment_value="${*}"
-  local segment_length=${#segment_value}
+  local segment_parts=("${@}")
+  local themed_parts
+  local segment_length=0
   local prefix_size=0
 
   if [[ "$color_type" == 'highlight' ]]; then
@@ -36,6 +37,20 @@ print_themed_segment() {
   fi
 
   seperator_size=$(( ${#SETTINGS_SEGMENT_SEPARATOR_RIGHT} + ${#SETTINGS_SEGMENT_SEPARATOR_LEFT} ))
+
+  for part in "${segment_parts[@]}"; do
+    [[ -z "$part" ]] && continue
+    part_length="${#part}"
+
+    if [[ -n "$themed_parts" ]]; then
+      themed_parts="${themed_parts}${part_splitter_themed}${part}"
+      segment_length=$(( segment_length + part_length ))
+    else
+      segment_length="$(( segment_length + part_length))"
+      themed_parts="${part}"
+    fi
+  done
+
 
   if [[ "$SEGMENT_LINE_POSITION" == 1 ]]; then
     if [[ "$segment_value" == "$SETTINGS_PROMPT_READY_ICON" ]]; then
