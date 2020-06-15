@@ -52,6 +52,7 @@ print_themed_segment() {
   decorate::print_colors 'segment_colors' "$SECONDARY_COLOR" "$PRIMARY_COLOR"
 
 
+  part_splitter="${part_splitter/  //}"
   local part_splitter_length="${#part_splitter}"
 
   if [[ "$SEGMENT_LINE_POSITION" -gt 1 ]]; then

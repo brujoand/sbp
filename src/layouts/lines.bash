@@ -33,8 +33,7 @@ print_themed_segment() {
     PRIMARY_COLOR="$PRIMARY_COLOR_HIGHLIGHT"
   fi
 
-  if [[ -z "${segment_parts// /}" || "${segment_parts}" == "$SETTINGS_PROMPT_READY_ICON" ]]; then
-    debug::log_info "$segment_parts"
+  if [[ -z "${segment_parts// /}" || "${segment_parts[*]}" == "$SETTINGS_PROMPT_READY_ICON" ]]; then
     SETTINGS_SEGMENT_SEPARATOR_RIGHT=''
     SETTINGS_SEGMENT_SEPARATOR_LEFT=''
   fi
