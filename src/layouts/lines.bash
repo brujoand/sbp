@@ -34,6 +34,7 @@ print_themed_segment() {
   fi
 
   if [[ -z "${segment_parts// /}" || "${segment_parts}" == "$SETTINGS_PROMPT_READY_ICON" ]]; then
+    debug::log_info "$segment_parts"
     SETTINGS_SEGMENT_SEPARATOR_RIGHT=''
     SETTINGS_SEGMENT_SEPARATOR_LEFT=''
   fi
