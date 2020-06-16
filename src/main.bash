@@ -17,7 +17,7 @@ COMMAND_DURATION=$2
 main::main() {
   execute::execute_prompt_hooks
 
-  tempdir=$_SBP_CACHE
+  tempdir=$SBP_TMP
 
   declare -a fillers
   declare -a newlines

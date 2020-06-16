@@ -10,12 +10,12 @@ source "${SBP_PATH}/src/interact.bash"
 source "${SBP_PATH}/src/debug.bash"
 
 if [[ -d "/run/user/${UID}" ]]; then
-  _SBP_CACHE=$(mktemp -d --tmpdir="/run/user/${UID}") && trap 'rm -rf "$_SBP_CACHE"' EXIT;
+  SBP_TMP=$(mktemp -d --tmpdir="/run/user/${UID}") && trap 'rm -rf "$SBP_TMP"' EXIT;
 else
-  _SBP_CACHE=$(mktemp -d) && trap 'rm -rf "$_SBP_CACHE"' EXIT;
+  SBP_TMP=$(mktemp -d) && trap 'rm -rf "$SBP_TMP"' EXIT;
 fi
 
-export _SBP_CACHE
+export SBP_TMP
 export SBP_PATH
 export COLUMNS
 
@@ -29,10 +29,10 @@ _sbp_set_prompt() {
   local command_status current_time command_start command_duration
   [[ -n "$SBP_DEBUG" ]] && debug::start_timer
   current_time=$(date +%s)
-  if [[ -f "${_SBP_CACHE}/execution" ]]; then
-    command_start=$(< "${_SBP_CACHE}/execution")
+  if [[ -f "${SBP_TMP}/execution" ]]; then
+    command_start=$(< "${SBP_TMP}/execution")
     command_duration=$(( current_time - command_start ))
-    rm "${_SBP_CACHE}/execution"
+    rm "${SBP_TMP}/execution"
   else
     command_duration=0
   fi
@@ -50,7 +50,7 @@ _sbp_set_prompt() {
 }
 
 _sbp_pre_exec() {
-  date +%s > "${_SBP_CACHE}/execution"
+  date +%s > "${SBP_TMP}/execution"
 }
 
 PS0="\$(_sbp_pre_exec)"
