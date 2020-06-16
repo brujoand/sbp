@@ -14,24 +14,58 @@ SETTINGS_TIMESTAMP_FORMAT="%H:%M:%S"
 SETTINGS_OPENSHIFT_DEFAULT_USER="$USER"
 SETTINGS_RESCUETIME_REFRESH_RATE=600
 SETTINGS_SEGMENT_ENABLE_BG_COLOR=0
+SETTINGS_PROMPT_READY_ICON='➜'
 SETTINGS_GIT_ICON=' '
 
-print_themed_segment() {
-  local primary_color=$1
-  local secondary_color=$2
-  local segment_value=$3
-  local segment_length=$5
+print_themed_filler() {
+  local -n return_value=$1
+  local filler_size=$2
+  # Account for seperator and padding
+  padding=$(printf "%*s" "$filler_size")
+  SEGMENT_LINE_POSITION=2
+  prompt_filler_output="$(print_themed_segment 'normal' "$padding")"
+  mapfile -t segment_output <<< "$prompt_filler_output"
 
-  if [[ -n "${segment_value// /}" ]]; then
-    segment_length=$(( segment_length + 2 ))
-    segment_value=" ${segment_value} "
+  return_value=${segment_output[1]}
+}
+
+print_themed_segment() {
+  local color_type=$1
+  shift
+  local segment_parts=("${@}")
+  local segment_length=0
+  local themed_parts
+
+  if [[ "$color_type" == 'highlight' ]]; then
+    PRIMARY_COLOR="$PRIMARY_COLOR_HIGHLIGHT"
   fi
 
-  secondary_color="$primary_color"
-  primary_color=""
-  color="$(print_fg_color "$secondary_color")"
+  if [[ -z "${segment_parts// /}" ]]; then
+    themed_parts="$segment_parts"
+  else
+    for part in "${segment_parts[@]}"; do
+      [[ -z "${part// /}" ]] && continue
+      part_length="${#part}"
 
-  full_output="${color}${segment_value}"
+      themed_parts="${themed_parts} ${part}"
+      segment_length=$(( segment_length + part_length + 1 ))
+    done
+  fi
+  if [[ "$SEGMENT_LINE_POSITION" -eq 1 ]]; then
+    if [[ "$themed_parts" == " $SETTINGS_PROMPT_READY_ICON" ]]; then
+      themed_parts="${themed_parts} "
+      segment_length=$(( segment_length + 1 ))
+    fi
+    themed_parts="${themed_parts:1}"
+    segment_length=$(( segment_length - 1 ))
+  fi
 
-  printf '%s;;%s' "$segment_length" "$full_output"
+
+
+  local color
+  decorate::print_fg_color 'color' "$PRIMARY_COLOR"
+
+  full_output="${color}${themed_parts}"
+
+  printf '%s\n%s' "$segment_length" "$full_output"
 }
