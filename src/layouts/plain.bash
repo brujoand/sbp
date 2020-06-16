@@ -40,7 +40,7 @@ print_themed_segment() {
     PRIMARY_COLOR="$PRIMARY_COLOR_HIGHLIGHT"
   fi
 
-  if [[ -z "${segment_parts// /}" ]]; then
+  if [[ "${#segment_parts[@]}" -eq 1 && -z "${segment_parts// /}" ]]; then
     themed_parts="$segment_parts"
   else
     for part in "${segment_parts[@]}"; do
