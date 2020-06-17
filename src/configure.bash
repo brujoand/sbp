@@ -1,18 +1,18 @@
 #! /usr/bin/env bash
 
-config_folder="${HOME}/.config/sbp"
-config_file="${config_folder}/settings.conf"
-colors_file="${config_folder}/colors.conf"
+SBP_CONFIG="${HOME}/.config/sbp"
+config_file="${SBP_CONFIG}/settings.conf"
+colors_file="${SBP_CONFIG}/colors.conf"
 default_config_file="${SBP_PATH}/config/settings.conf"
 default_colors_file="${SBP_PATH}/config/colors.conf"
-cache_folder="${config_folder}/cache"
+SBP_CACHE="${SBP_CONFIG}/cache"
 
 configure::list_feature_files() {
   local feature_type=$1
   IFS=" " read -r -a features <<< "$(\
     shopt -s nullglob; \
     echo ${SBP_PATH}/{src,config}/${feature_type}/*.bash \
-      "${config_folder}/${feature_type}"/*.bash; \
+      "${SBP_CONFIG}/${feature_type}"/*.bash; \
   )"
 
   for file in "${features[@]}"; do
@@ -38,7 +38,7 @@ configure::set_colors() {
     return 1
   fi
 
-  user_theme="${config_folder}/themes/colors/${theme_name}.bash"
+  user_theme="${SBP_CONFIG}/themes/colors/${theme_name}.bash"
   sbp_theme="${SBP_PATH}/config/colors/${theme_name}.bash"
 
   if [[ -f "$user_theme" ]]; then
@@ -62,7 +62,7 @@ configure::set_layout() {
     return 1
   fi
 
-  user_layout="${config_folder}/themes/layouts/${layout_name}.bash"
+  user_layout="${SBP_CONFIG}/themes/layouts/${layout_name}.bash"
   sbp_layout="${SBP_PATH}/src/layouts/${layout_name}.bash"
 
   if [[ -f "$user_layout" ]]; then
@@ -78,7 +78,7 @@ configure::set_layout() {
 }
 
 configure::load_config() {
-  [[ -d "$cache_folder" ]] || mkdir -p "$cache_folder"
+  [[ -d "$SBP_CACHE" ]] || mkdir -p "$SBP_CACHE"
 
   if [[ ! -f "$config_file" ]]; then
     debug::log_info "Config file note found: ${config_file}"

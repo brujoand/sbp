@@ -1,9 +1,5 @@
 language: bash
 dist: trusty
-sudo: required
 email: false
-addons:
-  apt:
-    packages:
-    - bc
-script: npm install -g bats && bats -r -T test/
+before_install: npm install -g bats
+script: shellcheck -x sbp.bash src/main.bash && bats -r -T test/

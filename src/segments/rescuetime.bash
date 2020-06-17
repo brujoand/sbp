@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 segments::rescuetime() {
-  local cache_file="${cache_folder}/rescuetime.csv"
+  local cache_file="${SBP_CACHE}/rescuetime.csv"
 
   if [[ -f "$cache_file" ]]; then
     read -r cache < "$cache_file"

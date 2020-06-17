@@ -5,11 +5,11 @@ execute::get_script() {
   local type=$2
   local feature=$3
 
-  if [[ -f "${config_folder}/peekaboo/${segment_name}" ]]; then
+  if [[ -f "${SBP_CONFIG}/peekaboo/${segment_name}" ]]; then
     return 0
   fi
 
-  local local_script="${config_folder}/${type}s/${feature}.bash"
+  local local_script="${SBP_CONFIG}/${type}s/${feature}.bash"
   local global_script="${SBP_PATH}/src/${type}s/${feature}.bash"
 
   if [[ -f "$local_script" ]]; then

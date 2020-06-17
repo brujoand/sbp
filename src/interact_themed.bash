@@ -16,7 +16,7 @@ generate_extra_options() {
   # TODO this should probably be rewritten to better check
   # if we are messing with any previous settings
   if [[ "$SETTINGS_PROMPT_READY_VI_MODE" -eq 1 ]]; then
-    local cache_file="${cache_folder}/extra_options.bash"
+    local cache_file="${SBP_CACHE}/extra_options.bash"
     rm -f "$cache_file"
     if [[ -n "$SETTINGS_PROMPT_READY_ICON" ]]; then
       local insert_color="$SETTINGS_PROMPT_READY_VI_INSERT_COLOR"
@@ -42,7 +42,7 @@ list_segments() {
     local segment_file="${segment_path##*/}"
     local segment_name="${segment_file/.bash/}"
     if printf '%s.bash\n' "${SETTINGS_SEGMENTS[@]}" | grep -qo "${segment_name}"; then
-      if [[ -f "${config_folder}/peekaboo/${segment_name/.bash/}" ]]; then
+      if [[ -f "${SBP_CONFIG}/peekaboo/${segment_name/.bash/}" ]]; then
         status='hidden'
       else
         status='enabled'
@@ -63,7 +63,7 @@ list_hooks() {
     hook_name="${hook_file/.bash/}"
     status='disabled'
     if printf '%s.bash\n' "${SETTINGS_HOOKS[@]}" | grep -qo "${hook_name}"; then
-      if [[ -f "${config_folder}/peekaboo/${hook_name}" ]]; then
+      if [[ -f "${SBP_CONFIG}/peekaboo/${hook_name}" ]]; then
         status='paused'
       else
         status='enabled'

@@ -2,10 +2,10 @@
 
 hooks::rescuetime() {
   refresh_rate="${SETTINGS_RESCUETIME_REFRESH_RATE:-600}"
-  if [[ -z "$cache_folder" ]]; then
+  if [[ -z "$SBP_CACHE" ]]; then
     debug::log_error "No cache folder"
   fi
-  cache_file="${cache_folder}/rescuetime.csv"
+  cache_file="${SBP_CACHE}/rescuetime.csv"
 
   if [[ -f "$cache_file" ]]; then
     last_update=$(stat -f "%m" "$cache_file")

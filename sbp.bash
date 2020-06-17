@@ -53,6 +53,7 @@ _sbp_pre_exec() {
   date +%s > "${SBP_TMP}/execution"
 }
 
+# shellcheck disable=SC2034
 PS0="\$(_sbp_pre_exec)"
 
 [[ "$PROMPT_COMMAND" =~ _sbp_set_prompt ]] || PROMPT_COMMAND="_sbp_set_prompt;$PROMPT_COMMAND"
