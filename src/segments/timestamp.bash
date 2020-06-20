@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
 segments::timestamp() {
-  local timestamp_value=$(date +"$SETTINGS_TIMESTAMP_FORMAT")
-  print_themed_segment 'normal' "$timestamp_value"
+  local timestamp_format=${SETTINGS_TIMESTAMP_FORMAT:-'%H:%M:%S'}
+  print_themed_segment 'normal' "$(date +"$timestamp_format")"
 }

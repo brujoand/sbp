@@ -23,6 +23,12 @@ execute::get_script() {
   fi
 }
 
+execute::execute_nohup_function() {
+  (trap '' HUP INT
+    "$@"
+  ) </dev/null &>/dev/null &
+}
+
 execute::execute_prompt_hooks() {
   local hook_script
   for hook in "${SETTINGS_HOOKS[@]}"; do

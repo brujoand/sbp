@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+user_id="$(id -u)"
+
 segments::host() {
 
   if [[ -n "$SSH_CLIENT" ]]; then
@@ -8,7 +10,7 @@ segments::host() {
     host_value="$USER"
   fi
 
-  if [[ "$(id -u)" -eq 0 ]]; then
+  if [[ "$user_id" -eq 0 ]]; then
     print_themed_segment 'highlight' "$host_value"
   else
     print_themed_segment 'normal' "$host_value"

@@ -2,7 +2,7 @@
 
 SETTINGS_ALERT_THRESHOLD="${SETTINGS_ALERT_THRESHOLD:-60}"
 
-function hooks::alert::notify() { # User notification
+hooks::alert_notify() {
   [[ -z "$2" ]] && return
 
   title=$1
@@ -17,22 +17,19 @@ function hooks::alert::notify() { # User notification
   fi
 }
 
-function hooks::alert {
-  local exit_code=$1
-  local command_time=$2
-
-  [[ "$exit_code" -lt 0 ]] && return
-  if [[ "$SETTINGS_ALERT_THRESHOLD" -le "$command_time" ]]; then
+hooks::alert() {
+  [[ "$COMMAND_EXIT_CODE" -lt 0 ]] && return
+  if [[ "$SETTINGS_ALERT_THRESHOLD" -le "$COMMAND_DURATION" ]]; then
     local title message
 
-    if [[ "$exit_code" -eq "0" ]]; then
+    if [[ "$COMMAND_EXIT_CODE" -eq "0" ]]; then
       title="Command Succeded"
-      message="Time spent was ${command_time}s"
+      message="Time spent was ${COMMAND_DURATION}s"
     else
       title="Command Failed"
-      message="Time spent was ${command_time}s"
+      message="Time spent was ${COMMAND_DURATION}s"
     fi
 
-    hooks::alert::notify "$title" "$message"
+    hooks::alert_notify "$title" "$message"
   fi
 }

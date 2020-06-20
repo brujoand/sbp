@@ -10,28 +10,29 @@ You can create your own segments by placing a file in:
    ${HOME}/.config/sbp/segments/${your_segment_name}.bash
 ```
 
-Your script will be executed with 4 arguments:
+This script should contain at least a function called
+`segments::${your_segment_name}` and it will have the following variables
+available:
 ```
-  1: The exit code of the previous shell command
-  2: The execution time of the previous command
-  3: The direction of the current segment (to be passed to the print function)
-  4: The maximum length that your segment needs to abide by
-```
-
-When you have defined the text you want to use in your segment you need to print
-it by issuing the following command:
-```
-  pretty_print_segment "$segment_color_primary" "$segment_color_secondary" "${segment_value}" "$segment_direction"
+  - COMMAND_EXIT_CODE, the exit code of the privous shell command
+  - COMMAND_DURATION, the duration of the shell command
+  - SBP_TMP, a tmp folder which is local to your shell PID and cleaned upon exit
+  - SBP_CACHE, a cache folder which is global to all SBP processes
+  - SBP_PATH, the path to the SBP diectory
 ```
 
-Your segment should also be executable
+When you have defined the parts you want to use in your segment you need to
+theme the parts by issuing the following command:
+```
+  print_themed_segment 'normal/higlight' "${segment_pars[@]}"
+```
 
 - aws; Shows the current active aws profile
 - command; shows the time spent on the last command, and turns red if it failed
 - exit_code; shows the value of the last exitcode
 - git; shows the git branch and current status
 - host; shows the ${USER} and maybe ${HOSTNAME} depending on your settings
-- openshift; shows the current user/cluster/project
+- k8s; shows the current user/cluster/project
 - path; shows the path
 - path_ro; shows a if current path is read only
 - prompt_ready; Shows a simple character before the end of the prompt

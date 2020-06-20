@@ -1,8 +1,7 @@
 # Hooks
 
 Hooks are executed asynchronously and are meant to provide a way of either
-alerting the user, or fetching data from APIs to be used by segments. See the
-[rescuetime.bash](/rescuetime.bash) script for en example.
+alerting the user, or running other non segment related tasks.
 
 ## Creating your own hooks
 You can create your own hooks by placing a file in:
@@ -10,15 +9,15 @@ You can create your own hooks by placing a file in:
    ${HOME}/.config/sbp/hooks/${your_hooks_name}.bash
 ```
 
-Your script will be executed with 2 arguments:
+Your script will be sourced and executed with the following env variables:
 ```
-  1: The exit code of the previous shell command
-  2: The execution time of the previous command
+  - COMMAND_EXIT_CODE, the exit code of the privous shell command
+  - COMMAND_DURATION, the duration of the shell command
+  - SBP_TMP, a tmp folder which is local to your shell PID and cleaned upon exit
+  - SBP_CACHE, a cache folder which is global to all SBP processes
+  - SBP_PATH, the path to the SBP diectory
 ```
-Your hook should also be executable
 
 These are the provided hooks:
 - Alert; Creates a notification if the previous command took longer than x
 seconds.
-- rescuetime: Fetches the rescuetime stats for your account, given that the
-`RESCUETIME_API_KEY` is defined in your environment.
