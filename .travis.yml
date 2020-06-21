@@ -3,5 +3,5 @@ dist: bionic
 email: false
 before_install:
   - sudo apt-get install npm -y
-  - npm install -g bats
+  - sudo npm install -g bats
 script: shellcheck -x sbp.bash src/main.bash && bats -r test/
