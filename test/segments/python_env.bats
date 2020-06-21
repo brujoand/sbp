@@ -10,9 +10,9 @@ setup() {
   VIRTUAL_ENV='3.5'
   mapfile -t result <<< "$(execute_segment)"
 
-  [[ "${#result[@]}" -eq 2 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" == "$VIRTUAL_ENV" ]]
+  assert_equal "${#result[@]}" 2
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" "$VIRTUAL_ENV"
 }
 
 @test "test a file based python_env segment" {
@@ -20,7 +20,7 @@ setup() {
   echo "$version" > .python-version
   mapfile -t result <<< "$(execute_segment)"
 
-  [[ "${#result[@]}" -eq 2 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" == "$version" ]]
+  assert_equal "${#result[@]}" 2
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" "$version"
 }

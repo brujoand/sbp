@@ -22,10 +22,10 @@ EOF
   echo "$stats" > "$RESCUETIME_CACHE"
   mapfile -t result <<< "$(execute_segment)"
 
-  [[ "${#result[@]}" -eq 3 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" == "77%" ]]
-  [[ "${result[2]}" == "3h:20m" ]]
+  assert_equal "${#result[@]}" 3
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" "77%"
+  assert_equal "${result[2]}" "3h:20m"
 }
 
 @test "test a refreshing the rescuetime segment" {

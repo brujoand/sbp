@@ -4,4 +4,6 @@ email: false
 before_install:
   - sudo apt-get install npm -y
   - sudo npm install -g bats
+  - npm install --save-dev https://github.com/ztombol/bats-support
+  - npm install --save-dev https://github.com/ztombol/bats-assert
 script: ./run_tests

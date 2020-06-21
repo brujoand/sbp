@@ -18,13 +18,13 @@ EOF
 @test "test no config k8s segment" {
   rm "$KUBE_CONFIG"
   result="$(execute_segment)"
-  [[ -z "$result" ]]
+  assert_equal "$result" ''
 }
 
 @test "test normal config k8s segment" {
   mapfile -t result <<< "$(execute_segment)"
 
-  [[ "${#result[@]}" -eq 2 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" == 'sbp@k8s/project' ]]
+  assert_equal "${#result[@]}" 2
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" 'sbp@k8s/project'
 }

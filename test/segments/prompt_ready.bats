@@ -6,10 +6,9 @@ load segment_helper
   export SETTINGS_PROMPT_READY_VI_MODE
   export SETTINGS_PROMPT_READY_ICON='x'
   mapfile -t result <<< "$(execute_segment)"
-  echo "${result[@]}"
 
-  [[ "${#result[@]}" -eq 2 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" == "$SETTINGS_PROMPT_READY_ICON" ]]
+  assert_equal "${#result[@]}" 2
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" "$SETTINGS_PROMPT_READY_ICON"
 }
 

@@ -17,18 +17,18 @@ setup() {
 
 @test "test a clean master" {
   mapfile -t result <<< "$(execute_segment)"
-  [[ "${#result[@]}" -eq 2 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" == 'master' ]]
+  assert_equal "${#result[@]}" 2
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" 'master'
 }
 
 @test "test untracked git segment" {
   touch this and that
   mapfile -t result <<< "$(execute_segment)"
-  [[ "${#result[@]}" -eq 3 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" == '?3' ]]
-  [[ "${result[2]}" == 'master' ]]
+  assert_equal "${#result[@]}" 3
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" '?3'
+  assert_equal "${result[2]}" 'master'
 }
 
 @test "test commited git segment" {
@@ -37,8 +37,8 @@ setup() {
 
   mapfile -t result <<< "$(execute_segment)"
   echo "${result[@]}"
-  [[ "${#result[@]}" -eq 3 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" == '+3' ]]
-  [[ "${result[2]}" == 'master' ]]
+  assert_equal "${#result[@]}" 3
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" '+3'
+  assert_equal "${result[2]}" 'master'
 }

@@ -7,8 +7,7 @@ load segment_helper
   mapfile -t result <<< "$(execute_segment)"
   echo "${result[@]}"
 
-  [[ "${#result[@]}" -eq 2 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" =~ ^[0-2][0-9]:[0-6][0-9]:[0-6][0-9]$ ]]
+  assert_equal "${#result[@]}" 2
+  assert_equal "${result[0]}" 'normal'
 }
 

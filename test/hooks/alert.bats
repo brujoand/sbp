@@ -19,8 +19,8 @@ hooks::alert_notify() {
   expected_message="Time spent was ${COMMAND_DURATION}s"
 
 
-  [[ "${#result[@]}" -eq 2 ]]
-  [[ "${result[0]}" == "$expected_title" ]]
-  [[ "${result[1]}" == "$expected_message" ]]
+  assert_equal "${#result[@]}"  2
+  assert_equal "${result[0]}" "$expected_title"
+  assert_equal "${result[1]}" "$expected_message"
 }
 

@@ -10,16 +10,16 @@ setup() {
   mapfile -t result <<< "$(execute_segment)"
   dir_slashes="${TMP_DIR//[^\/]}"
   dir_count="${#dir_slashes}"
-  [[ "${#result[@]}" -eq $(( dir_count + 1 )) ]]
-  [[ "${result[0]}" == 'normal' ]]
+  assert_equal "${#result[@]}" $(( dir_count + 1 ))
+  assert_equal "${result[0]}" 'normal'
 }
 
 @test "test a non-split path segment" {
   export SETTINGS_PATH_SPLITTER_DISABLE=1
   export SETTINGS_PATH_COMPRESS_DEPTH=99
   mapfile -t result <<< "$(execute_segment)"
-  [[ "${#result[@]}" -eq 2 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" == "$TMP_DIR" ]]
+  assert_equal "${#result[@]}" 2
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" "$TMP_DIR"
 }
 

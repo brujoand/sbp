@@ -8,7 +8,7 @@ setup() {
 
 @test "test a normal path segment" {
   result="$(execute_segment)"
-  [[ -z "$result" ]]
+  assert_equal "$result" ''
 }
 
 @test "test a read only path segment" {
@@ -16,8 +16,8 @@ setup() {
   chmod 0555 ro
   cd ro
   mapfile -t result <<< "$(execute_segment)"
-  [[ "${#result[@]}" -eq 2 ]]
-  [[ "${result[0]}" == 'normal' ]]
-  [[ "${result[1]}" == "" ]]
+  assert_equal "${#result[@]}" 2
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" ""
 }
 
