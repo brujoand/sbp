@@ -2,7 +2,6 @@ language: bash
 dist: bionic
 email: false
 before_install:
-  - sudo add-apt-repository ppa:duggan/bats -y
-  - sudo apt-get update
-  - sudo apt-get install bats -y
+  - sudo apt-get install npm -y
+  - npm install -g bats
 script: shellcheck -x sbp.bash src/main.bash && bats -r test/
