@@ -4,4 +4,4 @@ email: false
 before_install:
   - sudo apt-get install npm -y
   - sudo npm install -g bats
-script: export SBP_PATH=${PWD}; shellcheck -x sbp.bash src/main.bash && bats -r test/
+script: ./run_tests
