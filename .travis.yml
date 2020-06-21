@@ -1,7 +1,7 @@
 language: bash
 email: false
 before_install:
-  - sudo add-apt-repository ppa:duggan/bats
+  - sudo add-apt-repository ppa:duggan/bats -y
   - sudo apt-get update
   - sudo apt-get install bats -y
 script: shellcheck -x sbp.bash src/main.bash && bats -r -T test/
