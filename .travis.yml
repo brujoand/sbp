@@ -1,4 +1,5 @@
 language: bash
+dist: bionic
 email: false
 before_install:
   - sudo add-apt-repository ppa:duggan/bats -y
