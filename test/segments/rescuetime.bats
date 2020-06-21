@@ -2,6 +2,8 @@
 
 load segment_helper
 
+RESCUETIME_API_KEY=password
+
 execute::execute_nohup_function() {
   "$@"
 }
