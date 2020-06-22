@@ -18,10 +18,9 @@ EOF
 }
 
 @test "test parsing the rescuetime segment" {
-  SBP_CACHE="$TMP_DIR"
-  RESCUETIME_CACHE="${TMP_DIR}/rescuetime.csv"
+  SEGMENT_CACHE="${TMP_DIR}/rescuetime"
   stats='77%;3h:20m'
-  echo "$stats" > "$RESCUETIME_CACHE"
+  echo "$stats" > "$SEGMENT_CACHE"
   mapfile -t result <<< "$(execute_segment)"
 
   assert_equal "${#result[@]}" 3
@@ -31,10 +30,11 @@ EOF
 }
 
 @test "test a refreshing the rescuetime segment" {
-  SBP_CACHE="$TMP_DIR"
-  RESCUETIME_CACHE="${TMP_DIR}/rescuetime.csv"
+  SEGMENT_CACHE="${TMP_DIR}/rescuetime"
+  rm -rf "$SEGMENT_CACHE"
   RESCUETIME_ENDPOINT="http://localhost:8080"
 
   execute_segment
-  cat "$RESCUETIME_CACHE"
+  [[ -f "$SEGMENT_CACHE" ]]
+
 }

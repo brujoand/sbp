@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-RESCUETIME_CACHE="${SBP_CACHE}/rescuetime.csv"
 RESCUETIME_ENDPOINT="https://www.rescuetime.com/anapi/data?key=${RESCUETIME_API_KEY}&format=csv&rs=day&rk=productivity"
 
-segment::rescuetime_fetch_changes() {
+segments::rescuetime_fetch_changes() {
   result=$(curl -s "$RESCUETIME_ENDPOINT" | grep -v '^Rank')
   exit_code=$?
   if [[ "$exit_code" -gt 0 ]]; then
@@ -15,13 +14,12 @@ segment::rescuetime_fetch_changes() {
 
 segments::rescuetime_refresh() {
   refresh_rate="${SETTINGS_RESCUETIME_REFRESH_RATE:-600}"
-  if [[ -z "$SBP_CACHE" ]]; then
+  if [[ ! -f "$SEGMENT_CACHE" ]]; then
     debug::log_error "No cache folder"
   fi
-  RESCUETIME_CACHE="${SBP_CACHE}/rescuetime.csv"
 
-  if [[ -f "$RESCUETIME_CACHE" ]]; then
-    last_update=$(stat -f "%m" "$RESCUETIME_CACHE")
+  if [[ -f "$SEGMENT_CACHE" ]]; then
+    last_update=$(stat -f "%m" "$SEGMENT_CACHE")
   else
     last_update=0
   fi
@@ -42,7 +40,7 @@ segments::rescuetime_refresh() {
 
   if [[ -z "$result" ]]; then
     # No data, so no logging of time today
-    rm -f "$RESCUETIME_CACHE"
+    rm -f "$SEGMENT_CACHE"
     return 0
   fi
 
@@ -65,13 +63,13 @@ segments::rescuetime_refresh() {
   minutes=$(( remaining_seconds / 60 ))
   time="${hours}h:${minutes}m"
 
-  printf '%s;%s' "$pulse" "$time" > "$RESCUETIME_CACHE"
+  printf '%s;%s' "$pulse" "$time" > "$SEGMENT_CACHE"
 }
 
 
 segments::rescuetime() {
-  if [[ -f "$RESCUETIME_CACHE" ]]; then
-    read -r cache < "$RESCUETIME_CACHE"
+  if [[ -f "$SEGMENT_CACHE" ]]; then
+    read -r cache < "$SEGMENT_CACHE"
     pulse="${cache/;*}"
     time="${cache/*;}"
     print_themed_segment 'normal' "$pulse" "$time"

@@ -21,7 +21,7 @@ decorate::get_complement_rgb() {
   fi
 }
 
-decorate::print_colors() { # prints ansi escape codes for fg and bg (optional)
+decorate::print_colors() {
   local -n return_value=$1
   local fg_code=$2
   local bg_code=$3

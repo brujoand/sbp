@@ -26,7 +26,7 @@ execute::get_script() {
 execute::execute_nohup_function() {
   (trap '' HUP INT
     "$@"
-  ) </dev/null &>/dev/null &
+  ) </dev/null &>>"${SBP_CONFIG}/hook.log" &
 }
 
 execute::execute_prompt_hooks() {
@@ -35,10 +35,8 @@ execute::execute_prompt_hooks() {
     execute::get_script 'hook_script' 'hook' "$hook"
 
     if [[ -f "$hook_script" ]]; then
-      (trap '' HUP INT
         source "$hook_script"
-        "hooks::${hook}" "$COMMAND_EXIT_CODE" "$COMMAND_DURATION"
-      ) </dev/null &>/dev/null &
+        execute::execute_nohup_function "hooks::${hook}"
     fi
   done
 }
@@ -47,6 +45,7 @@ execute::execute_prompt_segment() {
   local segment=$1
   local SEGMENT_POSITION=$2
   local SEGMENT_LINE_POSITION=$3
+  local SEGMENT_CACHE="${SBP_CACHE}/${segment}"
 
   local segment_script
   execute::get_script 'segment_script' 'segment' "$segment"
@@ -69,8 +68,7 @@ execute::execute_prompt_segment() {
     local splitter_color_var="SETTINGS_${segment}_SPLITTER_COLOR"
     SPLITTER_COLOR="${!splitter_color_var}"
 
-    "segments::${segment}" "$COMMAND_EXIT_CODE" "$COMMAND_DURATION"
-
+    "segments::${segment}"
   fi
 
 }

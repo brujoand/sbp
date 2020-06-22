@@ -17,21 +17,26 @@ here](https://asciinema.org/a/0efgJrqQJY2vH1XguXjX3xV1c)
 I wanted to add support for trueculors instead of relying on "just" 256 colors.
 To do this I had to break the configuration, and when the flood gates had been
 opened, a lot of things started changing. Suddenly layout changes was pretty
-easy too.
+easy too. After a while speed became and issue, and I had to reduce the number
+of subshells. This led to return by reference which is now the standard way of
+returning results in the code base. So if you're upgrading from an older version
+it's probably a good idea to make a copy of your sbp config and start fresh.
 
 ## Soft Requirements
 If you want the fancy pointy segment separators, you need the powerline fonts _installed_ and _enabled_. Both.
 You can get them [here](https://github.com/powerline/fonts).
 Then run the install.sh script. Now the hard_to_remember part. Change the settings of your terminal emulator.
 Something like "Settings" and then "Fonts" will probably be the right place.
-If you don't like powerline then use the 'plain' theme or create your own.
+If you don't like powerline then use the 'plain' or 'lines' theme or create your
+own. If you are using Kitty as a terminal then everything should work out of the
+box.
 
 ## Installing
 There is an install script. It will copy the default
 settings to `~/.config/sbp/settings.conf` along with the default color assignments
 to `~/.config/sbp/colors.conf` and add two lines to your `$HOME/.bashrc`:
 ```
-  sbp_path=/the/path/to/sbp/
+  SBP_PATH=/the/path/to/sbp/
   source ${sbp_path}/sbp.bash
 ```
 
@@ -55,6 +60,7 @@ You can use the `sbp` command for a lot of things:
   debug     - Toggle debug mode
   status    - Show the current configuration
   config    - Opens the config in $EDITOR
+  colors    - Opens the color config in $EDITOR
 ```
 
 ## Features
@@ -68,11 +74,12 @@ Hooks let's you execute scripts asynchronously to either alert you, populate
 data for segments or whatever you want really. Read more about those and how to
 make your own in the [Hooks Folder](/hooks).
 
-### Themes
-Themes let you decide how the prompt is drawn, both in terms of layout and the
-colors used. Read more about those and how to make your own in the [Themes
-Folder](/themes). SBP supports both truecolors through RGB values and 256 colors
-by using ansi codes.
+### Colors and Layouts
+Colors and layouts let you decide how the prompt is drawn. Read more about those
+and how to make your own in the [Colors](/config/colors) and
+[Layouts](/src/layouts). SBP supports both truecolors through RGB values and 256 colors
+by using ansi codes. Many will probably just want to rely on the configuration
+set in Xresources, by using the xresources color setting.
 
 #### Beta - VI mode
 The setting `settings_prompt_ready_vi_mode=1` will use the `prompt_ready` icon
@@ -80,63 +87,17 @@ with the configured colors and change it's color depending on the current VI
 mode if enabled. The cursor will also change from blinking to solid block if
 your terminal supports it.
 
-
-### Speed
-I've been comparing the speed of SBP to fancy prompts like
-[powerline9k](https://github.com/Powerlevel9k/powerlevel9k), but there has been
-an improvement recently in the form of
-[powerlevel10k](https://github.com/romkatv/powerlevel10k). The latter version
-feels a lot snappier and does deliver on speed. However in my benchmarks SBP is
-still faster. I ran 50 invocation of the prompt in succession, with the
-following enabled for all prompts: host, path, git, time, last command time and
-last command exit status. I measured the display time on my trusted old mac mini
-running Ubuntu using the following function:
-
-```
-precmd() {
-  export second=$(date +'%s%3N')
-
-  if [[ -n "$first" ]]; then
-    echo $(( first - second ))ms >> ${HOME}/${ZSH_THEME##*/}.stats
-  fi
-  export first=$(date +'%s%3N')
-}
-```
-Since bash doesn't support the `precmd` function I used `$PROMPT_COMMAND` instead, and by
-taking the average of each stats file and ignoring the first unrealistic values
-I ended up with pretty similar results.
-
-| prompt       | Ubuntu mac mini|        Raspbian  | MacOS Catalina|
-|--------------|----------------|------------------|---------------|
-| SBP          | 48ms           | 254ms            | 105ms         |
-| Powerlevel10k| 81ms           | 87ms             | 77ms          |
-| Powerlevel9k | 179ms          | 554ms            | 180ms         |
-
-I'm not quite sure why these numbers differ so much from the ones in the
-Powerlevel10k readme, but I suspect it might be because the benchmarking script
-used doesn't actually measure rendering but rather generation time. Another
-point of course is the different hardware used, which will affect the time spent
-but shouldn't affect the relation between the times much. There will also be a
-ton of other things that will slow each prompt down differently depending on
-implementation. SBP for instance caches data to files which can be slower on
-some systems like the rpi. Also feel free to educate me if there are better ways of measuring
-the speed difference here. On a related note though, on thing that tends to slow
-these prompts down are large git repositories. Powerlevel10k has a special
-binary for this and I expect it will perform much better in these cases.
-But in the end, even if SBP is faster on some setups, the consistency in speed
-for Powerlevel10k is mind blowing. I'll have to dig into how they've done that.
-
 ### FAQ
 
 #### Is this really just bash?
-Yes, but actually no. At the time of writing there are 4 sed
-invocations in addition to a few date calls. I want to get rid of awk and sed,
-but I haven't been able to yet.
+Yes, but actually no. At the time of writing the main implementation has
+just a few calls do date, while some segments touch grep and sed but these
+are being removed.
 
 #### My prompt doesn't show any colors, whats wrong?
 You are using a terminal that doesn't support truecolors. You can write your own
-ansi theme, or use one of the two provided ones, default-256 & xresources. The
-latter only uses the 16 base colors.
+ansi theme, or use one of the two provided ones, default-256 or xresources.
 
 #### I don't want to install any fancy fonts, can I still have nice things?
-Why yes! Simply use the 'plain' layout. No fonts needed.
+Why yes! Simply use the 'plain' layout. No fonts needed. Or use the Kitty
+terminal.
