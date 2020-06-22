@@ -42,3 +42,17 @@ setup() {
   assert_equal "${result[1]}" '+3'
   assert_equal "${result[2]}" 'master'
 }
+
+@test "test we can use an icon with git segment" {
+  export SETTINGS_GIT_ICON='@'
+  touch this and that
+  git add . &>/dev/null
+
+  mapfile -t result <<< "$(execute_segment)"
+  echo "${result[@]}"
+  assert_equal "${#result[@]}" 4
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" '+3'
+  assert_equal "${result[2]}" "$SETTINGS_GIT_ICON"
+  assert_equal "${result[3]}" 'master'
+}
