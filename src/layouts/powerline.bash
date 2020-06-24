@@ -2,9 +2,19 @@ SETTINGS_SEGMENT_SEPARATOR_LEFT=''
 SETTINGS_SEGMENT_SEPARATOR_RIGHT=''
 SETTINGS_SEGMENT_SPLITTER_LEFT=''
 SETTINGS_SEGMENT_SPLITTER_RIGHT=''
+SETTINGS_PROMPT_READY_ICON='➜'
 SETTINGS_GIT_ICON=''
 
 #TODO these layouts need a refactor, and should share common functionality
+
+print_themed_command_mode() {
+  echo "\1\e[38;2;${command_color}m\e[49m\2 ${SETTINGS_PROMPT_READY_ICON} \1\e[0m\2"
+}
+
+print_themed_insert_mode() {
+  echo "\1\e[38;2;${insert_color}m\e[49m\2 ${SETTINGS_PROMPT_READY_ICON} \1\e[0m\2"
+}
+
 
 print_themed_filler() {
   local -n return_value=$1
@@ -21,7 +31,7 @@ print_themed_filler() {
 }
 
 print_themed_segment() {
-  local color_type=$1
+  local segment_type=$1
   shift
   local segment_parts=("${@}")
   local segment_length=0
@@ -30,7 +40,11 @@ print_themed_segment() {
   local seperator_themed
   local part_splitter
 
-  if [[ "$color_type" == 'highlight' ]]; then
+  if [[ "$segment_type" == 'prompt_ready' && "$SETTINGS_PROMPT_READY_VI_MODE" -eq 1 ]]; then
+    return 0
+  fi
+
+  if [[ "$segment_type" == 'highlight' ]]; then
     PRIMARY_COLOR="$PRIMARY_COLOR_HIGHLIGHT"
     SECONDARY_COLOR="$SECONDARY_COLOR_HIGHLIGHT"
   fi
@@ -59,7 +73,7 @@ print_themed_segment() {
   fi
   local part_splitter_length="${#part_splitter}"
 
-  if [[ "$SEGMENT_LINE_POSITION" -gt 1 ]]; then
+  if [[ "$SEGMENT_LINE_POSITION" -gt 0 ]]; then
     segment_length="${#seperator}"
     themed_segment="$seperator_themed"
   fi

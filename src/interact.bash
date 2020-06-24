@@ -5,17 +5,18 @@ _sbp_print_usage() {
   Usage: sbp [command]
 
   Commands:
-  segments  - List all available segments
-  hooks     - List all available hooks
-  peekaboo  - Toggle visibility of [segment] or [hook]
-  color     - Set [color] for the current session
-  layout    - Set [layout] for the current session
-  themes    - List all available color themes and layouts
-  reload    - Reload SBP and user settings
-  debug     - Toggle debug mode
-  status    - Show the current configuration
-  config    - Opens the config in \$EDITOR ($EDITOR)
-  colors    - Opens the colors config in \$EDITOR ($EDITOR)
+  reload          - Reload SBP and user settings
+  edit-config     - Opens the sbp config in \$EDITOR (${EDITOR:-'not set'})
+  edit-colors     - Opens the colors config in \$EDITOR (${EDITOR:-'not set'})
+  show-status     - Show the current configuration
+  show-help       - Show this help text
+  list-segments   - List all available segments
+  list-hooks      - List all available hooks
+  list-themes     - List all available color themes and layouts
+  set-color       - Set [color] for the current session
+  set-layout      - Set [layout] for the current session
+  toggle-peekaboo - Toggle visibility of [segment] or [hook]
+  toggle-debug    - Toggle debug mode
 EOF
 }
 
@@ -62,8 +63,8 @@ _sbp_toggle_debug() {
 
 _sbp_peekaboo() {
   local feature=$1
-  feature_hook="${SBP_PATH}/hooks/${feature}.bash"
-  feature_segment="${SBP_PATH}/segments/${feature}.bash"
+  feature_hook="${SBP_PATH}/src/hooks/${feature}.bash"
+  feature_segment="${SBP_PATH}/src/segments/${feature}.bash"
   peekaboo_folder="${HOME}/.config/sbp/peekaboo"
   mkdir -p "${peekaboo_folder}"
   peekaboo_file="${peekaboo_folder}/${feature}"
@@ -80,45 +81,45 @@ _sbp_peekaboo() {
 
 sbp() {
   case $1 in
-    'segments') # Show all available segments
+    'list-segments') # Show all available segments
       "$_sbp_themed_helper" 'list_segments'
       ;;
-    'hooks') # Show all available hooks
+    'list-hooks') # Show all available hooks
       "$_sbp_themed_helper" 'list_hooks'
       ;;
-    'peekaboo')
+    'toggle-peekaboo')
       _sbp_require_argument "$2" '[segment|hook]'
       _sbp_peekaboo "$2"
       ;;
-    'color') # Show currently defined colors
+    'set-color') # Show currently defined colors
       _sbp_require_argument "$2" '[color]'
       export SBP_THEME_COLOR="$2"
       _sbp_reload
       ;;
-    'layout')
+    'set-layout')
       _sbp_require_argument "$2" '[layout]'
       export SBP_THEME_LAYOUT="$2"
       _sbp_reload
       ;;
-    'themes') # Show all defined colors and layouts
+    'list-themes') # Show all defined colors and layouts
       "$_sbp_themed_helper" 'list_themes'
       ;;
     'reload') # Reload settings and SBP
       _sbp_reload
       ;;
-    'config') # Open the config file
+    'edit-config') # Open the config file
       _sbp_edit_config
       ;;
-    'colors') # Open the config file
+    'edit-colors') # Open the config file
       _sbp_edit_colors
       ;;
-    'debug') # Toggle debug mode
+    'toggle-debug') # Toggle debug mode
       _sbp_toggle_debug
       ;;
     'extra_options') # Woho, hiddden function
       "$_sbp_themed_helper" 'generate_extra_options'
       ;;
-    'status')
+    'show-status')
       "$_sbp_themed_helper" 'show_status'
       ;;
     *)
@@ -135,7 +136,7 @@ _sbp() {
 
   words=()
   case "$prev" in
-    'peekaboo')
+    'toggle-peekaboo')
       for hook in $($_sbp_themed_helper list_words 'hooks'); do
         words+=("$hook")
       done
@@ -144,18 +145,18 @@ _sbp() {
         words+=("$segment")
       done
       ;;
-    'color')
+    'set-color')
       for color in $($_sbp_themed_helper list_words 'colors'); do
         words+=("$color")
       done
       ;;
-    'layout')
+    'set-layout')
       for layout in $($_sbp_themed_helper list_words 'layouts'); do
         words+=("$layout")
       done
       ;;
     *)
-      words=('segments' 'hooks' 'peekaboo' 'color' 'layout' 'themes' 'reload' 'help' 'config' 'colors' 'status' 'debug')
+      words=('list-segments' 'list-hooks' 'toggle-peekaboo' 'set-color' 'set-layout' 'list-themes' 'reload' 'help' 'edit-config' 'edit-colors' 'show-status' 'toggle-debug')
       ;;
   esac
 

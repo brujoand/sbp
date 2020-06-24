@@ -11,8 +11,8 @@ segments::k8s() {
   host=${host%:*}
   namespace=${namespace_and_host%/*}
 
-  if [[ "${user,,}" == "${SETTINGS_OPENSHIFT_DEFAULT_USER,,}" ]]; then
-    if [[ "$SETTINGS_OPENSHIFT_HIDE_CLUSTER" -eq 1 ]]; then
+  if [[ "${user,,}" == "${SETTINGS_K8S_DEFAULT_USER,,}" ]]; then
+    if [[ "$SETTINGS_K8S_HIDE_CLUSTER" -eq 1 ]]; then
       segment="${namespace}"
     else
       segment="${host}:${namespace}"
@@ -21,5 +21,5 @@ segments::k8s() {
     segment="${user}@${host}/${namespace}"
   fi
 
-  print_themed_segment 'normal' "$segment"
+  print_themed_segment 'normal' "${segment,,}"
 }

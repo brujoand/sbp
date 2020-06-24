@@ -11,7 +11,7 @@ configure::list_feature_files() {
   local feature_type=$1
   IFS=" " read -r -a features <<< "$(\
     shopt -s nullglob; \
-    echo ${SBP_PATH}/{src,config}/${feature_type}/*.bash \
+    echo "${SBP_PATH}/{src,config}/${feature_type}"/*.bash \
       "${SBP_CONFIG}/${feature_type}"/*.bash; \
   )"
 

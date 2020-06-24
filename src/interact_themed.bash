@@ -17,17 +17,13 @@ generate_extra_options() {
   # if we are messing with any previous settings
   if [[ "$SETTINGS_PROMPT_READY_VI_MODE" -eq 1 ]]; then
     local cache_file="${SBP_CACHE}/extra_options.bash"
-    rm -f "$cache_file"
-    if [[ -n "$SETTINGS_PROMPT_READY_ICON" ]]; then
-      local insert_color="$SETTINGS_PROMPT_READY_VI_INSERT_COLOR"
-      local command_color="$SETTINGS_PROMPT_READY_VI_COMMAND_COLOR"
-      local command_segment="\1\e[38;2;${command_color}m\e[49m\2 ${SETTINGS_PROMPT_READY_ICON} \1\e[0m\2"
-      local insert_segment="\1\e[38;2;${insert_color}m\e[49m\2 ${SETTINGS_PROMPT_READY_ICON} \1\e[0m\2"
-    fi
+    insert_mode=$(print_themed_insert_mode)
+    command_mode=$(print_themed_command_mode)
+
     cat << EOF > "$cache_file"
 bind 'set show-mode-in-prompt on'
-bind "set vi-cmd-mode-string \1\e[2 q\2${command_segment}"
-bind "set vi-ins-mode-string \1\e[1 q\2${insert_segment}"
+bind "set vi-cmd-mode-string \1\e[2 q\2${command_mode}"
+bind "set vi-ins-mode-string \1\e[1 q\2${insert_mode}"
 EOF
     echo "$cache_file"
   else
@@ -82,6 +78,7 @@ list_layouts() {
 
 show_current_colors() {
   SETTINGS_SEGMENT_ENABLE_BG_COLOR=1
+  printf '    '
   for n in "${COLOR_IDS[@]}"; do
     color="color${n}"
     local text_color_value
@@ -99,7 +96,7 @@ list_colors() {
   for color in $(configure::list_feature_files 'colors'); do
     source "$color"
     file="${color##*/}"
-    printf '\n%s \n' "${file/.bash/}"
+    printf '\n  %s \n' "${file/.bash/}"
     show_current_colors
   done
 }

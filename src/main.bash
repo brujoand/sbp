@@ -19,30 +19,29 @@ main::main() {
 
   tempdir=$SBP_TMP
 
-  declare -a fillers
-  declare -a newlines
   declare -a pids
 
   local segment_position='left'
-  local last_newline=0
+  local start_of_current_line=0
 
+  # Trigger all segments
+  # Mark all special cases and generate all other
+  # segments
   for i in "${!SETTINGS_SEGMENTS[@]}"; do
-    segment_name="${SETTINGS_SEGMENTS[i]}"
+    local segment_name="${SETTINGS_SEGMENTS[i]}"
 
     case "$segment_name" in
       'newline')
-        newlines+=("$i")
         segment_position='left'
-        last_newline=$i
-        pids[i]=0
+        start_of_current_line=$(( i + 1 ))
+        pids[i]="$segment_name"
         ;;
       'filler')
-        fillers+=("$i")
         segment_position='right'
-        pids[i]=0
+        pids[i]="$segment_name"
         ;;
       *)
-        execute::execute_prompt_segment "$segment_name" "$segment_position" "$(( i - last_newline ))" > "${tempdir}/${i}" & pids[i]=$!
+        execute::execute_prompt_segment "$segment_name" "$segment_position" "$(( i - start_of_current_line ))" > "${tempdir}/${i}" & pids[i]=$!
         ;;
     esac
   done
@@ -51,19 +50,21 @@ main::main() {
   local pre_filler=
   local post_filler=
 
+  # Gather up all the generated segments
+  # by their pid
+  # and generate the special cases
   for i in "${!pids[@]}"; do
-    if [[ "${fillers[0]}" -eq "$i" ]]; then
+    local current_pid="${pids[$i]}"
+    if [[ "$current_pid" == 'filler' ]]; then
       current_filler_position="$i"
-      fillers=("${fillers[@]:1}")
-    elif [[ ${newlines[0]} -eq "$i" ]]; then
-      newlines=("${newlines[@]:1}")
-      local filler
+    elif [[ "$current_pid" == 'newline' ]]; then
       if [[ -n "$current_filler_position" ]]; then
+        local filler
         print_themed_filler 'filler' "$total_empty_space"
-        total_empty_space="$COLUMNS"
         pre_filler="${pre_filler}${filler}${post_filler}"
         unset current_filler_position post_filler
       fi
+      total_empty_space="$COLUMNS"
 
       pre_filler="${pre_filler}\n"
     else
@@ -85,10 +86,12 @@ main::main() {
       fi
     fi
   done
-  prompt="${pre_filler}${post_filler}"
 
-  # Print the prompt and reset colors
-  printf '%s' "$prompt"
+  local color_reset
+  decorate::print_colors 'color_reset'
+
+  printf '%s%s%s' "$pre_filler" "$post_filler" "$color_reset"
+
 }
 
 main::main
