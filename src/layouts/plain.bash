@@ -21,24 +21,24 @@ print_themed_filler() {
   # Account for seperator and padding
   padding=$(printf "%*s" "$filler_size")
   SEGMENT_LINE_POSITION=2
-  prompt_filler_output="$(print_themed_segment 'normal' "$padding")"
+  prompt_filler_output="$(print_themed_segment 'filler' "$padding")"
   mapfile -t segment_output <<< "$prompt_filler_output"
 
   return_value=${segment_output[1]}
 }
 
 print_themed_segment() {
-  local color_type=$1
+  local segment_type=$1
   shift
   local segment_parts=("${@}")
   local segment_length=0
   local themed_parts
 
-  if [[ "$color_type" == 'highlight' ]]; then
+  if [[ "$segment_type" == 'highlight' ]]; then
     PRIMARY_COLOR="$PRIMARY_COLOR_HIGHLIGHT"
   fi
 
-  if [[ "${#segment_parts[@]}" -eq 1 && -z "${segment_parts// /}" ]]; then
+  if [[ "$segment_type" == 'filler' ]]; then
     themed_parts="$segment_parts"
   else
     for part in "${segment_parts[@]}"; do
@@ -49,11 +49,10 @@ print_themed_segment() {
       segment_length=$(( segment_length + part_length + 1 ))
     done
   fi
-  if [[ "$SEGMENT_LINE_POSITION" -eq 1 ]]; then
-    if [[ "$themed_parts" == " $SETTINGS_PROMPT_READY_ICON" ]]; then
-      themed_parts="${themed_parts} "
-      segment_length=$(( segment_length + 1 ))
-    fi
+  if [[ "$segment_type" == 'prompt_ready' ]]; then
+    themed_parts="${themed_parts} "
+    segment_length=$(( segment_length + 1 ))
+  elif [[ "$SEGMENT_LINE_POSITION" -eq 0 ]]; then
     themed_parts="${themed_parts:1}"
     segment_length=$(( segment_length - 1 ))
   fi
