@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-SETTINGS_ALERT_THRESHOLD="${SETTINGS_ALERT_THRESHOLD:-60}"
+HOOKS_ALERT_THRESHOLD="${HOOKS_ALERT_THRESHOLD:-60}"
 
 hooks::alert_notify() {
   [[ -z "$2" ]] && return
@@ -19,7 +19,7 @@ hooks::alert_notify() {
 
 hooks::alert() {
   [[ "$COMMAND_EXIT_CODE" -lt 0 ]] && return
-  if [[ "$SETTINGS_ALERT_THRESHOLD" -le "$COMMAND_DURATION" ]]; then
+  if [[ "$HOOKS_ALERT_THRESHOLD" -le "$COMMAND_DURATION" ]]; then
     local title message
 
     if [[ "$COMMAND_EXIT_CODE" -eq "0" ]]; then

@@ -4,6 +4,6 @@ assert_equal() {
   if [[ $1 != "$2" ]]; then
     echo "expected: '$2'"
     echo "actual: '$1'"
-    fail
+    false
   fi
 }

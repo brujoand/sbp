@@ -15,8 +15,8 @@ setup() {
 }
 
 @test "test a non-split path segment" {
-  export SETTINGS_PATH_SPLITTER_DISABLE=1
-  export SETTINGS_PATH_COMPRESS_DEPTH=99
+  export SEGMENTS_PATH_SPLITTER_DISABLE=1
+  export SEGMENTS_PATH_COMPRESS_AFTER=99
   mapfile -t result <<< "$(execute_segment)"
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'

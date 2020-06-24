@@ -3,8 +3,8 @@
 load segment_helper
 
 setup() {
-  export SETTINGS_GIT_MAX_LENGTH=99
-  export SETTINGS_GIT_ICON=''
+  export SEGMENTS_GIT_MAX_LENGTH=99
+  export SEGMENTS_GIT_ICON=''
 
   cd "$TMP_DIR"
   git init &>/dev/null
@@ -44,7 +44,7 @@ setup() {
 }
 
 @test "test we can use an icon with git segment" {
-  export SETTINGS_GIT_ICON='@'
+  export SEGMENTS_GIT_ICON='@'
   touch this and that
   git add . &>/dev/null
 
@@ -53,6 +53,6 @@ setup() {
   assert_equal "${#result[@]}" 4
   assert_equal "${result[0]}" 'normal'
   assert_equal "${result[1]}" '+3'
-  assert_equal "${result[2]}" "$SETTINGS_GIT_ICON"
+  assert_equal "${result[2]}" "$SEGMENTS_GIT_ICON"
   assert_equal "${result[3]}" 'master'
 }

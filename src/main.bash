@@ -17,18 +17,23 @@ COMMAND_DURATION=$2
 main::main() {
   execute::execute_prompt_hooks
 
-  tempdir=$SBP_TMP
-
   declare -a pids
 
   local segment_position='left'
   local start_of_current_line=0
 
+
+  if [[ -n "${SBP_SEGMENTS_RIGHT}" ]]; then
+    SBP_SEGMENTS=('newline' "${SBP_SEGMENTS_LEFT[@]}" 'filler' "${SBP_SEGMENTS_RIGHT[@]}" 'newline' "${SBP_SEGMENTS_LINE_TWO[@]}")
+  else
+    SBP_SEGMENTS=('newline' "${SBP_SEGMENTS_LEFT[@]}")
+  fi
+
   # Trigger all segments
   # Mark all special cases and generate all other
   # segments
-  for i in "${!SETTINGS_SEGMENTS[@]}"; do
-    local segment_name="${SETTINGS_SEGMENTS[i]}"
+  for i in "${!SBP_SEGMENTS[@]}"; do
+    local segment_name="${SBP_SEGMENTS[$i]}"
 
     case "$segment_name" in
       'newline')
@@ -41,7 +46,7 @@ main::main() {
         pids[i]="$segment_name"
         ;;
       *)
-        execute::execute_prompt_segment "$segment_name" "$segment_position" "$(( i - start_of_current_line ))" > "${tempdir}/${i}" & pids[i]=$!
+        execute::execute_prompt_segment "$segment_name" "$segment_position" "$(( i - start_of_current_line ))" > "${SBP_TMP}/${i}" & pids[i]=$!
         ;;
     esac
   done
@@ -69,7 +74,7 @@ main::main() {
       pre_filler="${pre_filler}\n"
     else
       wait "${pids[i]}"
-      mapfile -t segment_output < "${tempdir}/${i}"
+      mapfile -t segment_output < "${SBP_TMP}/${i}"
 
       segment=${segment_output[1]}
       segment_length=${segment_output[0]}

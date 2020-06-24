@@ -11,8 +11,8 @@ segments::k8s() {
   host=${host%:*}
   namespace=${namespace_and_host%/*}
 
-  if [[ "${user,,}" == "${SETTINGS_K8S_DEFAULT_USER,,}" ]]; then
-    if [[ "$SETTINGS_K8S_HIDE_CLUSTER" -eq 1 ]]; then
+  if [[ "${user,,}" == "${SEGMENTS_K8S_DEFAULT_USER,,}" ]]; then
+    if [[ "$SEGMENTS_K8S_HIDE_CLUSTER" -eq 1 ]]; then
       segment="${namespace}"
     else
       segment="${host}:${namespace}"

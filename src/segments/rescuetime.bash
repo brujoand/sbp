@@ -13,7 +13,7 @@ segments::rescuetime_fetch_changes() {
 }
 
 segments::rescuetime_refresh() {
-  refresh_rate="${SETTINGS_RESCUETIME_REFRESH_RATE:-600}"
+  refresh_rate="${SEGMENTS_RESCUETIME_REFRESH_RATE:-600}"
   if [[ ! -f "$SEGMENT_CACHE" ]]; then
     debug::log_error "No cache folder"
   fi

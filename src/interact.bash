@@ -93,12 +93,12 @@ sbp() {
       ;;
     'set-color') # Show currently defined colors
       _sbp_require_argument "$2" '[color]'
-      export SBP_THEME_COLOR="$2"
+      export SBP_THEME_COLOR_OVERRIDE="$2"
       _sbp_reload
       ;;
     'set-layout')
       _sbp_require_argument "$2" '[layout]'
-      export SBP_THEME_LAYOUT="$2"
+      export SBP_THEME_LAYOUT_OVERRIDE="$2"
       _sbp_reload
       ;;
     'list-themes') # Show all defined colors and layouts

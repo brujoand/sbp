@@ -1,10 +1,10 @@
 #! /usr/bin/env bash
 
 segments::git() {
-  local segment_max_length=$SETTINGS_GIT_MAX_LENGTH
+  local segment_max_length=$SEGMENTS_GIT_MAX_LENGTH
 
-  local incoming_icon="$SETTINGS_GIT_INCOMING_ICON"
-  local outgoing_icon="$SETTINGS_GIT_OUTGOING_ICON"
+  local incoming_icon="$SEGMENTS_GIT_INCOMING_ICON"
+  local outgoing_icon="$SEGMENTS_GIT_OUTGOING_ICON"
 
   local path=${PWD}
   while [[ $path ]]; do
@@ -67,10 +67,10 @@ segments::git() {
     git_head=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
   fi
 
-  git_size=$(( ${#git_state} + ${#SETTINGS_GIT_ICON} + ${#git_head} + ${#upstream_status} ))
+  git_size=$(( ${#git_state} + ${#SEGMENTS_GIT_ICON} + ${#git_head} + ${#upstream_status} ))
 
   if [[ "$git_size" -gt "$segment_max_length" ]]; then
-    available_space=$(( segment_max_length - ${#git_state} - ${#SETTINGS_GIT_ICON} + ${#upstream_status} ))
+    available_space=$(( segment_max_length - ${#git_state} - ${#SEGMENTS_GIT_ICON} + ${#upstream_status} ))
     if [[ "$available_space" -gt 0 ]]; then
       git_head="${git_head:0:$available_space}.."
     else
@@ -79,7 +79,7 @@ segments::git() {
   fi
 
 
-  SETTINGS_SEGMENT_SPLITTER_LEFT=''
-  SETTINGS_SEGMENT_SPLITTER_RIGHT=''
-  print_themed_segment 'normal' "${git_state/ /}" "$SETTINGS_GIT_ICON" "${git_head/ /}" "${upstream_status/ /}"
+  SPLITTER_LEFT=''
+  SPLITTER_RIGHT=''
+  print_themed_segment 'normal' "${git_state/ /}" "$SEGMENTS_GIT_ICON" "${git_head/ /}" "${upstream_status/ /}"
 }

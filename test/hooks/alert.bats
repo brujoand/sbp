@@ -10,7 +10,7 @@ hooks::alert_notify() {
 }
 
 @test "test an okay alert hook" {
-  SETTINGS_ALERT_THRESHOLD=1
+  HOOKS_ALERT_THRESHOLD=1
   COMMAND_DURATION=20
   COMMAND_EXIT_CODE=0
 

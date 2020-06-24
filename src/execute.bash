@@ -53,8 +53,8 @@ execute::execute_prompt_segment() {
   if [[ -f "$segment_script" ]]; then
     source "$segment_script"
 
-    local primary_color_var="SETTINGS_${segment^^}_COLOR_PRIMARY"
-    local secondary_color_var="SETTINGS_${segment^^}_COLOR_SECONDARY"
+    local primary_color_var="SEGMENTS_${segment^^}_COLOR_PRIMARY"
+    local secondary_color_var="SEGMENTS_${segment^^}_COLOR_SECONDARY"
 
     local primary_color_highlight_var="${primary_color_var}_HIGHLIGHT"
     local secondary_color_highlight_var="${secondary_color_var}_HIGHLIGHT"
@@ -65,7 +65,7 @@ execute::execute_prompt_segment() {
     PRIMARY_COLOR_HIGHLIGHT="${!primary_color_highlight_var}"
     SECONDARY_COLOR_HIGHLIGHT="${!secondary_color_highlight_var}"
 
-    local splitter_color_var="SETTINGS_${segment}_SPLITTER_COLOR"
+    local splitter_color_var="SEGMENTS_${segment}_SPLITTER_COLOR"
     SPLITTER_COLOR="${!splitter_color_var}"
 
     "segments::${segment}"

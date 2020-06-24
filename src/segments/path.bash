@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 segments::path() {
-  local segment_max_length=$SETTINGS_PATH_COMPRESS_DEPTH
+  local segment_max_length=${SEGMENTS_PATH_COMPRESS_AFTER:-10}
 
   local wdir=${PWD/${HOME}/\~}
 
@@ -12,7 +12,7 @@ segments::path() {
   fi
 
   IFS=/ read -r -a wdir_array <<<"${wdir}"
-  if [[ $SETTINGS_PATH_SPLITTER_DISABLE -ne 1 && "${#wdir_array[@]}" -gt 1 ]]; then
+  if [[ $SEGMENTS_PATH_SPLITTER_DISABLE -ne 1 && "${#wdir_array[@]}" -gt 1 ]]; then
     declare -a segments
     for dir in "${wdir_array[@]}"; do
       if [[ -n "$dir" ]]; then
