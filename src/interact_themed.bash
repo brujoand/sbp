@@ -79,10 +79,10 @@ list_layouts() {
 show_current_colors() {
   SETTINGS_SEGMENT_ENABLE_BG_COLOR=1
   printf '    '
-  for n in "${COLOR_IDS[@]}"; do
+  for n in {0..15}; do
     color="color${n}"
     local text_color_value
-    decorate::get_complement_rgb 'text_color_value' "${!color}"
+    decorate::calculate_complementing_color 'text_color_value' "${!color}"
     local text_color
     decorate::print_fg_color 'text_color' "$text_color_value" 'false'
     local bg_color

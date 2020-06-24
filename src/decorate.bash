@@ -1,8 +1,6 @@
 #! /usr/bin/env bash
 
-COLOR_IDS=( 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F )
-
-decorate::get_complement_rgb() {
+decorate::calculate_complementing_color() {
   local -n return_value=$1
   local source_color=$2
   input_colors=()
@@ -13,11 +11,17 @@ decorate::get_complement_rgb() {
     return_value="$(( 255 - source_color ))"
   else
     mapfile -t input_colors < <(tr ';' '\n' <<< "$source_color")
-    for color_value in "${input_colors[@]}"; do
-      output_colors+=("$(( 255 - color_value ))")
-    done
+    r_lum=$(( ${input_colors[0]} * 2126 ))
+    g_lum=$(( ${input_colors[1]} * 7152 ))
+    b_lum=$(( ${input_colors[2]} * 722 ))
 
-    return_value="${output_colors[0]};${output_colors[1]};${output_colors[2]}"
+    lum=$(( r_lum + g_lum + b_lum ))
+    if [[ "$lum" -gt 1400000 ]]; then
+      return_value='0;0;0'
+    else
+      return_value='255;255;255'
+    fi
+
   fi
 }
 
