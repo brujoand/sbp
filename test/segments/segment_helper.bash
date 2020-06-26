@@ -1,5 +1,5 @@
 source "${SBP_PATH}/src/debug.bash"
-source "${SBP_PATH}/test/test_helper.bash"
+source "${SBP_PATH}/test/asserts.bash"
 
 export COMMAND_EXIT_CODE=0
 export COMMAND_DURATION=0

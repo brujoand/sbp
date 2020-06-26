@@ -2,25 +2,16 @@
 
 execute::get_script() {
   local -n return_value=$1
-  local type=$2
-  local feature=$3
+  local feature_type=$2
+  local feature_name=$3
 
-  if [[ -f "${SBP_CONFIG}/peekaboo/${segment_name}" ]]; then
+  if [[ -f "${SBP_CONFIG}/peekaboo/${feature_name}" ]]; then
     return 0
   fi
 
-  local local_script="${SBP_CONFIG}/${type}s/${feature}.bash"
-  local global_script="${SBP_PATH}/src/${type}s/${feature}.bash"
-
-  if [[ -f "$local_script" ]]; then
-    return_value="$local_script"
-  elif [[ -f "$global_script" ]]; then
-    return_value="$global_script"
-  else
-    debug::log_error "Could not find $local_script"
-    debug::log_error "Could not find $global_script"
-    debug::log_error "Make sure it exists"
-  fi
+  local feature_file
+  configure::get_feature_file 'feature_file' "$feature_type" "$feature_name"
+  return_value="$feature_file"
 }
 
 execute::execute_nohup_function() {

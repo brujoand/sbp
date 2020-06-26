@@ -11,13 +11,33 @@ configure::list_feature_files() {
   local feature_type=$1
   IFS=" " read -r -a features <<< "$(\
     shopt -s nullglob; \
-    echo ${SBP_PATH}/{src,config}/${feature_type}/*.bash \
+    echo "${SBP_PATH}/src/${feature_type}"/*.bash \
       "${SBP_CONFIG}/${feature_type}"/*.bash; \
   )"
 
   for file in "${features[@]}"; do
     printf '%s\n' "$file"
   done
+}
+
+configure::get_feature_file() {
+  local -n return_value=$1
+  local feature_type=$2
+  local feature_name=$3
+
+  local local_file="${SBP_PATH}/src/${feature_type}s/${feature_name}.bash"
+  local global_file="${SBP_CONFIG}/${feature_type}s/${feature_name}.bash"
+
+  if [[ -f "$local_file" ]]; then
+    return_value="$local_file"
+  elif [[ -f "$global_file" ]]; then
+    return_value="$global_file"
+  else
+    debug::log_error "Could not find $local_file"
+    debug::log_error "Could not find $global_file"
+    debug::log_error "Make sure at least on of them exists"
+  fi
+
 }
 
 configure::list_feature_names() {
@@ -30,49 +50,28 @@ configure::list_feature_names() {
 }
 
 configure::set_colors() {
-  local theme_name=$1
-  if [[ -z "$theme_name" ]]; then
-    debug::log_error "No theme name set"
-    debug::log_info "Using the default theme"
-    source "${SBP_PATH}/config/colors/default.bash"
-    return 1
-  fi
+  local color_name=$1
+  local colors_file
+  configure::get_feature_file 'colors_file' 'color' "$color_name"
 
-  user_theme="${SBP_CONFIG}/themes/colors/${theme_name}.bash"
-  sbp_theme="${SBP_PATH}/config/colors/${theme_name}.bash"
-
-  if [[ -f "$user_theme" ]]; then
-    source "$user_theme"
-  elif [[ -f "$sbp_theme" ]]; then
-    source "$sbp_theme"
+  if [[ -n "$colors_file" ]]; then
+    source "$colors_file"
   else
-    debug::log_error "Could not find theme file: ${user_theme}"
-    debug::log_error "Could not find theme file: ${sbp_theme}"
-    debug::log_info "Using the default theme"
-    source "${SBP_PATH}/config/colors/default.bash"
+    debug::log_info "Using the default color config"
+    source "${SBP_PATH}/src/colors/default.bash"
   fi
 }
 
 configure::set_layout() {
   local layout_name=$1
-  if [[ -z "$layout_name" ]]; then
-    debug::log_error "No layout name set"
-    debug::log_info "Using the default layout"
-    source "${SBP_PATH}/themes/layouts/default.bash"
-    return 1
-  fi
+  local layout_file
 
-  user_layout="${SBP_CONFIG}/themes/layouts/${layout_name}.bash"
-  sbp_layout="${SBP_PATH}/src/layouts/${layout_name}.bash"
+  configure::get_feature_file 'layout_file' 'layout' "$layout_name"
 
-  if [[ -f "$user_layout" ]]; then
-    source "$user_layout"
-  elif [[ -f "$sbp_layout" ]]; then
-    source "$sbp_layout"
+  if [[ -n "$layout_file" ]]; then
+    source "$layout_file"
   else
-    debug::log_error "Could not find theme file: ${user_layout}"
-    debug::log_error "Could not find theme file: ${sbp_layout}"
-    debug::log_info "Using the default theme"
+    debug::log_info "Using the default layout"
     source "${SBP_PATH}/src/layouts/plain.bash"
   fi
 }
@@ -87,7 +86,7 @@ configure::load_config() {
   fi
 
   if [[ ! -f "$colors_file" ]]; then
-    debug::log_info "Config file note found: ${colors_file}"
+    debug::log_info "Color config file note found: ${colors_file}"
     debug::log_info "Creating it.."
     cp "$default_colors_file" "$colors_file"
   fi

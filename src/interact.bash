@@ -19,7 +19,7 @@ _sbp_print_usage() {
     color           - Set [color] for the current session
     layout          - Set [layout] for the current session
   toggle
-    peekaboo        - Toggle visibility of [segment] or [hook]
+    peekaboo        - Toggle execution of [segment] or [hook]
     debug           - Toggle debug mode
 EOF
 }
@@ -103,9 +103,9 @@ sbp() {
       ;;
     'toggle')
       case $2 in
-        'peekabo')
-          _sbp_require_argument "$2" '[segment|hook]'
-          _sbp_peekaboo "$2"
+        'peekaboo')
+          _sbp_require_argument "$3" '[segment|hook]'
+          _sbp_peekaboo "$3"
           ;;
         'debug') # Toggle debug mode
           _sbp_toggle_debug
@@ -118,13 +118,13 @@ sbp() {
     'set')
       case $2 in
         'color') # Show currently defined colors
-          _sbp_require_argument "$2" '[color]'
-          export SBP_THEME_COLOR_OVERRIDE="$2"
+          _sbp_require_argument "$3" '[color]'
+          export SBP_THEME_COLOR_OVERRIDE="$3"
           _sbp_reload
           ;;
         'layout')
-          _sbp_require_argument "$2" '[layout]'
-          export SBP_THEME_LAYOUT_OVERRIDE="$2"
+          _sbp_require_argument "$3" '[layout]'
+          export SBP_THEME_LAYOUT_OVERRIDE="$3"
           _sbp_reload
           ;;
         *)
@@ -164,7 +164,7 @@ _sbp() {
   local cur words
   #_get_comp_words_by_ref cur
   cur="${COMP_WORDS[COMP_CWORD]}"
-  prev="${COMP_WORDS[1]}"
+  prev="${COMP_WORDS[$(( COMP_CWORD - 1 ))]}"
 
   words=()
   case "$prev" in
@@ -175,7 +175,7 @@ _sbp() {
       words=('hooks' 'segments' 'themes')
       ;;
     'toggle')
-      words=('debug' 'peekabo')
+      words=('debug' 'peekaboo')
       ;;
     'edit')
       words=('config' 'colors')

@@ -37,30 +37,35 @@ settings to `~/.config/sbp/settings.conf` along with the default color assignmen
 to `~/.config/sbp/colors.conf` and add two lines to your `$HOME/.bashrc`:
 ```
   SBP_PATH=/the/path/to/sbp/
-  source ${sbp_path}/sbp.bash
+  source ${SBP_PATH}/sbp.bash
 ```
 
 ## Usage
 So you're ready to go. Now you do nothing. Just use it. But you could. If you want. Change stuff up a bit.
-Edit your config by running `sbp config` and run `sbp reload` if you changed
+Edit your config by running `sbp edit config` and run `sbp reload` if you changed
 something substantial. Most changes will be effective immediately.
 You can use the `sbp` command for a lot of things:
 ```
-  sbp
   Usage: sbp [command]
 
   Commands:
-  segments  - List all available segments
-  hooks     - List all available hooks
-  peekaboo  - Toggle visibility of [segment] or [hook]
-  color     - Set [color] for the current session
-  layout    - Set [layout] for the current session
-  themes    - List all available color themes and layouts
-  reload    - Reload SBP and user settings
-  debug     - Toggle debug mode
-  status    - Show the current configuration
-  config    - Opens the config in $EDITOR
-  colors    - Opens the color config in $EDITOR
+  reload            - Reload SBP and user settings
+  status            - Show the current configuration
+  help              - Show this help text
+  list
+    segments        - List all available segments
+    hooks           - List all available hooks
+    themes          - List all available color themes and layouts
+  edit
+    config          - Opens the sbp config in \$EDITOR (${EDITOR:-'not set'})
+    colors          - Opens the colors config in \$EDITOR (${EDITOR:-'not set'})
+  set
+    color           - Set [color] for the current session
+    layout          - Set [layout] for the current session
+  toggle
+    peekaboo        - Toggle execution of [segment] or [hook]
+    debug           - Toggle debug mode
+  sbp
 ```
 
 ## Features

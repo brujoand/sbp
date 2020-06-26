@@ -4,10 +4,10 @@
 source "${SBP_PATH}/src/debug.bash"
 # shellcheck source=src/decorate.bash
 source "${SBP_PATH}/src/decorate.bash"
-# shellcheck source=src/configure.bash
-source "${SBP_PATH}/src/configure.bash"
 # shellcheck source=src/execute.bash
 source "${SBP_PATH}/src/execute.bash"
+# shellcheck source=src/configure.bash
+source "${SBP_PATH}/src/configure.bash"
 
 configure::load_config
 

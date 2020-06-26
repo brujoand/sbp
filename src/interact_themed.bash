@@ -37,7 +37,8 @@ list_segments() {
     local status='disabled'
     local segment_file="${segment_path##*/}"
     local segment_name="${segment_file/.bash/}"
-    if printf '%s.bash\n' "${SETTINGS_SEGMENTS[@]}" | grep -qo "${segment_name}"; then
+    SBP_SEGMENTS=("${SBP_SEGMENTS_LEFT[@]}" "${SBP_SEGMENTS_RIGHT[@]}" "${SBP_SEGMENTS_LINE_TWO[@]}")
+    if printf '%s.bash\n' "${SBP_SEGMENTS[@]}" | grep -qo "${segment_name}"; then
       if [[ -f "${SBP_CONFIG}/peekaboo/${segment_name/.bash/}" ]]; then
         status='hidden'
       else
