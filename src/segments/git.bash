@@ -16,6 +16,11 @@ segments::git() {
   done
 
   [[ -z "$git_folder" ]] && exit 0
+  if [[ "$PWD" == "$git_folder" ]]; then
+    print_themed_segment 'normal' '.git/'
+    return 0
+  fi
+
   type git &>/dev/null || exit 0
 
   local git_status="$(git status --porcelain --branch 2>/dev/null)"
