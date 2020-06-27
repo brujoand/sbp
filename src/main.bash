@@ -29,7 +29,6 @@ main::main() {
     SBP_SEGMENTS=('newline' "${SBP_SEGMENTS_LEFT[@]}")
   fi
 
-  # Trigger all segments
   # Mark all special cases and generate all other
   # segments
   for i in "${!SBP_SEGMENTS[@]}"; do
