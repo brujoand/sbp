@@ -7,8 +7,6 @@ SEGMENTS_GIT_ICON=${LAYOUTS_POWERLINE_GIT_ICON:-''}
 SEGMENTS_GIT_INCOMING_ICON=${LAYOUTS_POWERLINE_GIT_INCOMING_ICON:-'↓'}
 SEGMENTS_GIT_OUTGOING_ICON=${LAYOUTS_POWERLINE_GIT_OUTGOING_ICON:-'↑'}
 
-#TODO these layouts need a refactor, and should share common functionality
-
 print_themed_command_mode() {
   local command_color
   decorate::print_fg_color 'command_color' "$SETTINGS_PROMPT_READY_VI_COMMAND_COLOR" false

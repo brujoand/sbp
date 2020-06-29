@@ -29,7 +29,7 @@ main::main() {
     SBP_SEGMENTS=('newline' "${SBP_SEGMENTS_LEFT[@]}")
   fi
 
-  # Mark all special cases and generate all other
+  # Mark filler and newline and generate all other
   # segments
   for i in "${!SBP_SEGMENTS[@]}"; do
     local segment_name="${SBP_SEGMENTS[$i]}"
@@ -56,7 +56,7 @@ main::main() {
 
   # Gather up all the generated segments
   # by their pid
-  # and generate the special cases
+  # and generate the filler and newline
   for i in "${!pids[@]}"; do
     local current_pid="${pids[$i]}"
     if [[ "$current_pid" == 'filler' ]]; then
@@ -77,7 +77,6 @@ main::main() {
 
       segment=${segment_output[1]}
       segment_length=${segment_output[0]}
-      # Make fillers and newlines part of the theme?
       empty_space=$(( total_empty_space - segment_length ))
 
       if [[ "$empty_space" -gt 0 ]]; then
