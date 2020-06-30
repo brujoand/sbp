@@ -9,6 +9,26 @@ SEGMENTS_GIT_OUTGOING_ICON=${LAYOUTS_POWERLINE_GIT_OUTGOING_ICON:-'↑'}
 
 #TODO these layouts need a refactor, and should share common functionality
 
+print_themed_prompt() {
+  local left_segments=$1
+  local right_segments=$2
+  local line_two_segments=$3
+  local prompt_gap_size=$4
+
+  # Remove the first seperator as it's not ending a previous segment
+  local seperator_left_size=${#SEPERATOR_LEFT}
+  left_segments=${left_segments#*$SEPERATOR_LEFT}
+  prompt_gap_size=$(( seperator_left_size + prompt_gap_size ))
+  # Remove the first seperator as it's not ending a previous segment
+  line_two_segments=${line_two_segments#*$SEPERATOR_LEFT}
+  prompt_gap_size=$(( seperator_left_size + prompt_gap_size ))
+
+  local filler_segment
+  print_themed_filler 'filler_segment' "$prompt_gap_size"
+  printf '%s%s%s\n%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
+}
+
+
 print_themed_command_mode() {
   local command_color
   decorate::print_fg_color 'command_color' "$SETTINGS_PROMPT_READY_VI_COMMAND_COLOR" false
@@ -21,7 +41,6 @@ print_themed_insert_mode() {
   echo "\1\e[0m\2\1${insert_color}\2 ${PROMPT_READY_ICON} \1\e[0m\2"
 }
 
-
 print_themed_filler() {
   local -n return_value=$1
   local seperator_size=${#SEPERATOR_LEFT}
@@ -29,7 +48,6 @@ print_themed_filler() {
   local filler_size=$(( $2 - seperator_size - 2 ))
   padding=$(printf '%*s' "$filler_size")
   SEGMENT_POSITION='left'
-  SEGMENT_LINE_POSITION=2
   prompt_filler_output="$(print_themed_segment 'normal' "$padding")"
   mapfile -t segment_output <<< "$prompt_filler_output"
 
@@ -78,12 +96,8 @@ print_themed_segment() {
     part_splitter=' '
   fi
   local part_splitter_length="${#part_splitter}"
-
-  if [[ "$SEGMENT_LINE_POSITION" -gt 0 ]]; then
-    segment_length="${#seperator}"
-    themed_segment="$seperator_themed"
-  fi
-
+  segment_length="${#seperator}"
+  themed_segment="$seperator_themed"
   themed_segment="${themed_segment}${segment_colors}"
 
   if [[ "${#segment_parts[@]}" -gt 1 ]]; then

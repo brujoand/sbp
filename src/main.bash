@@ -17,85 +17,59 @@ COMMAND_DURATION=$2
 main::main() {
   execute::execute_prompt_hooks
 
-  declare -a pids
+  # Execute the segments
+  declare -A left_pids
+  declare -A right_pids
+  declare -A line_two_pids
+  segment_groups=('left' 'right' 'line_two')
 
-  local segment_position='left'
-  local start_of_current_line=0
-
-
-  if [[ -n "${SBP_SEGMENTS_RIGHT}" ]]; then
-    SBP_SEGMENTS=('newline' "${SBP_SEGMENTS_LEFT[@]}" 'filler' "${SBP_SEGMENTS_RIGHT[@]}" 'newline' "${SBP_SEGMENTS_LINE_TWO[@]}")
-  else
-    SBP_SEGMENTS=('newline' "${SBP_SEGMENTS_LEFT[@]}")
-  fi
-
-  # Mark all special cases and generate all other
-  # segments
-  for i in "${!SBP_SEGMENTS[@]}"; do
-    local segment_name="${SBP_SEGMENTS[$i]}"
-
-    case "$segment_name" in
-      'newline')
-        segment_position='left'
-        start_of_current_line=$(( i + 1 ))
-        pids[i]="$segment_name"
-        ;;
-      'filler')
-        segment_position='right'
-        pids[i]="$segment_name"
-        ;;
-      *)
-        execute::execute_prompt_segment "$segment_name" "$segment_position" "$(( i - start_of_current_line ))" > "${SBP_TMP}/${i}" & pids[i]=$!
-        ;;
-    esac
-  done
-
-  local total_empty_space="$COLUMNS"
-  local pre_filler=
-  local post_filler=
-
-  # Gather up all the generated segments
-  # by their pid
-  # and generate the special cases
-  for i in "${!pids[@]}"; do
-    local current_pid="${pids[$i]}"
-    if [[ "$current_pid" == 'filler' ]]; then
-      current_filler_position="$i"
-    elif [[ "$current_pid" == 'newline' ]]; then
-      if [[ -n "$current_filler_position" ]]; then
-        local filler
-        print_themed_filler 'filler' "$total_empty_space"
-        pre_filler="${pre_filler}${filler}${post_filler}"
-        unset current_filler_position post_filler
-      fi
-      total_empty_space="$COLUMNS"
-
-      pre_filler="${pre_filler}\n"
+  for group in "${segment_groups[@]}"; do
+    local -n segment_list="SBP_SEGMENTS_${group^^}"
+    local -n pid_list="${group}_pids"
+    if [[ "$group" == 'right' ]]; then
+      segment_position='right'
     else
-      wait "${pids[i]}"
-      mapfile -t segment_output < "${SBP_TMP}/${i}"
-
-      segment=${segment_output[1]}
-      segment_length=${segment_output[0]}
-      # Make fillers and newlines part of the theme?
-      empty_space=$(( total_empty_space - segment_length ))
-
-      if [[ "$empty_space" -gt 0 ]]; then
-        if [[ -n "$current_filler_position" ]]; then
-          post_filler="${post_filler}${segment}"
-        else
-          pre_filler="${pre_filler}${segment}"
-        fi
-        total_empty_space="$empty_space"
-      fi
+      segment_position='left'
     fi
+    for i in "${!segment_list[@]}"; do
+      local segment_name="${segment_list[$i]}"
+      execute::execute_prompt_segment "$segment_name" "$segment_position" > "${SBP_TMP}/${segment_name}" & pid_list["$segment_name"]=$!
+    done
   done
 
-  local color_reset
-  decorate::print_colors 'color_reset'
 
-  printf '%s%s%s' "$pre_filler" "$post_filler" "$color_reset"
+  # Collect the segments
+  local left_size=0
+  local left_segments
 
+  local right_size=0
+  local right_segments
+
+  local line_two_size=0
+  local line_two_segments
+
+  for group in "${segment_groups[@]}"; do
+    local -n segment_list="SBP_SEGMENTS_${group^^}"
+    local -n pid_list="${group}_pids"
+    local -n segments_size="${group}_size"
+    local -n segments_output="${group}_segments"
+
+    for segment_name in "${segment_list[@]}"; do
+      local current_pid="${pid_list[$segment_name]}"
+        wait "$current_pid"
+        mapfile -t segment_data < "${SBP_TMP}/${segment_name}"
+
+        segment_size=${segment_data[0]}
+        segment_output=${segment_data[1]}
+        if [[ -n "$segment_output" ]]; then
+          segments_size=$(( segments_size + segment_size ))
+          segments_output="${segments_output}${segment_output}"
+        fi
+    done
+  done
+
+  local prompt_gap_size=$(( COLUMNS - (left_size + right_size) ))
+  print_themed_prompt "$left_segments" "$right_segments" "$line_two_segments" "$prompt_gap_size"
 }
 
 main::main
