@@ -6,6 +6,25 @@ SEGMENTS_PROMPT_READY_ICON=${LAYOUT_LINES_PROMPT_READY_ICON:-'➜'}
 SETTINGS_GIT_ICON=${LAYOUT_LINES_GIT_ICON:-' '}
 SEGMENTS_PATH_SPLITTER_DISABLE=1
 
+print_themed_prompt() {
+  local left_segments=$1
+  local right_segments=$2
+  local line_two_segments=$3
+  local prompt_gap_size=$4
+
+  # Remove the first seperator as it's not ending a previous segment
+  prefix_upper_size="${#PROMPT_PREFIX_UPPER}"
+  left_segments="\e[0m${PROMPT_PREFIX_UPPER}${left_segments}"
+  prompt_gap_size=$(( prefix_upper_size - prompt_gap_size ))
+  # Remove the first seperator as it's not ending a previous segment
+  prefix_lower_size="${#PROMPT_PREFIX_LOWER}"
+  line_two_segments="\e[0m${PROMPT_PREFIX_LOWER}${line_two_segments}"
+
+  local filler_segment
+  print_themed_filler 'filler_segment' "$prompt_gap_size"
+  printf '%s%s%s\n%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments "
+}
+
 print_themed_command_mode() {
   local command_color
   decorate::print_fg_color 'command_color' "$SEGMENTS_PROMPT_READY_VI_COMMAND_COLOR" false
@@ -24,7 +43,6 @@ print_themed_filler() {
   local filler_size=$2
   # Account for seperator and padding
   padding=$(printf "%*s" "$filler_size")
-  SEGMENT_LINE_POSITION=2
   prompt_filler_output="$(print_themed_segment 'filler' "$padding")"
   mapfile -t segment_output <<< "$prompt_filler_output"
 
@@ -37,7 +55,6 @@ print_themed_segment() {
   local segment_parts=("${@}")
   local themed_parts
   local segment_length=0
-  local prefix_size=0
 
   if [[ "$segment_type" == 'prompt_ready' && "$SEGMENTS_PROMPT_READY_VI_MODE" -eq 1 ]]; then
     return 0
@@ -69,26 +86,14 @@ print_themed_segment() {
   done
 
 
-  if [[ "$SEGMENT_LINE_POSITION" -eq 0 ]]; then
-    if [[ "$segment_type" == 'prompt_ready' ]]; then
-      prefix="$PROMPT_PREFIX_LOWER"
-      themed_parts="${themed_parts} "
-    else
-      prefix="$PROMPT_PREFIX_UPPER"
-      segment_length=$(( segment_length + 1 ))
-    fi
-    prefix_size=${#prefix}
-  fi
-
-
   local color
   decorate::print_fg_color 'color' "$PRIMARY_COLOR"
 
   local color_reset
   decorate::print_colors 'color_reset'
 
-  full_output="${color_reset}${prefix}${color}${SEPERATOR_LEFT}${themed_parts}${SEPERATOR_RIGHT}"
-  segment_length=$(( segment_length + seperator_size + prefix_size ))
+  full_output="${color_reset}${color}${SEPERATOR_LEFT}${themed_parts}${SEPERATOR_RIGHT}"
+  segment_length=$(( segment_length + seperator_size ))
 
   printf '%s\n%s' "$segment_length" "$full_output"
 }

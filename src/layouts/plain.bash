@@ -3,6 +3,21 @@ SEGMENTS_GIT_ICON=${LAYOUTS_PLAIN_GIT_ICON:-' '}
 SEGMENTS_GIT_INCOMING_ICON=${LAYOUTS_PLAIN_GIT_INCOMING_ICON:-'↓'}
 SEGMENTS_GIT_OUTGOING_ICON=${LAYOUTS_PLAIN_GIT_OUTGOING_ICON:-'↑'}
 
+print_themed_prompt() {
+  local left_segments=$1
+  local right_segments=$2
+  local line_two_segments=$3
+  local prompt_gap_size=$4
+
+  # Remove the first seperator as it's not ending a previous segment
+  left_segments=${left_segments/ /}
+  prompt_gap_size=$(( seperator_left_size + prompt_gap_size ))
+
+  local filler_segment
+  print_themed_filler 'filler_segment' "$prompt_gap_size"
+  printf '%s%s%s\n%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
+}
+
 print_themed_command_mode() {
   local command_color
   decorate::print_fg_color 'command_color' "$SEGMENTS_PROMPT_READY_VI_COMMAND_COLOR" false
@@ -49,20 +64,15 @@ print_themed_segment() {
       segment_length=$(( segment_length + part_length + 1 ))
     done
   fi
-  if [[ "$segment_type" == 'prompt_ready' ]]; then
-    themed_parts="${themed_parts} "
-    segment_length=$(( segment_length + 1 ))
-  elif [[ "$SEGMENT_LINE_POSITION" -eq 0 ]]; then
-    themed_parts="${themed_parts:1}"
-    segment_length=$(( segment_length - 1 ))
-  fi
-
-
 
   local color
   decorate::print_fg_color 'color' "$PRIMARY_COLOR"
 
   full_output="${color}${themed_parts}"
+
+  if [[ "$segment_type" == 'prompt_ready' ]]; then
+    full_output="${full_output} "
+  fi
 
   printf '%s\n%s' "$segment_length" "$full_output"
 }
