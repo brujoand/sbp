@@ -21,7 +21,6 @@ print_themed_prompt() {
   prompt_gap_size=$(( seperator_left_size + prompt_gap_size ))
   # Remove the first seperator as it's not ending a previous segment
   line_two_segments=${line_two_segments#*$SEPERATOR_LEFT}
-  prompt_gap_size=$(( seperator_left_size + prompt_gap_size ))
 
   local filler_segment
   print_themed_filler 'filler_segment' "$prompt_gap_size"

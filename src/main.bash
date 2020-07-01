@@ -18,58 +18,47 @@ main::main() {
   execute::execute_prompt_hooks
 
   # Execute the segments
-  declare -A left_pids
-  declare -A right_pids
-  declare -A line_two_pids
   segment_groups=('left' 'right' 'line_two')
 
+  declare -a pids_left
+  declare -a pids_right
+  declare -a pids_line_two
+
   for group in "${segment_groups[@]}"; do
+    # Bash doesn't support array -> array, so we use pointers instead :(
     local -n segment_list="SBP_SEGMENTS_${group^^}"
-    local -n pid_list="${group}_pids"
-    if [[ "$group" == 'right' ]]; then
-      segment_position='right'
-    else
-      segment_position='left'
-    fi
+    local -n pids="pids_${group}"
+
     for i in "${!segment_list[@]}"; do
       local segment_name="${segment_list[$i]}"
-      execute::execute_prompt_segment "$segment_name" "$segment_position" > "${SBP_TMP}/${segment_name}" & pid_list["$segment_name"]=$!
+      execute::execute_prompt_segment "$segment_name" "$group" > "${SBP_TMP}/${group}.${i}" & pids["$i"]=$!
     done
   done
 
+  declare -A segments_output
+  declare -A segments_length
 
   # Collect the segments
-  local left_size=0
-  local left_segments
-
-  local right_size=0
-  local right_segments
-
-  local line_two_size=0
-  local line_two_segments
-
   for group in "${segment_groups[@]}"; do
-    local -n segment_list="SBP_SEGMENTS_${group^^}"
-    local -n pid_list="${group}_pids"
-    local -n segments_size="${group}_size"
-    local -n segments_output="${group}_segments"
+    # Bash doesn't support array -> array, so we use pointers instead :(
+    local -n pids="pids_${group}"
 
-    for segment_name in "${segment_list[@]}"; do
-      local current_pid="${pid_list[$segment_name]}"
-        wait "$current_pid"
-        mapfile -t segment_data < "${SBP_TMP}/${segment_name}"
+    for i in "${!pids[@]}"; do
+      pid=${pids[$i]}
+      wait "$pid"
+      mapfile -t segment_data < "${SBP_TMP}/${group}.${i}"
 
-        segment_size=${segment_data[0]}
-        segment_output=${segment_data[1]}
-        if [[ -n "$segment_output" ]]; then
-          segments_size=$(( segments_size + segment_size ))
-          segments_output="${segments_output}${segment_output}"
-        fi
+      segment_size=${segment_data[0]}
+      segment_value=${segment_data[1]}
+      if [[ -n "$segment_value" ]]; then
+        segments_length["$group"]=$(( ${segments_length["$group"]} + segment_size ))
+        segments_output["$group"]="${segments_output["$group"]}${segment_value}"
+      fi
     done
   done
 
-  local prompt_gap_size=$(( COLUMNS - (left_size + right_size) ))
-  print_themed_prompt "$left_segments" "$right_segments" "$line_two_segments" "$prompt_gap_size"
+  local prompt_gap_size=$(( COLUMNS - segments_length['left'] - segments_length['right'] ))
+  print_themed_prompt "${segments_output['left']}" "${segments_output['right']}" "${segments_output[line_two]}" "$prompt_gap_size"
 }
 
 main::main
