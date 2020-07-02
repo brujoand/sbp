@@ -58,7 +58,7 @@ segments::git() {
     esac
   done <<< "$git_status"
 
-  local git_state="${additions_icon}${additions/#0/}${modifications_icon}${modifications/#0/}${deletions_icon}${deletions/#0/}${untracked_icon}${untracked/#0/}"
+  local git_state="${additions_icon}${additions#0}${modifications_icon}${modifications#0}${deletions_icon}${deletions#0}${untracked_icon}${untracked#0}"
 
   # git status does not support detached head
   if [[ "$branch" != 'HEAD' ]]; then

@@ -9,13 +9,14 @@ print_themed_prompt() {
   local line_two_segments=$3
   local prompt_gap_size=$4
 
-  # Remove the first seperator as it's not ending a previous segment
-  left_segments=${left_segments/ /}
-  prompt_gap_size=$(( seperator_left_size + prompt_gap_size ))
+  right_segment="${right_segments} "
+  prompt_gap_size=$(( prompt_gap_size - 1 ))
 
   local filler_segment
-  print_themed_filler 'filler_segment' "$prompt_gap_size"
-  printf '%s%s%s\n%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
+  if [[ -n "$right_segments" || -n "$line_two_segments" ]]; then
+    print_themed_filler 'filler_segment' "$prompt_gap_size"
+  fi
+  printf '%s%s%s %s\e[0m' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
 }
 
 print_themed_command_mode() {

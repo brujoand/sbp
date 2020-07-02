@@ -12,17 +12,18 @@ print_themed_prompt() {
   local line_two_segments=$3
   local prompt_gap_size=$4
 
-  # Remove the first seperator as it's not ending a previous segment
-  prefix_upper_size="${#PROMPT_PREFIX_UPPER}"
-  left_segments="\e[0m${PROMPT_PREFIX_UPPER}${left_segments}"
-  prompt_gap_size=$(( prefix_upper_size - prompt_gap_size ))
-  # Remove the first seperator as it's not ending a previous segment
-  prefix_lower_size="${#PROMPT_PREFIX_LOWER}"
-  line_two_segments="\e[0m${PROMPT_PREFIX_LOWER}${line_two_segments}"
+  if [[ -n "$right_segments" || -n "$line_two_segments" ]]; then
+    prefix_upper_size="${#PROMPT_PREFIX_UPPER}"
+    left_segments="\e[0m${PROMPT_PREFIX_UPPER}${left_segments}"
+    prompt_gap_size=$(( prefix_upper_size - prompt_gap_size ))
+    # Remove the first seperator as it's not ending a previous segment
+    prefix_lower_size="${#PROMPT_PREFIX_LOWER}"
+    line_two_segments="\e[0m${PROMPT_PREFIX_LOWER}${line_two_segments}"
 
-  local filler_segment
-  print_themed_filler 'filler_segment' "$prompt_gap_size"
-  printf '%s%s%s\n%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments "
+    local filler_segment
+    print_themed_filler 'filler_segment' "$prompt_gap_size"
+  fi
+  printf '%s%s%s%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments "
 }
 
 print_themed_command_mode() {

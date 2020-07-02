@@ -23,8 +23,14 @@ print_themed_prompt() {
   line_two_segments=${line_two_segments#*$SEPERATOR_LEFT}
 
   local filler_segment
-  print_themed_filler 'filler_segment' "$prompt_gap_size"
-  printf '%s%s%s\n%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
+  if [[ -n "$right_segments" || -n "$line_two_segments" ]]; then
+    print_themed_filler 'filler_segment' "$prompt_gap_size"
+  else
+    print_themed_filler 'filler_segment' '1'
+    filler_segment="${filler_segment// /} "
+  fi
+
+  printf '%s%s%s%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
 }
 
 
@@ -94,6 +100,7 @@ print_themed_segment() {
   else
     part_splitter=' '
   fi
+
   local part_splitter_length="${#part_splitter}"
   segment_length="${#seperator}"
   themed_segment="$seperator_themed"
