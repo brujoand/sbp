@@ -44,24 +44,18 @@ execute::execute_prompt_segment() {
   if [[ -f "$segment_script" ]]; then
     source "$segment_script"
 
-    local primary_color_var="SEGMENTS_${segment^^}_COLOR_PRIMARY"
-    local secondary_color_var="SEGMENTS_${segment^^}_COLOR_SECONDARY"
+    local -n PRIMARY_COLOR="SEGMENTS_${segment^^}_COLOR_PRIMARY"
+    local -n SECONDARY_COLOR="SEGMENTS_${segment^^}_COLOR_SECONDARY"
 
-    local primary_color_highlight_var="${primary_color_var}_HIGHLIGHT"
-    local secondary_color_highlight_var="${secondary_color_var}_HIGHLIGHT"
+    local -n PRIMARY_COLOR_HIGHLIGHT="${primary_color_var}_HIGHLIGHT"
+    local -n SECONDARY_COLOR_HIGHLIGHT="${secondary_color_var}_HIGHLIGHT"
 
-    PRIMARY_COLOR="${!primary_color_var}"
-    SECONDARY_COLOR="${!secondary_color_var}"
+    local -n SPLITTER_COLOR="SEGMENTS_${segment^^}_SPLITTER_COLOR"
 
-    PRIMARY_COLOR_HIGHLIGHT="${!primary_color_highlight_var}"
-    SECONDARY_COLOR_HIGHLIGHT="${!secondary_color_highlight_var}"
-
-    local splitter_color_var="SEGMENTS_${segment^^}_SPLITTER_COLOR"
-    SPLITTER_COLOR="${!splitter_color_var}"
-
-    local segment_max_length_var="SEGMENTS_${segment^^}_MAX_LENGTH"
-    SEGMENTS_MAX_LENGTH_override=${!segment_max_length_var}
-    SEGMENTS_MAX_LENGTH="${SEGMENTS_MAX_LENGTH_override:-$SEGMENTS_MAX_LENGTH}"
+    local -n max_length_override="SEGMENTS_${segment^^}_MAX_LENGTH"
+    if [[ -n "$max_length_override" ]]; then
+      SEGMENTS_MAX_LENGTH="$max_length_override"
+    fi
 
     "segments::${segment}"
   fi

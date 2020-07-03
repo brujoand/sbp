@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 segments::git() {
-  local segment_max_length=$SEGMENTS_MAX_LENGTH
+  local max_length=$SEGMENTS_MAX_LENGTH
 
   local incoming_icon="$SEGMENTS_GIT_INCOMING_ICON"
   local outgoing_icon="$SEGMENTS_GIT_OUTGOING_ICON"
@@ -74,8 +74,8 @@ segments::git() {
 
   git_size=$(( ${#git_state} + ${#SEGMENTS_GIT_ICON} + ${#git_head} + ${#upstream_status} ))
 
-  if [[ "$git_size" -gt "$segment_max_length" ]]; then
-    available_space=$(( segment_max_length - ${#git_state} - ${#SEGMENTS_GIT_ICON} + ${#upstream_status} ))
+  if [[ "$git_size" -gt "$max_length" && "$max_length" -ne -1 ]]; then
+    available_space=$(( max_length - ${#git_state} - ${#SEGMENTS_GIT_ICON} + ${#upstream_status} ))
     if [[ "$available_space" -gt 0 ]]; then
       git_head="${git_head:0:$available_space}.."
     else
