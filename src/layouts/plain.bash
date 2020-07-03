@@ -2,6 +2,7 @@ SEGMENTS_PROMPT_READY_ICON=${LAYOUTS_PLAIN_PROMPT_READY_ICON:-'➜'}
 SEGMENTS_GIT_ICON=${LAYOUTS_PLAIN_GIT_ICON:-' '}
 SEGMENTS_GIT_INCOMING_ICON=${LAYOUTS_PLAIN_GIT_INCOMING_ICON:-'↓'}
 SEGMENTS_GIT_OUTGOING_ICON=${LAYOUTS_PLAIN_GIT_OUTGOING_ICON:-'↑'}
+SEGMENTS_PATH_SPLITTER_DISABLE=${LAYOUTS_PLAIN_PATH_SPLITTER_DISABLE:-1}
 
 print_themed_prompt() {
   local left_segments=$1
@@ -17,18 +18,6 @@ print_themed_prompt() {
     print_themed_filler 'filler_segment' "$prompt_gap_size"
   fi
   printf '%s%s%s %s\e[0m' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
-}
-
-print_themed_command_mode() {
-  local command_color
-  decorate::print_fg_color 'command_color' "$SEGMENTS_PROMPT_READY_VI_COMMAND_COLOR" false
-  echo "\1\e[0m\2\1${command_color}\2 ${PROMPT_READY_ICON} \1\e[0m\2"
-}
-
-print_themed_insert_mode() {
-  local insert_color
-  decorate::print_fg_color 'insert_color' "$SEGMENTS_PROMPT_READY_VI_INSERT_COLOR" false
-  echo "\1\e[0m\2\1${insert_color}\2 ${PROMPT_READY_ICON} \1\e[0m\2"
 }
 
 print_themed_filler() {

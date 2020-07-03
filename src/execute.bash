@@ -56,8 +56,12 @@ execute::execute_prompt_segment() {
     PRIMARY_COLOR_HIGHLIGHT="${!primary_color_highlight_var}"
     SECONDARY_COLOR_HIGHLIGHT="${!secondary_color_highlight_var}"
 
-    local splitter_color_var="SEGMENTS_${segment}_SPLITTER_COLOR"
+    local splitter_color_var="SEGMENTS_${segment^^}_SPLITTER_COLOR"
     SPLITTER_COLOR="${!splitter_color_var}"
+
+    local segment_max_length_var="SEGMENTS_${segment^^}_MAX_LENGTH"
+    SEGMENTS_MAX_LENGTH_override=${!segment_max_length_var}
+    SEGMENTS_MAX_LENGTH="${SEGMENTS_MAX_LENGTH_override:-$SEGMENTS_MAX_LENGTH}"
 
     "segments::${segment}"
   fi

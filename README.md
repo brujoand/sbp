@@ -87,10 +87,12 @@ by using ansi codes. Many will probably just want to rely on the configuration
 set in Xresources, by using the xresources color setting.
 
 #### Beta - VI mode
-The setting `settings_prompt_ready_vi_mode=1` will use the `prompt_ready` icon
+~~The setting `settings_prompt_ready_vi_mode=1` will use the `prompt_ready` icon
 with the configured colors and change it's color depending on the current VI
 mode if enabled. The cursor will also change from blinking to solid block if
-your terminal supports it.
+your terminal supports it.~~
+The VI mode support has been removed as it is not possible to predictably place
+the VI mode indicator on a multiline prompt.
 
 ### FAQ
 

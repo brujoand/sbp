@@ -12,26 +12,6 @@ source "${SBP_PATH}/src/debug.bash"
 
 configure::load_config
 
-generate_extra_options() {
-  # TODO this should probably be rewritten to better check
-  # if we are messing with any previous settings
-  if [[ "$SETTINGS_PROMPT_READY_VI_MODE" -eq 1 ]]; then
-    local cache_file="${SBP_CACHE}/extra_options.bash"
-    insert_mode=$(print_themed_insert_mode)
-    command_mode=$(print_themed_command_mode)
-
-    cat << EOF > "$cache_file"
-bind 'set show-mode-in-prompt on'
-bind "set vi-cmd-mode-string \1\e[2 q\2${command_mode}"
-bind "set vi-ins-mode-string \1\e[1 q\2${insert_mode}"
-EOF
-    echo "$cache_file"
-  else
-    return 1
-  fi
-
-}
-
 list_segments() {
   for segment_path in $(configure::list_feature_files 'segments'); do
     local status='disabled'

@@ -28,20 +28,7 @@ print_themed_prompt() {
     filler_segment="${filler_segment// /} "
   fi
 
-  printf '%s%s%s%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
-}
-
-
-print_themed_command_mode() {
-  local command_color
-  decorate::print_fg_color 'command_color' "$SETTINGS_PROMPT_READY_VI_COMMAND_COLOR" false
-  echo "\1\e[0m\2\1${command_color}\2 ${PROMPT_READY_ICON} \1\e[0m\2"
-}
-
-print_themed_insert_mode() {
-  local insert_color
-  decorate::print_fg_color 'insert_color' "$SETTINGS_PROMPT_READY_VI_INSERT_COLOR" false
-  echo "\1\e[0m\2\1${insert_color}\2 ${PROMPT_READY_ICON} \1\e[0m\2"
+  printf '\e[0m%s%s%s\e[0m%s\e[0m' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
 }
 
 print_themed_filler() {
@@ -66,10 +53,6 @@ print_themed_segment() {
   local themed_segment
   local seperator_themed
   local part_splitter
-
-  if [[ "$segment_type" == 'prompt_ready' && "$SEGMENTS_PROMPT_READY_VI_MODE" -eq 1 ]]; then
-    return 0
-  fi
 
   if [[ "$segment_type" == 'highlight' ]]; then
     PRIMARY_COLOR="$PRIMARY_COLOR_HIGHLIGHT"

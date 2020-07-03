@@ -148,9 +148,6 @@ sbp() {
     'reload') # Reload settings and SBP
       _sbp_reload
       ;;
-    'extra_options') # Woho, hiddden function
-      "$_sbp_themed_helper" 'generate_extra_options'
-      ;;
     'status')
       "$_sbp_themed_helper" 'show_status'
       ;;

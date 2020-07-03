@@ -19,11 +19,6 @@ export SBP_TMP
 export SBP_PATH
 export COLUMNS
 
-options_file=$(sbp extra_options)
-if [[ -f "$options_file" ]]; then
-  source "$options_file"
-fi
-
 _sbp_set_prompt() {
   local command_status=$?
   local command_status current_time command_start command_duration

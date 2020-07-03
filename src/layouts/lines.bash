@@ -14,31 +14,15 @@ print_themed_prompt() {
 
   if [[ -n "$right_segments" || -n "$line_two_segments" ]]; then
     prefix_upper_size="${#PROMPT_PREFIX_UPPER}"
-    left_segments="\e[0m${PROMPT_PREFIX_UPPER}${left_segments}"
+    left_segments="${PROMPT_PREFIX_UPPER}${left_segments}"
     prompt_gap_size=$(( prefix_upper_size - prompt_gap_size ))
-    # Remove the first seperator as it's not ending a previous segment
-    prefix_lower_size="${#PROMPT_PREFIX_LOWER}"
-    line_two_segments="\e[0m${PROMPT_PREFIX_LOWER}${line_two_segments}"
+    line_two_segments="${PROMPT_PREFIX_LOWER}${line_two_segments}"
 
     local filler_segment
     print_themed_filler 'filler_segment' "$prompt_gap_size"
   fi
-  printf '%s%s%s%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments "
+  printf '\e[0m%s%s%s\e[0m%s\e[0m' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments "
 }
-
-print_themed_command_mode() {
-  local command_color
-  decorate::print_fg_color 'command_color' "$SEGMENTS_PROMPT_READY_VI_COMMAND_COLOR" false
-  echo "\1\e[0m\2${PROMPT_PREFIX_LOWER}\1${command_color}\2${PROMPT_READY_ICON} \1\e[0m\2"
-}
-
-print_themed_insert_mode() {
-  local insert_color
-  decorate::print_fg_color 'insert_color' "$SEGMENTS_PROMPT_READY_VI_INSERT_COLOR" false
-  echo "\1\e[0m\2${PROMPT_PREFIX_LOWER}\1${insert_color}\2${PROMPT_READY_ICON} \1\e[0m\2"
-}
-
-
 print_themed_filler() {
   local -n return_value=$1
   local filler_size=$2
@@ -56,11 +40,6 @@ print_themed_segment() {
   local segment_parts=("${@}")
   local themed_parts
   local segment_length=0
-
-  if [[ "$segment_type" == 'prompt_ready' && "$SEGMENTS_PROMPT_READY_VI_MODE" -eq 1 ]]; then
-    return 0
-  fi
-
 
   if [[ "$segment_type" == 'highlight' ]]; then
     PRIMARY_COLOR="$PRIMARY_COLOR_HIGHLIGHT"

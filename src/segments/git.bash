@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 segments::git() {
-  local segment_max_length=$SEGMENTS_GIT_MAX_LENGTH
+  local segment_max_length=$SEGMENTS_MAX_LENGTH
 
   local incoming_icon="$SEGMENTS_GIT_INCOMING_ICON"
   local outgoing_icon="$SEGMENTS_GIT_OUTGOING_ICON"

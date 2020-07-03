@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 segments::path() {
-  local segment_max_length=${SEGMENTS_PATH_COMPRESS_AFTER:-10}
+  local segment_max_length=$SEGMENTS_MAX_LENGTH
 
   local wdir=${PWD/${HOME}/\~}
 
