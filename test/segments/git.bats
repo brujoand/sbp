@@ -3,7 +3,7 @@
 load segment_helper
 
 setup() {
-  export SEGMENTS_GIT_MAX_LENGTH=99
+  export SEGMENTS_MAX_LENGTH=99
   export SEGMENTS_GIT_ICON=''
 
   cd "$TMP_DIR"
