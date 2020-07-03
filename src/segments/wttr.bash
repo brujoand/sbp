@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
+location=${SETTINGS_WTTR_LOCATION:-'Oslo'}
+format=${SETTINGS_WTTR_FORMAT:-'%p;%t;%w'}
+refresh_rate="${SEGMENTS_WTTR_REFRESH_RATE:-600}"
+
 segments::wttr_refresh() {
-  refresh_rate="${SEGMENTS_WTTR_REFRESH_RATE:-600}"
   if [[ ! -f "$SEGMENT_CACHE" ]]; then
     debug::log_error "No cache folder"
   fi
@@ -19,7 +22,7 @@ segments::wttr_refresh() {
     return 0
   fi
 
-  curl -s "wttr.in/Nerdrum?format=%p;%t;%w" > "$SEGMENT_CACHE"
+  curl -H "Accept-Language: ${LANG%_*}" --compressed "wttr.in/${location}?format=${format}" | tr -d '\n' > "$SEGMENT_CACHE"
 }
 
 
