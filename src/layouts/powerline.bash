@@ -19,7 +19,7 @@ print_themed_prompt() {
   left_segments=${left_segments#*$SEPERATOR_LEFT}
   prompt_gap_size=$(( seperator_left_size + prompt_gap_size ))
   # Remove the first seperator as it's not ending a previous segment
-  line_two_segments=${line_two_segments#*$SEPERATOR_LEFT}
+  [[ -n "$line_two_segments" ]] && line_two_segments=${line_two_segments#*$SEPERATOR_LEFT}
 
   local reset_color
   decorate::print_colors 'reset_color'
@@ -28,18 +28,17 @@ print_themed_prompt() {
     left_segments="\n${left_segments}"
   fi
 
-  right_segments="${right_segments}${reset_color}"
-  line_two_segments="${line_two_segments}${reset_color}"
 
   local filler_segment
   if [[ -n "$right_segments" || -n "$line_two_segments" ]]; then
     print_themed_filler 'filler_segment' "$prompt_gap_size"
-    right_segments="${right_segments}\n"
-  else
-    print_themed_filler 'filler_segment' '1'
-    filler_segment="${filler_segment// /} "
+    right_segments="${right_segments}${reset_color}\n"
+  elif [[ "${SBP_SEGMENTS_LEFT[-1]}" != 'prompt_ready' ]]; then
+    print_themed_filler 'filler_segment' 1
+    filler_segment="${filler_segment// /}${reset_color} "
   fi
 
+  line_two_segments="${line_two_segments}${reset_color}"
 
   printf '%s' "${left_segments}${filler_segment}${right_segments}${line_two_segments}"
 
