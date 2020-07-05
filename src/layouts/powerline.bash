@@ -6,6 +6,7 @@ SEGMENTS_PROMPT_READY_ICON=${LAYOUTS_POWERLINE_PROMPT_READY_ICON:-'➜'}
 SEGMENTS_GIT_ICON=${LAYOUTS_POWERLINE_GIT_ICON:-''}
 SEGMENTS_GIT_INCOMING_ICON=${LAYOUTS_POWERLINE_GIT_INCOMING_ICON:-'↓'}
 SEGMENTS_GIT_OUTGOING_ICON=${LAYOUTS_POWERLINE_GIT_OUTGOING_ICON:-'↑'}
+PROMPT_COMPACT=${SBP_PROMPT_COMPACT:-false}
 
 print_themed_prompt() {
   local left_segments=$1
@@ -20,15 +21,28 @@ print_themed_prompt() {
   # Remove the first seperator as it's not ending a previous segment
   line_two_segments=${line_two_segments#*$SEPERATOR_LEFT}
 
+  local reset_color
+  decorate::print_colors 'reset_color'
+
+  if [[ "$PROMPT_COMPACT" == false ]]; then
+    left_segments="\n${left_segments}"
+  fi
+
+  right_segments="${right_segments}${reset_color}"
+  line_two_segments="${line_two_segments}${reset_color}"
+
   local filler_segment
   if [[ -n "$right_segments" || -n "$line_two_segments" ]]; then
     print_themed_filler 'filler_segment' "$prompt_gap_size"
+    right_segments="${right_segments}\n"
   else
     print_themed_filler 'filler_segment' '1'
     filler_segment="${filler_segment// /} "
   fi
 
-  printf '%s%s%s%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
+
+  printf '%s' "${left_segments}${filler_segment}${right_segments}${line_two_segments}"
+
 }
 
 print_themed_filler() {
@@ -65,12 +79,16 @@ print_themed_segment() {
     local seperator_color
     decorate::print_bg_color 'seperator_color' "$PRIMARY_COLOR"
     seperator_themed="${seperator_color}${seperator}"
+    local prepare_color=
+    decorate::print_fg_color 'prepare_color' "$PRIMARY_COLOR"
   elif [[ "$SEGMENT_POSITION" == 'right' ]]; then
     part_splitter="$SPLITTER_RIGHT"
     seperator="$SEPERATOR_RIGHT"
     local seperator_color
     decorate::print_fg_color 'seperator_color' "$PRIMARY_COLOR"
     seperator_themed="${seperator_color}${seperator}"
+    local prepare_color=
+    decorate::print_fg_color 'prepare_color' "$PRIMARY_COLOR"
   fi
 
   local segment_colors
@@ -113,8 +131,6 @@ print_themed_segment() {
   themed_segment="${themed_segment} ${themed_parts} "
   segment_length=$(( segment_length + 2 ))
 
-  local prepare_color=
-  decorate::print_colors 'prepare_color' "$PRIMARY_COLOR" "$PRIMARY_COLOR"
   themed_segment="${themed_segment}${prepare_color}"
   printf '%s\n%s' "$segment_length" "$themed_segment"
 }

@@ -5,6 +5,7 @@ PROMPT_PREFIX_LOWER=${LAYOUT_LINES_PROMPT_PREFIX_LOWER:-'└'}
 SEGMENTS_PROMPT_READY_ICON=${LAYOUT_LINES_PROMPT_READY_ICON:-'➜'}
 SETTINGS_GIT_ICON=${LAYOUT_LINES_GIT_ICON:-' '}
 SEGMENTS_PATH_SPLITTER_DISABLE=1
+PROMPT_COMPACT=${SBP_PROMPT_COMPACT:-false}
 
 print_themed_prompt() {
   local left_segments=$1
@@ -12,17 +13,30 @@ print_themed_prompt() {
   local line_two_segments=$3
   local prompt_gap_size=$4
 
+  if [[ "$PROMPT_COMPACT" == false ]]; then
+    left_segments="\n${left_segments}"
+  fi
+
+  local reset_color
+  decorate::print_colors 'reset_color'
+
   if [[ -n "$right_segments" || -n "$line_two_segments" ]]; then
     prefix_upper_size="${#PROMPT_PREFIX_UPPER}"
     left_segments="${PROMPT_PREFIX_UPPER}${left_segments}"
     prompt_gap_size=$(( prefix_upper_size - prompt_gap_size ))
     line_two_segments="${PROMPT_PREFIX_LOWER}${line_two_segments}"
+    right_segments="${right_segments}\n"
 
     local filler_segment
     print_themed_filler 'filler_segment' "$prompt_gap_size"
   fi
-  printf '%s%s%sm%s\[\e[0m\]' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments "
+
+  right_segments="${right_segments}${reset_color}"
+  prompt_ready="${prompt_ready}${reset_color}"
+
+  printf '%s' "${left_segments}${filler_segment}${right_segments}${line_two_segments} "
 }
+
 print_themed_filler() {
   local -n return_value=$1
   local filler_size=$2
