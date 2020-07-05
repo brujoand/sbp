@@ -21,7 +21,7 @@ print_themed_prompt() {
     local filler_segment
     print_themed_filler 'filler_segment' "$prompt_gap_size"
   fi
-  printf '\e[0m%s%s%s\e[0m%s\e[0m' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments "
+  printf '%s%s%sm%s\[\e[0m\]' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments "
 }
 print_themed_filler() {
   local -n return_value=$1

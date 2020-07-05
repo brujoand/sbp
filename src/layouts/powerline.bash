@@ -28,7 +28,7 @@ print_themed_prompt() {
     filler_segment="${filler_segment// /} "
   fi
 
-  printf '\e[0m%s%s%s\e[0m%s\e[0m' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
+  printf '%s%s%s%s' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
 }
 
 print_themed_filler() {
@@ -36,7 +36,7 @@ print_themed_filler() {
   local seperator_size=${#SEPERATOR_LEFT}
   # Account for seperator and padding
   local filler_size=$(( $2 - seperator_size - 2 ))
-  padding=$(printf '%*s' "$filler_size")
+  printf -v padding '%*s' "$filler_size"
   SEGMENT_POSITION='left'
   prompt_filler_output="$(print_themed_segment 'normal' "$padding")"
   mapfile -t segment_output <<< "$prompt_filler_output"

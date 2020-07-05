@@ -39,7 +39,7 @@ list_hooks() {
     hook_file="${hook##*/}"
     hook_name="${hook_file/.bash/}"
     status='disabled'
-    if printf '%s.bash\n' "${SETTINGS_HOOKS[@]}" | grep -qo "${hook_name}"; then
+    if printf '%s.bash\n' "${SBP_HOOKS[@]}" | grep -qo "${hook_name}"; then
       if [[ -f "${SBP_CONFIG}/peekaboo/${hook_name}" ]]; then
         status='paused'
       else

@@ -22,7 +22,7 @@ execute::execute_nohup_function() {
 
 execute::execute_prompt_hooks() {
   local hook_script
-  for hook in "${SETTINGS_HOOKS[@]}"; do
+  for hook in "${SBP_HOOKS[@]}"; do
     execute::get_script 'hook_script' 'hook' "$hook"
 
     if [[ -f "$hook_script" ]]; then
@@ -35,7 +35,6 @@ execute::execute_prompt_hooks() {
 execute::execute_prompt_segment() {
   local segment=$1
   local SEGMENT_POSITION=$2
-  local SEGMENT_LINE_POSITION=$3
   local SEGMENT_CACHE="${SBP_CACHE}/${segment}"
 
   local segment_script
@@ -47,8 +46,8 @@ execute::execute_prompt_segment() {
     local -n PRIMARY_COLOR="SEGMENTS_${segment^^}_COLOR_PRIMARY"
     local -n SECONDARY_COLOR="SEGMENTS_${segment^^}_COLOR_SECONDARY"
 
-    local -n PRIMARY_COLOR_HIGHLIGHT="${primary_color_var}_HIGHLIGHT"
-    local -n SECONDARY_COLOR_HIGHLIGHT="${secondary_color_var}_HIGHLIGHT"
+    local -n PRIMARY_COLOR_HIGHLIGHT="SEGMENTS_${segment^^}_COLOR_PRIMARY_HIGHLIGHT"
+    local -n SECONDARY_COLOR_HIGHLIGHT="SEGMENTS_${segment^^}_COLOR_SECONDARY_HIGHLIGHT"
 
     local -n SPLITTER_COLOR="SEGMENTS_${segment^^}_SPLITTER_COLOR"
 

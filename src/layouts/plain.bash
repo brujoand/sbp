@@ -17,7 +17,7 @@ print_themed_prompt() {
   if [[ -n "$right_segments" || -n "$line_two_segments" ]]; then
     print_themed_filler 'filler_segment' "$prompt_gap_size"
   fi
-  printf '%s%s%s %s\e[0m' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
+  printf '%s%s%s %s\[\e[0m\]' "$left_segments" "$filler_segment" "$right_segments" "$line_two_segments"
 }
 
 print_themed_filler() {
