@@ -9,6 +9,8 @@ You can create your own hooks by placing a file in:
    ${HOME}/.config/sbp/hooks/${your_hooks_name}.bash
 ```
 
+You'll also want to add your hooks in the ´SBP_HOOKS´ variable, in the settings.
+
 Your script will be sourced and executed with the following env variables:
 ```
   - COMMAND_EXIT_CODE, the exit code of the privous shell command

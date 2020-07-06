@@ -4,6 +4,9 @@
 #   Simple Bash Prompt (SBP)    #
 #################################
 
+# For catching legacy installs
+SBP_PATH=${SBP_PATH:-$sbp_path}
+
 # shellcheck source=src/interact.bash
 source "${SBP_PATH}/src/interact.bash"
 # shellcheck source=src/debug.bash
