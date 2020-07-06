@@ -34,6 +34,7 @@ print_themed_prompt() {
     print_themed_filler 'filler_segment' "$prompt_gap_size"
     right_segments="${right_segments}${reset_color}\n"
   elif [[ "${SBP_SEGMENTS_LEFT[-1]}" != 'prompt_ready' ]]; then
+    # We need to finish the last segment in this case
     print_themed_filler 'filler_segment' 1
     filler_segment="${filler_segment// /}${reset_color} "
   fi

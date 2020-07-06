@@ -30,6 +30,7 @@ _sbp_set_prompt() {
     rm "${SBP_TMP}/execution"
   else
     command_duration=0
+    command_status=0
   fi
 
   # TODO move this somewhere else
