@@ -24,8 +24,9 @@ it's probably a good idea to make a copy of your sbp config and start fresh.
 
 ## Soft Requirements
 If you want the fancy pointy segment separators, you need the powerline fonts _installed_ and _enabled_. Both.
-You can get them [here](https://github.com/powerline/fonts).
-Then run the ´./bin/install´ script. Now the hard_to_remember part. Change the settings of your terminal emulator.
+You can get them [here](https://github.com/powerline/fonts) which also has
+installation instructions
+Now the hard_to_remember part. Change the settings of your terminal emulator.
 Something like "Settings" and then "Fonts" will probably be the right place.
 If you don't like powerline then use the 'plain' or 'lines' theme or create your
 own. If you are using Kitty as a terminal then everything should work out of the
@@ -35,6 +36,7 @@ box.
 
 ### With brew:
 `brew install brujoand/sbp/sbp`
+This will get you the latest release.
 
 ### With git and the install script
 When you clone this repo, there is an install script located at ´bin/install´.
@@ -44,7 +46,8 @@ It will add two lines to `$HOME/.bashrc`:
   source ${SBP_PATH}/sbp.bash
 ```
 You could also just add these two lines to some bash config file of your own
-choosing manually.
+choosing manually. Keep in mind that this approach will use the master branch
+by default, so expect less stability.
 
 ## Usage
 So you're ready to go. Now you do nothing. Just use it. But you could. If you want. Change stuff up a bit.
