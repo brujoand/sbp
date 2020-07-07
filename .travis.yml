@@ -1,7 +1,9 @@
 language: bash
 dist: bionic
 email: false
+services:
+  - docker
 before_install:
   - sudo apt-get install npm -y
   - sudo npm install -g bats
-script: ./run_tests
+script: ./bin/run_tests
