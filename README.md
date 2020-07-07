@@ -25,7 +25,7 @@ it's probably a good idea to make a copy of your sbp config and start fresh.
 ## Soft Requirements
 If you want the fancy pointy segment separators, you need the powerline fonts _installed_ and _enabled_. Both.
 You can get them [here](https://github.com/powerline/fonts).
-Then run the install.sh script. Now the hard_to_remember part. Change the settings of your terminal emulator.
+Then run the ´./bin/install´ script. Now the hard_to_remember part. Change the settings of your terminal emulator.
 Something like "Settings" and then "Fonts" will probably be the right place.
 If you don't like powerline then use the 'plain' or 'lines' theme or create your
 own. If you are using Kitty as a terminal then everything should work out of the

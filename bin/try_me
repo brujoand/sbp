@@ -1,0 +1,15 @@
+#! /usr/bin/env bash
+
+set -e
+
+base_path=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sudo='sudo'
+else
+  sudo=''
+fi
+
+"$sudo" docker build -t brujoand/sbp "$base_path"
+"$sudo" docker run -it brujoand/sbp bash
+

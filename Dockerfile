@@ -2,7 +2,6 @@ FROM ubuntu
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ADD . /sbp
 
 RUN apt-get update && \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
@@ -12,8 +11,7 @@ RUN adduser --system --shell /bin/bash --disabled-password sbp && \
     apt-get install -y locales && \
     locale-gen en_US.UTF-8 && \
     dpkg-reconfigure locales && \
-    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 && \
-    chown -R sbp /sbp
+    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
 USER sbp
 
@@ -22,5 +20,6 @@ ENV LC_ALL en_US.UTF-8
 
 WORKDIR /home/sbp
 
+copy . ./sbp
 
-RUN chown -R sbp sbp && ./sbp/install
+RUN touch .bashrc && ./sbp/bin/install

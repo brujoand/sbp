@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-base_path=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+base_path=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
 bashrc_path="$HOME"/.bashrc
 
 if ! grep -qE '^SBP_PATH=*' "$bashrc_path"; then
