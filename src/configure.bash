@@ -80,13 +80,13 @@ configure::load_config() {
   [[ -d "$SBP_CACHE" ]] || mkdir -p "$SBP_CACHE"
 
   if [[ ! -f "$config_file" ]]; then
-    debug::log_info "Config file note found: ${config_file}"
+    debug::log_info "Config file not found: ${config_file}"
     debug::log_info "Creating it.."
     cp "$default_config_file" "$config_file"
   fi
 
   if [[ ! -f "$colors_file" ]]; then
-    debug::log_info "Color config file note found: ${colors_file}"
+    debug::log_info "Color config file not found: ${colors_file}"
     debug::log_info "Creating it.."
     cp "$default_colors_file" "$colors_file"
   fi
