@@ -24,4 +24,4 @@ ENV LC_ALL en_US.UTF-8
 
 WORKDIR /home/sbp
 
-RUN /sbp/bin/install
+RUN touch .bashrc && /sbp/bin/install
