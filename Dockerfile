@@ -13,6 +13,10 @@ RUN adduser --system --shell /bin/bash --disabled-password sbp && \
     dpkg-reconfigure locales && \
     update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
+copy . /sbp
+
+RUN chown -R sbp /sbp
+
 USER sbp
 
 ENV USER sbp
@@ -20,6 +24,4 @@ ENV LC_ALL en_US.UTF-8
 
 WORKDIR /home/sbp
 
-copy . ./sbp
-
-RUN touch .bashrc && ./sbp/bin/install
+RUN /sbp/bin/install

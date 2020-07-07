@@ -4,13 +4,21 @@
 #   Simple Bash Prompt (SBP)    #
 #################################
 
-# For catching legacy installs
-SBP_PATH=${SBP_PATH:-$sbp_path}
-
 # shellcheck source=src/interact.bash
 source "${SBP_PATH}/src/interact.bash"
 # shellcheck source=src/debug.bash
 source "${SBP_PATH}/src/debug.bash"
+
+# For catching legacy installs
+if [[ -z "$SBP_PATH" && -n "$sbp_path" ]]; then
+  debug::alert_user "Unfortunatly your current configuration is incompatible with the latest version of SBP"
+  debug::alert_user "Two changes are required:"
+  debug::alert_user "1. Please backup and remove your configuration ${HOME}/.config/sbp"
+  debug::alert_user "2. Please change the casing of the 'sbp_path' variable to 'SBP_PATH' in your '$HOME/.bashrc'"
+  debug::alert_user "In the mean time, your prompt has ben set to '\h@\h:\w'"
+  PS1='\u@\h:\w '
+  return 1
+fi
 
 if [[ -d "/run/user/${UID}" ]]; then
   SBP_TMP=$(mktemp -d --tmpdir="/run/user/${UID}") && trap 'rm -rf "$SBP_TMP"' EXIT;

@@ -1,9 +1,15 @@
 language: bash
 dist: bionic
 email: false
-services:
-  - docker
 before_install:
   - sudo apt-get install npm -y
   - sudo npm install -g bats
-script: ./bin/run_tests
+script: ./bin/run_tests && ./bin/package
+deploy:
+  provider: releases
+  api_key:
+    secure: c5h0E4QkBWe7Bka6mkowP/z6QEiqwKGV5/E9MhX9COzxhtQGlDa7rYJ7AlS43o9sXOqJR7P8Hq5KJAXqYoOamKpXB7M+1IGlDjeVB8uHBKZ/53Iwj6ZUrnXvmIrbY3X6Cr2cK2JVkmKeHx4MhT3HZKCv+MGbA3EfcIghEk/KSi8GcP84oqMLLvOhXStvVgOh2n80w4KUlqXct7DWBTc8kZAhlp2jFXBXOTdk7ihwGzS98qvHyFEO+asW63PwqpCAj74Qmj9KECIStTWGr/ieArpIuoWMVB3yvmmmZkAcm0hckwdgnwcwS47MWo3PDoUO/QuAy0CoVdWGmkz+NekudXrN7xTuTgP0afA5VF0hX7DtDsu18BoiQonauAfImNz5dYVonqMXqHSVZXcwCuyAs/zfbpFVjrngUnPrZN+rD/NwdAB3EbTIFHdQz3dqsrFhKbeHzg2dQv6NNUn9FY/hD7kol2xODONLk0A8tnZwEVRLEKSA/aBPcjh1gq63im4DpONUpf2EjtHSWVJ/kaqiKgc+kQGeF/KdH36O57qP5ttiZuYmjftiNS2n6vlu2ODgQiBrwVlbTXOdR2+lYLrQKF26L7IvslLX7PJUG9S79OjSxob/+NyuFgKYbD0SUT7nN6enwS1UVi3vO+LOJkWmq3fFULjy3stbcreH9L48iTs=
+  file: sbp-v${TRAVIS_TAG}.tar.gz
+  on:
+    tags: true
+  skip_cleanup: 'true'
