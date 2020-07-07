@@ -13,10 +13,12 @@ if [[ -z "$SBP_PATH" && -n "$sbp_path" ]]; then
    1. Please backup and remove your configuration ${HOME}/.config/sbp
    2. Please change the casing of the 'sbp_path' variable to 'SBP_PATH' in your '$HOME/.bashrc'
 
+   Start a new bash shell or source "${HOME}/.bashrc" when these changes have been made.
+
    In the mean time, your prompt has ben set to '\h@\h:\w'
 EOF
   # Alert the user
-  >&2 printf 'SBP: \e[38;5;76m%s\e[00m\n' "$alert_text"
+  >&2 printf '\e[38;5;76m%s\e[00m\n' "$alert_text"
   # Set a usable prompt
   PS1='\u@\h:\w '
   # Override the prompt command
