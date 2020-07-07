@@ -32,13 +32,19 @@ own. If you are using Kitty as a terminal then everything should work out of the
 box.
 
 ## Installing
-There is an install script. It will copy the default
-settings to `~/.config/sbp/settings.conf` along with the default color assignments
-to `~/.config/sbp/colors.conf` and add two lines to your `$HOME/.bashrc`:
+
+### With brew:
+`brew install brujoand/sbp/sbp`
+
+### With git and the install script
+When you clone this repo, there is an install script located at ´bin/install´.
+It will add two lines to `$HOME/.bashrc`:
 ```
   SBP_PATH=/the/path/to/sbp/
   source ${SBP_PATH}/sbp.bash
 ```
+You could also just add these two lines to some bash config file of your own
+choosing manually.
 
 ## Usage
 So you're ready to go. Now you do nothing. Just use it. But you could. If you want. Change stuff up a bit.
@@ -72,16 +78,16 @@ You can use the `sbp` command for a lot of things:
 ### Segments
 Segments can be configured, moved, and hidden depending on your mood, or
 environment. Read more about those and how to make your own in the [Segments
-Folder](/segments).
+Folder](/src/segments).
 
 ### Hooks
-Hooks let's you execute scripts asynchronously to either alert you, populate
-data for segments or whatever you want really. Read more about those and how to
-make your own in the [Hooks Folder](/hooks).
+Hooks let's you execute scripts asynchronously to either alert you, or prepare
+data in some way. Whatever you want really. Read more about those and how to
+make your own in the [Hooks Folder](/src/hooks).
 
 ### Colors and Layouts
 Colors and layouts let you decide how the prompt is drawn. Read more about those
-and how to make your own in the [Colors](/config/colors) and
+and how to make your own in the [Colors](/src/colors) and
 [Layouts](/src/layouts). SBP supports both truecolors through RGB values and 256 colors
 by using ansi codes. Many will probably just want to rely on the configuration
 set in Xresources, by using the xresources color setting.
@@ -92,19 +98,22 @@ with the configured colors and change it's color depending on the current VI
 mode if enabled. The cursor will also change from blinking to solid block if
 your terminal supports it.~~
 The VI mode support has been removed as it is not possible to predictably place
-the VI mode indicator on a multiline prompt.
+the VI mode indicator on a multiline prompt. PR's are very welcome if you find a
+way to do this.
 
 ### FAQ
 
 #### Is this really just bash?
 Yes, but actually no. At the time of writing the main implementation has
 just a few calls do date, while some segments touch grep and sed but these
-are being removed.
+are being removed. Sometimes we need to talk to other CLI applications though like
+git.
 
 #### My prompt doesn't show any colors, whats wrong?
-You are using a terminal that doesn't support truecolors. You can write your own
-ansi theme, or use one of the two provided ones, default-256 or xresources.
+You are using a terminal that doesn't support truecolors, the OSX Terminal.app maybe?
+You can write your own ansi theme, or use one of the two provided ones, default-256 or xresources.
 
 #### I don't want to install any fancy fonts, can I still have nice things?
-Why yes! Simply use the 'plain' layout. No fonts needed. Or use the Kitty
-terminal.
+Why yes! Simply use the 'plain' layout. No fonts needed. Or use the
+[Kitty](https://sw.kovidgoyal.net/kitty/) terminal which will draw most of the
+missing characters for you.
