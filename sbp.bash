@@ -4,21 +4,30 @@
 #   Simple Bash Prompt (SBP)    #
 #################################
 
+# For catching installs using the old config
+if [[ -z "$SBP_PATH" && -n "$sbp_path" ]]; then
+  read -r -d '' alert_text <<'EOF'
+   Unfortunatly your current configuration is incompatible with the latest version of SBP
+
+   Two changes are required:
+   1. Please backup and remove your configuration ${HOME}/.config/sbp
+   2. Please change the casing of the 'sbp_path' variable to 'SBP_PATH' in your '$HOME/.bashrc'
+
+   In the mean time, your prompt has ben set to '\h@\h:\w'
+EOF
+  # Alert the user
+  >&2 printf 'SBP: \e[38;5;76m%s\e[00m\n' "$alert_text"
+  # Set a usable prompt
+  PS1='\u@\h:\w '
+  # Override the prompt command
+  alias _sbp_set_prompt='true'
+  return 1
+fi
+
 # shellcheck source=src/interact.bash
 source "${SBP_PATH}/src/interact.bash"
 # shellcheck source=src/debug.bash
 source "${SBP_PATH}/src/debug.bash"
-
-# For catching legacy installs
-if [[ -z "$SBP_PATH" && -n "$sbp_path" ]]; then
-  debug::alert_user "Unfortunatly your current configuration is incompatible with the latest version of SBP"
-  debug::alert_user "Two changes are required:"
-  debug::alert_user "1. Please backup and remove your configuration ${HOME}/.config/sbp"
-  debug::alert_user "2. Please change the casing of the 'sbp_path' variable to 'SBP_PATH' in your '$HOME/.bashrc'"
-  debug::alert_user "In the mean time, your prompt has ben set to '\h@\h:\w'"
-  PS1='\u@\h:\w '
-  return 1
-fi
 
 if [[ -d "/run/user/${UID}" ]]; then
   SBP_TMP=$(mktemp -d --tmpdir="/run/user/${UID}") && trap 'rm -rf "$SBP_TMP"' EXIT;

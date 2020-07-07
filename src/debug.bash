@@ -18,11 +18,6 @@ debug::log_info() {
   >&2 printf '%s: \e[38;5;76m%s\e[00m\n' "${context}" "${*}"
 }
 
-debug::alert_user() {
-  >&2 printf 'SBP: \e[38;5;76m%s\e[00m\n' "${*}"
-}
-
-
 debug::start_timer() {
   timer_start=$("$date_cmd" +'%s%3N')
 }
