@@ -11,7 +11,7 @@ If something seems wrong, lacking or bad in some way; feel free to rant, review 
 ![Screenshot](/resources/sbp_screenshot.png)
 
 For a live demo of this magic [head over
-here](https://asciinema.org/a/0efgJrqQJY2vH1XguXjX3xV1c)
+here](https://asciinema.org/a/JuTQxC1wfoUr269Tzw8SMejVl)
 
 ## A note on the recent changes
 I wanted to add support for trueculors instead of relying on "just" 256 colors.
