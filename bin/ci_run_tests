@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+apk -U add bats shellcheck git
+
+/bash/bin/run_tests

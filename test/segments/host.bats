@@ -4,6 +4,8 @@ load segment_helper
 
 @test "test that we recognize a normal user" {
   unset SSH_CLIENT
+  export user_id=1000
+  USER=${USER:-travis}
   mapfile -t result <<< "$(execute_segment)"
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'
@@ -12,6 +14,8 @@ load segment_helper
 
 @test "test that we recognize an ssh session" {
   export SSH_CLIENT=yes
+  export user_id=1000
+  USER=${USER:-travis}
   mapfile -t result <<< "$(execute_segment)"
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'
@@ -21,6 +25,7 @@ load segment_helper
 @test "test that we recognize the root user" {
   unset SSH_CLIENT
   export user_id=0
+  USER=${USER:-travis}
   mapfile -t result <<< "$(execute_segment)"
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'highlight'
