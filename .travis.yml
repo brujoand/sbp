@@ -5,13 +5,12 @@ env:
   - BASH=5.0.3
   - BASH=4.4.23
   - BASH=4.3.48
-  - BASH=4.2.53
 
 before_script:
   - docker pull bash:$BASH
   - docker run bash:$BASH --version
 script:
-  - docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_run_tests
+  - ./bin/run_linter && docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_run_tests
 deploy:
   provider: releases
   script: ./bin/package
