@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
-apk -U add bats git
+echo 'http://dl-3.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories
+
+apk -U add bats git shellcheck
 
 /bash/bin/run_tests
