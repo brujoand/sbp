@@ -3,8 +3,6 @@ os:
   - linux
   distro: bionic
   - osx
-env:
-- BASH_TARGET=5
 
 email: false
 before_install: /bin/prepare_ci
