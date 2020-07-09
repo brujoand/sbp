@@ -1,8 +1,7 @@
-language: bash
-dist: bionic
-bash:
-  - 5
-  - 4.3
+language: shell
+os:
+  - linux
+  - osx
 email: false
 before_install:
   - sudo apt-get install npm -y

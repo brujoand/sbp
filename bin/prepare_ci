@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [[ $TRAVIS_OS_NAME = 'osx' ]]; then
+  brew install bash
+  echo '/usr/local/bin/bash' | sudo tee -a /etc/shells
+  pam_setting="auth       sufficient   pam_wheel.so trust group=chsh\n/"
+  pam_file="/etc/pam.d/chsh"
+  echo "$pam_setting" | cat - "$pam_file" > temp && sudo mv temp "$pam_file"
+  sudo usermod -a -G chsh "$USER"
+  chsh -s /usr/local/bin/bash
+fi
