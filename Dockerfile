@@ -5,7 +5,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
-    apt-get install -y git bash curl apt-utils dialog
+    apt-get install -y git bash curl apt-utils dialog vim
 
 RUN adduser --system --shell /bin/bash --disabled-password sbp && \
     apt-get install -y locales && \
