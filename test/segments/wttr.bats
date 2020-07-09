@@ -7,7 +7,7 @@ execute::execute_nohup_function() {
 }
 
 segments::wttr_fetch_changes() {
-  echo '0.1mm;+16°C;↓13km/h'
+  echo -e '0.1mm\n+16°C\n↓13km/h'
 }
 
 @test "test parsing the wttr segment" {
