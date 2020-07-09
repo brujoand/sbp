@@ -3,6 +3,9 @@ dist: bionic
 os:
   - linux
   - osx
+env:
+- BASH_TARGET=5
+- BASH_TArget=4.3
 
 before_install: ./bin/prepare_ci
 script: ./bin/run_tests && ./bin/package

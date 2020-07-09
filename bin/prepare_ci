@@ -9,6 +9,7 @@ if [[ $TRAVIS_OS_NAME = 'osx' ]]; then
   sudo usermod -a -G chsh "$USER"
   chsh -s /usr/local/bin/bash
 else
+  sudo apt-get update
   sudo apt-get install npm -y
   sudo npm install -g bats
 fi
