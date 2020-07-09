@@ -11,11 +11,11 @@ before_script:
   - docker pull bash:$BASH
   - docker run bash:$BASH --version
 script:
-  - docker run -v $PWD:/bash bash:$BASH && /bash/bin/ci_run_tests
-  - docker run -v $PWD:/bash bash:$BASH && /bash/bin/ci_run_tests
-  - docker run -v $PWD:/bash bash:$BASH && /bash/bin/ci_run_tests
-  - docker run -v $PWD:/bash bash:$BASH && /bash/bin/ci_run_tests
-  - docker run -v $PWD:/bash bash:$BASH && /bash/bin/ci_run_tests
+  - docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_run_tests
+  - docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_run_tests
+  - docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_run_tests
+  - docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_run_tests
+  - docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_run_tests
 deploy:
   provider: releases
   script: ./bin/package
