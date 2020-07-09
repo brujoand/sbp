@@ -1,11 +1,13 @@
 language: shell
 os:
   - linux
+  distro: bionic
   - osx
+env:
+- BASH_TARGET=5
+
 email: false
-before_install:
-  - sudo apt-get install npm -y
-  - sudo npm install -g bats
+before_install: /bin/prepare_ci
 script: ./bin/run_tests && ./bin/package
 deploy:
   provider: releases
