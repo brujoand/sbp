@@ -1,7 +1,6 @@
 language: shell
 os:
   - linux
-  distro: bionic
   - osx
 
 email: false
