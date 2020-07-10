@@ -67,4 +67,6 @@ decorate::format_color() {
   else
     format_color_result="\e[${color_code};2;${color_value}m"
   fi
+
+  format_color_result="\[${format_color_result}\]"
 }
