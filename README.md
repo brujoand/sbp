@@ -22,6 +22,10 @@ of subshells. This led to return by reference which is now the standard way of
 returning results in the code base. So if you're upgrading from an older version
 it's probably a good idea to make a copy of your sbp config and start fresh.
 
+## Hard Requirements
+  - Bash 4.3+
+  - Be nice
+
 ## Soft Requirements
 If you want the fancy pointy segment separators, you need the powerline fonts _installed_ and _enabled_. Both.
 You can get them [here](https://github.com/powerline/fonts) which also has

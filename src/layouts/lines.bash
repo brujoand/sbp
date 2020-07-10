@@ -38,14 +38,14 @@ print_themed_prompt() {
 }
 
 print_themed_filler() {
-  local -n return_value=$1
+  local -n print_themed_filler_result=$1
   local filler_size=$2
   # Account for seperator and padding
   padding=$(printf "%*s" "$filler_size")
   prompt_filler_output="$(print_themed_segment 'filler' "$padding")"
   mapfile -t segment_output <<< "$prompt_filler_output"
 
-  return_value=${segment_output[1]}
+  print_themed_filler_result=${segment_output[1]}
 }
 
 print_themed_segment() {

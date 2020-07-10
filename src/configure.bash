@@ -21,7 +21,7 @@ configure::list_feature_files() {
 }
 
 configure::get_feature_file() {
-  local -n return_value=$1
+  local -n get_feature_file_result=$1
   local feature_type=$2
   local feature_name=$3
 
@@ -29,9 +29,9 @@ configure::get_feature_file() {
   local global_file="${SBP_CONFIG}/${feature_type}s/${feature_name}.bash"
 
   if [[ -f "$local_file" ]]; then
-    return_value="$local_file"
+    get_feature_file_result="$local_file"
   elif [[ -f "$global_file" ]]; then
-    return_value="$global_file"
+    get_feature_file_result="$global_file"
   else
     debug::log_error "Could not find $local_file"
     debug::log_error "Could not find $global_file"

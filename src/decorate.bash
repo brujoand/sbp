@@ -1,77 +1,70 @@
 #! /usr/bin/env bash
 
 decorate::calculate_complementing_color() {
-  local -n return_value=$1
+  local -n calculate_complementing_color_result=$1
   local source_color=$2
   input_colors=()
-  output_colors=()
 
   if [[ -z "${source_color//[0123456789]}" ]]; then
     # This is not accurate
-    return_value="$(( 255 - source_color ))"
+    calculate_complementing_color_result="$(( 255 - source_color ))"
   else
     mapfile -t input_colors < <(tr ';' '\n' <<< "$source_color")
-    r_lum=$(( ${input_colors[0]} * 2126 ))
-    g_lum=$(( ${input_colors[1]} * 7152 ))
-    b_lum=$(( ${input_colors[2]} * 722 ))
+    local red=${input_colors[0]}
+    local green=${input_colors[1]}
+    local blue=${input_colors[2]}
 
-    lum=$(( r_lum + g_lum + b_lum ))
+    red=$(( red * 2126 ))
+    green=$(( green * 7152 ))
+    blue=$(( blue * 722 ))
+
+    lum=$(( red + green + blue ))
     if [[ "$lum" -gt 1400000 ]]; then
-      return_value='0;0;0'
+      calculate_complementing_color_result='0;0;0'
     else
-      return_value='255;255;255'
+      calculate_complementing_color_result='255;255;255'
     fi
-
   fi
 }
 
 decorate::print_colors() {
-  local -n return_value=$1
+  local -n print_colors_result=$1
   local fg_code=$2
   local bg_code=$3
   local fg_color bg_color
 
   decorate::print_fg_color 'fg_color' "$fg_code"
   decorate::print_bg_color 'bg_color' "$bg_code"
-  return_value="${fg_color}${bg_color}"
+  print_colors_result="${fg_color}${bg_color}"
 }
 
 decorate::print_bg_color() {
-  local -n return_value=$1
+  local -n print_bg_color_result=$1
   local bg_code=$2
   local escaped=$3
 
-  if [[ -z "$bg_code" ]]; then
-    bg_escaped="\e[49m"
-  elif [[ -z "${bg_code//[0123456789]}" ]]; then
-    bg_escaped="\e[48;5;${bg_code}m"
-  else
-    bg_escaped="\e[48;2;${bg_code}m"
-  fi
-
-  if [[ -z "$escaped" ]]; then
-    return_value="\[${bg_escaped}\]"
-  else
-    return_value="${bg_escaped}"
-  fi
+  decorate::format_color 'print_bg_color_result' 48 "$bg_code"
 }
 
 decorate::print_fg_color() {
-  local -n return_value=$1
+  local -n print_fg_color_result=$1
   local fg_code=$2
   local escaped=$3
 
-  if [[ -z "$fg_code" ]]; then
-    fg_escaped="\e[39m"
-  elif [[ -z "${fg_code//[0123456789]}" ]]; then
-    fg_escaped="\e[38;5;${fg_code}m"
-  else
-    fg_escaped="\e[38;2;${fg_code}m"
-  fi
+  decorate::format_color 'print_fg_color_result' 38 "$fg_code"
+}
 
-  if [[ -z "$escaped" ]]; then
-    return_value="\[${fg_escaped}\]"
+decorate::format_color() {
+  local -n format_color_result=$1
+  local color_code=$2
+  local color_value=$3
+  local color_reset_code=$(( color_code + 1 ))
+
+  if [[ -z "$color_value" ]]; then
+    format_color_result="\e[${color_reset_code}m"
+  elif [[ -z "${color_value//[0123456789]}" ]]; then
+    format_color_result="\e[${color_code};5;${color_value}m"
   else
-    return_value="${fg_escaped}"
+    format_color_result="\e[${color_code};2;${color_value}m"
   fi
 }

@@ -15,9 +15,6 @@ debug::log_info() {
 if [[ "$OSTYPE" == "darwin"* ]]; then
   if type -P gdate &>/dev/null; then
     date_cmd='gdate'
-  else
-    debug::log_error "OSX date does not support ms granularity, please install gdate"
-    date_cmd=''
   fi
 else
   date_cmd='date'

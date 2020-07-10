@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 execute::get_script() {
-  local -n return_value=$1
+  local -n get_script_result=$1
   local feature_type=$2
   local feature_name=$3
 
@@ -11,7 +11,7 @@ execute::get_script() {
 
   local feature_file
   configure::get_feature_file 'feature_file' "$feature_type" "$feature_name"
-  return_value="$feature_file"
+  get_script_result="$feature_file"
 }
 
 execute::execute_nohup_function() {
