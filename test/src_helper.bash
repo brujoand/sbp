@@ -15,9 +15,5 @@ source_src() {
   source "$src_source"
 }
 
-execute_src() {
-  "srcs::${SRC_NAME}"
-}
-
 source_src
 

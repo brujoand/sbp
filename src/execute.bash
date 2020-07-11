@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO replace with call to configure::get feature file
+# and check for peekaboo in the segment execution
 execute::get_script() {
   local -n get_script_result=$1
   local feature_type=$2
