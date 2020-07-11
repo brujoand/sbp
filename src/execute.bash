@@ -51,7 +51,7 @@ execute::execute_prompt_segment() {
     local -n PRIMARY_COLOR_HIGHLIGHT="SEGMENTS_${segment^^}_COLOR_PRIMARY_HIGHLIGHT"
     local -n SECONDARY_COLOR_HIGHLIGHT="SEGMENTS_${segment^^}_COLOR_SECONDARY_HIGHLIGHT"
 
-    local -n SPLITTER_COLOR="SEGMENTS_${segment^^}_SPLITTER_COLOR"
+    local -n SPLITTER_COLOR="SEGMENTS_${segment^^}_COLOR_SPLITTER"
 
     local -n max_length_override="SEGMENTS_${segment^^}_MAX_LENGTH"
     if [[ -n "$max_length_override" ]]; then
