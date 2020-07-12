@@ -33,9 +33,9 @@ configure::get_feature_file() {
   elif [[ -f "$global_file" ]]; then
     get_feature_file_result="$global_file"
   else
-    debug::log_error "Could not find $local_file"
-    debug::log_error "Could not find $global_file"
-    debug::log_error "Make sure at least on of them exists"
+    debug::log "Could not find $local_file"
+    debug::log "Could not find $global_file"
+    debug::log "Make sure at least on of them exists"
   fi
 
 }
@@ -57,7 +57,7 @@ configure::set_colors() {
   if [[ -n "$colors_file" ]]; then
     source "$colors_file"
   else
-    debug::log_info "Using the default color config"
+    debug::log "Using the default color config"
     source "${SBP_PATH}/src/colors/default.bash"
   fi
 }
@@ -71,7 +71,7 @@ configure::set_layout() {
   if [[ -n "$layout_file" ]]; then
     source "$layout_file"
   else
-    debug::log_info "Using the default layout"
+    debug::log "Using the default layout"
     source "${SBP_PATH}/src/layouts/plain.bash"
   fi
 }
@@ -80,14 +80,14 @@ configure::load_config() {
   [[ -d "$SBP_CACHE" ]] || mkdir -p "$SBP_CACHE"
 
   if [[ ! -f "$config_file" ]]; then
-    debug::log_info "Config file not found: ${config_file}"
-    debug::log_info "Creating it.."
+    debug::log "Config file not found: ${config_file}"
+    debug::log "Creating it.."
     cp "$default_config_file" "$config_file"
   fi
 
   if [[ ! -f "$colors_file" ]]; then
-    debug::log_info "Color config file not found: ${colors_file}"
-    debug::log_info "Creating it.."
+    debug::log "Color config file not found: ${colors_file}"
+    debug::log "Creating it.."
     cp "$default_colors_file" "$colors_file"
   fi
 

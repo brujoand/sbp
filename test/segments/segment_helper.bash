@@ -10,7 +10,7 @@ source_segment() {
   segment_source="${SBP_PATH}/src/segments/${SEGMENT_NAME}.bash"
 
   if [[ ! -f "$segment_source" ]]; then
-    debug::log_error "Could not find $segment_source"
+    debug::log "Could not find $segment_source"
     return 1
   fi
   source "$segment_source"

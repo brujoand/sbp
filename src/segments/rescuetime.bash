@@ -6,7 +6,7 @@ segments::rescuetime_fetch_changes() {
   result=$(curl -s "$RESCUETIME_ENDPOINT" | grep -v '^Rank')
   exit_code=$?
   if [[ "$exit_code" -gt 0 ]]; then
-    debug::log_error "Could not reach rescuetime RESCUETIME_ENDPOINT"
+    debug::log "Could not reach rescuetime RESCUETIME_ENDPOINT"
     return 0
   fi
   echo "$result"
@@ -15,7 +15,7 @@ segments::rescuetime_fetch_changes() {
 segments::rescuetime_refresh() {
   refresh_rate="${SEGMENTS_RESCUETIME_REFRESH_RATE:-600}"
   if [[ ! -f "$SEGMENT_CACHE" ]]; then
-    debug::log_error "No cache folder"
+    debug::log "No cache folder"
   fi
 
   if [[ -f "$SEGMENT_CACHE" ]]; then
@@ -32,7 +32,7 @@ segments::rescuetime_refresh() {
   fi
 
   if [[ -z $RESCUETIME_API_KEY ]]; then
-    debug::log_error "RESCUETIME_API_KEY not set"
+    debug::log "RESCUETIME_API_KEY not set"
     return 1
   fi
 

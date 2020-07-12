@@ -24,7 +24,6 @@ it's probably a good idea to make a copy of your sbp config and start fresh.
 
 ## Hard Requirements
   - Bash 4.3+
-  - Be nice
 
 ## Soft Requirements
 If you want the fancy pointy segment separators, you need the powerline fonts _installed_ and _enabled_. Both.
@@ -46,7 +45,7 @@ This will get you the latest release.
 When you clone this repo, there is an install script located at ´bin/install´.
 It will add two lines to `$HOME/.bashrc`:
 ```
-  SBP_PATH=/the/path/to/sbp/
+  SBP_PATH=/the/path/to/sbp
   source ${SBP_PATH}/sbp.bash
 ```
 You could also just add these two lines to some bash config file of your own
@@ -70,8 +69,8 @@ You can use the `sbp` command for a lot of things:
     hooks           - List all available hooks
     themes          - List all available color themes and layouts
   edit
-    config          - Opens the sbp config in \$EDITOR (${EDITOR:-'not set'})
-    colors          - Opens the colors config in \$EDITOR (${EDITOR:-'not set'})
+    config          - Opens the sbp config in $EDITOR
+    colors          - Opens the colors config in $EDITOR
   set
     color           - Set [color] for the current session
     layout          - Set [layout] for the current session

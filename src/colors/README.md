@@ -1,19 +1,9 @@
-# Themes
-
-## Creating your own theme layout
-You can create your own theme layout by placing a file in:
-```
-   ${HOME}/.config/sbp/themes/layouts/${your_layout_name}.bash
-```
-
-Layouts define both which characters are being used, and how the prompt is
-drawn. For instance if there should be one or two lines.
-
+# Colors
 
 ## Creating your own theme colors
 You can create your own theme layout by placing a file in:
 ```
-   ${HOME}/.config/sbp/themes/colors/${your_colors_name}.bash
+   ${HOME}/.config/sbp/themes/colors/${your_color_theme_name}.bash
 ```
 
 Theme colors are basically 16 RGB values. And I've added a template

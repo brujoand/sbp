@@ -1,15 +1,11 @@
 #! /usr/bin/env bash
 
-debug::log_error() {
-  local timestamp=$(date +'%y.%m.%d %H:%M:%S')
-  local context="${timestamp}:${BASH_SOURCE[1]}:${FUNCNAME[1]}"
-  >&2 printf '%s: \e[38;5;196m%s\e[00m\n' "${context}" "${*}"
-}
-
-debug::log_info() {
-  local timestamp=$(date +'%y.%m.%d %H:%M:%S')
-  local context="${timestamp}:${BASH_SOURCE[1]}:${FUNCNAME[1]}"
-  >&2 printf '%s: \e[38;5;76m%s\e[00m\n' "${context}" "${*}"
+debug::log() {
+  local timestamp file function
+  timestamp=$(date +'%y.%m.%d %H:%M:%S')
+  file="${BASH_SOURCE[1]##*/}"
+  function="${FUNCNAME[1]}"
+  >&2 printf '\n[%s] [%s - %s]: \e[31m%s\e[0m\n' "$timestamp" "$file" "$function" "${*}"
 }
 
 if [[ "$OSTYPE" == "darwin"* ]]; then

@@ -11,8 +11,8 @@ source "${SBP_PATH}/src/configure.bash"
 
 configure::load_config
 
-COMMAND_EXIT_CODE=$1
-COMMAND_DURATION=$2
+readonly COMMAND_EXIT_CODE=$1
+readonly COMMAND_DURATION=$2
 
 main::main() {
   execute::execute_prompt_hooks

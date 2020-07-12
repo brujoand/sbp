@@ -10,7 +10,7 @@ source_hook() {
   hook_source="${SBP_PATH}/src/hooks/${HOOK_NAME}.bash"
 
   if [[ ! -f "$hook_source" ]]; then
-    debug::log_error "Could not find $hook_source"
+    debug::log "Could not find $hook_source"
     exit 1
   fi
   source "$hook_source"

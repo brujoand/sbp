@@ -6,7 +6,7 @@ refresh_rate="${SEGMENTS_WTTR_REFRESH_RATE:-600}"
 
 segments::wttr_refresh() {
   if [[ ! -f "$SEGMENT_CACHE" ]]; then
-    debug::log_error "No cache folder"
+    debug::log "No cache folder"
   fi
 
   if [[ -f "$SEGMENT_CACHE" ]]; then
