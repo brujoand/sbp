@@ -1,23 +1,19 @@
 language: shell
 dist: bionic
-env:
-  - BASH=rc
-  - BASH=latest
-  - BASH=5.0.17
-  - BASH=4.4.23
-  - BASH=4.3.48
 
-before_script:
-  - docker pull bash:$BASH
-  - docker run bash:$BASH --version
-script:
-  - ./bin/run_linter && docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_run_tests
-deploy:
-  provider: releases
-  script: ./bin/package
-  token:
-    secure: c5h0E4QkBWe7Bka6mkowP/z6QEiqwKGV5/E9MhX9COzxhtQGlDa7rYJ7AlS43o9sXOqJR7P8Hq5KJAXqYoOamKpXB7M+1IGlDjeVB8uHBKZ/53Iwj6ZUrnXvmIrbY3X6Cr2cK2JVkmKeHx4MhT3HZKCv+MGbA3EfcIghEk/KSi8GcP84oqMLLvOhXStvVgOh2n80w4KUlqXct7DWBTc8kZAhlp2jFXBXOTdk7ihwGzS98qvHyFEO+asW63PwqpCAj74Qmj9KECIStTWGr/ieArpIuoWMVB3yvmmmZkAcm0hckwdgnwcwS47MWo3PDoUO/QuAy0CoVdWGmkz+NekudXrN7xTuTgP0afA5VF0hX7DtDsu18BoiQonauAfImNz5dYVonqMXqHSVZXcwCuyAs/zfbpFVjrngUnPrZN+rD/NwdAB3EbTIFHdQz3dqsrFhKbeHzg2dQv6NNUn9FY/hD7kol2xODONLk0A8tnZwEVRLEKSA/aBPcjh1gq63im4DpONUpf2EjtHSWVJ/kaqiKgc+kQGeF/KdH36O57qP5ttiZuYmjftiNS2n6vlu2ODgQiBrwVlbTXOdR2+lYLrQKF26L7IvslLX7PJUG9S79OjSxob/+NyuFgKYbD0SUT7nN6enwS1UVi3vO+LOJkWmq3fFULjy3stbcreH9L48iTs=
-  file: sbp-${TRAVIS_TAG}.tar.gz
-  on:
-    tags: true
-  cleanup: 'false'
+jobs:
+  include:
+    - script: ./bin/ci_test_wrapper 'rc'
+    - script: ./bin/ci_test_wrapper '5.0.17'
+    - script: ./bin/ci_test_wrapper '4.4.23'
+    - script: ./bin/ci_test_wrapper '4.3.48'
+    - stage: deploy
+      script: ./bin/package
+      deploy:
+        provider: releases
+        token:
+          secure: c5h0E4QkBWe7Bka6mkowP/z6QEiqwKGV5/E9MhX9COzxhtQGlDa7rYJ7AlS43o9sXOqJR7P8Hq5KJAXqYoOamKpXB7M+1IGlDjeVB8uHBKZ/53Iwj6ZUrnXvmIrbY3X6Cr2cK2JVkmKeHx4MhT3HZKCv+MGbA3EfcIghEk/KSi8GcP84oqMLLvOhXStvVgOh2n80w4KUlqXct7DWBTc8kZAhlp2jFXBXOTdk7ihwGzS98qvHyFEO+asW63PwqpCAj74Qmj9KECIStTWGr/ieArpIuoWMVB3yvmmmZkAcm0hckwdgnwcwS47MWo3PDoUO/QuAy0CoVdWGmkz+NekudXrN7xTuTgP0afA5VF0hX7DtDsu18BoiQonauAfImNz5dYVonqMXqHSVZXcwCuyAs/zfbpFVjrngUnPrZN+rD/NwdAB3EbTIFHdQz3dqsrFhKbeHzg2dQv6NNUn9FY/hD7kol2xODONLk0A8tnZwEVRLEKSA/aBPcjh1gq63im4DpONUpf2EjtHSWVJ/kaqiKgc+kQGeF/KdH36O57qP5ttiZuYmjftiNS2n6vlu2ODgQiBrwVlbTXOdR2+lYLrQKF26L7IvslLX7PJUG9S79OjSxob/+NyuFgKYbD0SUT7nN6enwS1UVi3vO+LOJkWmq3fFULjy3stbcreH9L48iTs=
+        file: sbp-${TRAVIS_TAG}.tar.gz
+        on:
+          tags: true
+        cleanup: 'false'
