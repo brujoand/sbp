@@ -2,7 +2,6 @@
 
 BASH=$1
 
-./bin/run_linter
 docker pull bash:$BASH
 docker run bash:$BASH --version
-docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_test_wrapper
+docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_test
