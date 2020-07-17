@@ -4,7 +4,7 @@ source "${SBP_PATH}/test/asserts.bash"
 export COMMAND_EXIT_CODE=0
 export COMMAND_DURATION=0
 HOOK_NAME="$(basename "$BATS_TEST_FILENAME" .bats)"
-TMP_DIR=$(mktemp -d) && trap 'rm -rf "$TMP_DIR"' EXIT;
+TMP_DIR=$(mktemp -d) && trap 'command rm -rf "$TMP_DIR"' EXIT;
 
 source_hook() {
   hook_source="${SBP_PATH}/src/hooks/${HOOK_NAME}.bash"

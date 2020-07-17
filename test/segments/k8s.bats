@@ -16,7 +16,7 @@ EOF
 }
 
 @test "test no config k8s segment" {
-  rm "$KUBE_CONFIG"
+  command rm "$KUBE_CONFIG"
   result="$(execute_segment)"
   assert_equal "$result" ''
 }

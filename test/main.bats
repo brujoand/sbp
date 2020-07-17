@@ -3,7 +3,7 @@
 source "${SBP_PATH}/test/asserts.bash"
 
 SRC_NAME="$(basename "$BATS_TEST_FILENAME" .bats)"
-TMP_DIR=$(mktemp -d) && trap 'rm -rf "$TMP_DIR"' EXIT;
+TMP_DIR=$(mktemp -d) && trap 'command rm -rf "$TMP_DIR"' EXIT;
 
 setup() {
   export SBP_CONFIG="${TMP_DIR}/local_config"

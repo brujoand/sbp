@@ -76,7 +76,7 @@ _sbp_peekaboo() {
 
   if [[ -f "$feature_hook" || -f "$feature_segment" ]]; then
     if [[ -f "$peekaboo_file" ]]; then
-      rm "$peekaboo_file"
+      command rm "$peekaboo_file"
     else
       touch "$peekaboo_file"
     fi

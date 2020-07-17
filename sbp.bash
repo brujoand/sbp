@@ -10,9 +10,9 @@ source "${SBP_PATH}/src/interact.bash"
 source "${SBP_PATH}/src/debug.bash"
 
 if [[ -d "/run/user/${UID}" ]]; then
-  SBP_TMP=$(mktemp -d --tmpdir="/run/user/${UID}") && trap 'rm -rf "$SBP_TMP"' EXIT;
+  SBP_TMP=$(mktemp -d --tmpdir="/run/user/${UID}") && trap 'command rm -rf "$SBP_TMP"' EXIT;
 else
-  SBP_TMP=$(mktemp -d) && trap 'rm -rf "$SBP_TMP"' EXIT;
+  SBP_TMP=$(mktemp -d) && trap 'command rm -rf "$SBP_TMP"' EXIT;
 fi
 
 export SBP_TMP
@@ -27,7 +27,7 @@ _sbp_set_prompt() {
   if [[ -f "${SBP_TMP}/execution" ]]; then
     command_start=$(< "${SBP_TMP}/execution")
     command_duration=$(( current_time - command_start ))
-    rm "${SBP_TMP}/execution"
+    command rm "${SBP_TMP}/execution"
   else
     command_duration=0
     command_status=0

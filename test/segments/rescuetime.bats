@@ -31,7 +31,7 @@ EOF
 
 @test "test a refreshing the rescuetime segment" {
   SEGMENT_CACHE="${TMP_DIR}/rescuetime"
-  rm -rf "$SEGMENT_CACHE"
+  command rm -rf "$SEGMENT_CACHE"
   RESCUETIME_ENDPOINT="http://localhost:8080"
 
   execute_segment

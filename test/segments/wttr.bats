@@ -25,7 +25,7 @@ segments::wttr_fetch_changes() {
 
 @test "test refreshing the wttr segment" {
   SEGMENT_CACHE="${TMP_DIR}/wttr"
-  rm -rf "$SEGMENT_CACHE"
+  command rm -rf "$SEGMENT_CACHE"
   execute_segment
   [[ -f "$SEGMENT_CACHE" ]]
 

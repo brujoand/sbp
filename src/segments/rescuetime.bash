@@ -40,7 +40,7 @@ segments::rescuetime_refresh() {
 
   if [[ -z "$result" ]]; then
     # No data, so no logging of time today
-    rm -f "$SEGMENT_CACHE"
+    command rm -f "$SEGMENT_CACHE"
     return 0
   fi
 
