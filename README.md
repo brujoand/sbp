@@ -14,7 +14,7 @@ For a live demo of this magic [head over
 here](https://asciinema.org/a/JuTQxC1wfoUr269Tzw8SMejVl)
 
 ## A note on the recent changes
-I wanted to add support for trueculors instead of relying on "just" 256 colors.
+I wanted to add support for truecolors instead of relying on "just" 256 colors.
 To do this I had to break the configuration, and when the flood gates had been
 opened, a lot of things started changing. Suddenly layout changes was pretty
 easy too. After a while speed became and issue, and I had to reduce the number
