@@ -57,6 +57,9 @@ truncation/compacting for that specific segment.
   Setting ´SEGMENTS_K8S_HIDE_CLUSTER´ to 1 will hide the cluster name. The
   default values are '' and 0 respectively.
 
+## load
+  shows the average load of the machine
+
 ## path
   shows the current path
 
