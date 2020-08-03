@@ -5,7 +5,8 @@ segments::command() {
   local timer_s=0
 
   if [[ "$COMMAND_EXIT_CODE" -lt 0 || "$COMMAND_EXIT_CODE" -eq 130 ]]; then
-    COMMAND_DURATION=0
+    timer_m=0
+    timer_s=0
   fi
 
   if [[ "$COMMAND_DURATION" -gt 0 ]]; then
