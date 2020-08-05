@@ -16,7 +16,7 @@ segments::wttr_refresh() {
   fi
 
   current_time=$(date +%s)
-  time_since_update=$(( current_time - last_update ))
+  time_since_update=$((current_time - last_update))
 
   if [[ $time_since_update -lt $refresh_rate ]]; then
     return 0
@@ -24,7 +24,6 @@ segments::wttr_refresh() {
 
   curl -H "Accept-Language: ${LANG%_*}" --compressed "wttr.in/${location}?format=${format}" | tr -d '\n' | tr ';' '\n' > "$SEGMENT_CACHE"
 }
-
 
 segments::wttr() {
   if [[ -f $SEGMENT_CACHE ]]; then
