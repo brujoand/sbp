@@ -22,7 +22,10 @@ segments::wttr_refresh() {
     return 0
   fi
 
-  curl -H "Accept-Language: ${LANG%_*}" --compressed "wttr.in/${location}?format=${format}" | tr -d '\n' | tr ';' '\n' > "$SEGMENT_CACHE"
+  weather_data="$(curl -H "Accept-Language: ${LANG%_*}" --compressed "wttr.in/${location}?format=${format}" | tr -d '\n' | tr ';' '\n')"
+  if [[ -n $weather_data ]]; then
+    echo "$weather_data" >"$SEGMENT_CACHE"
+  fi
 }
 
 segments::wttr() {
