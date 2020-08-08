@@ -3,8 +3,10 @@
 SBP_CONFIG="${HOME}/.config/sbp"
 config_file="${SBP_CONFIG}/settings.conf"
 colors_file="${SBP_CONFIG}/colors.conf"
-default_config_file="${SBP_PATH}/config/settings.conf"
-default_colors_file="${SBP_PATH}/config/colors.conf"
+config_template="${SBP_PATH}/config/settings.conf.template"
+colors_template="${SBP_PATH}/config/colors.conf.template"
+default_colors="${SBP_PATH}/config/colors.conf"
+default_config="${SBP_PATH}/config/settings.conf"
 SBP_CACHE="${SBP_CONFIG}/cache"
 
 configure::list_feature_files() {
@@ -82,19 +84,21 @@ configure::load_config() {
   if [[ ! -f "$config_file" ]]; then
     debug::log "Config file not found: ${config_file}"
     debug::log "Creating it.."
-    cp "$default_config_file" "$config_file"
+    cp "$config_template" "$config_file"
   fi
 
   if [[ ! -f "$colors_file" ]]; then
     debug::log "Color config file not found: ${colors_file}"
     debug::log "Creating it.."
-    cp "$default_colors_file" "$colors_file"
+    cp "$colors_template" "$colors_file"
   fi
 
   # shellcheck source=/dev/null
   source "$config_file"
+  source "$default_config"
   configure::set_layout "${SBP_THEME_LAYOUT_OVERRIDE:-$SBP_THEME_LAYOUT}"
   configure::set_colors "${SBP_THEME_COLOR_OVERRIDE:-$SBP_THEME_COLOR}"
   # shellcheck source=/dev/null
   source "$colors_file"
+  source "$default_colors"
 }

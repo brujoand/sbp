@@ -82,7 +82,7 @@ truncation/compacting for that specific segment.
   ´date´ command.
 
 ## wttr
-  Shows the weather based on ´SETTINGS_WTTR_LOCATION´ and
-  ´SETTINGS_WTTR_FORMAT´, the default values are ´Oslo´ and ´%p;%t;%w´
+  Shows the weather based on ´SEGMENTS_WTTR_LOCATION´ and
+  ´SEGMENTS_WTTR_FORMAT´, the default values are ´Oslo´ and ´%p;%t;%w´
   respectively.
 

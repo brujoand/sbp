@@ -1,47 +1,60 @@
 #! /usr/bin/env bash
 
-# Adapted from liquidprompts load average
-# https://github.com/nojhan/liquidprompt/blob/deff598f30f097279d6f6959ba49441923dec041/liquidprompt
+shopt -s extglob
 
-segments::init_load() {
-  case "$(uname -s)" in
-    Darwin | FreeBSD | OpenBSD)
-      CPU_COUNT=$(sysctl -n hw.ncpu)
+segments::load_get_cpu_count() {
+  cpu_count=$(nproc 2>/dev/null)
+  if [[ $cpu_count -gt 0 ]]; then
+    printf '%s\n' "$cpu_count"
+    return 0
+  fi
 
-      get_load_average() {
-        local bol eol IFS=$' \t'
-        # shellcheck disable=SC2034,SC2162
-        read bol LOAD_AVERAGE eol <<<"$(LC_ALL=C sysctl -n vm.loadavg)"
-      }
-      ;;
-    Linux)
-      CPU_COUNT=$(nproc 2>/dev/null || \grep -c '^[Pp]rocessor' /proc/cpuinfo)
+  cpu_count=$(sysctl -n hw.ncpu)
+  if [[ $cpu_count -gt 0 ]]; then
+    printf '%s\n' "$cpu_count"
+    return 0
+  fi
 
-      get_load_average() {
-        local eol IFS=$' \t'
-        # shellcheck disable=SC2034,SC2162
-        read LOAD_AVERAGE eol </proc/loadavg
-      }
-      ;;
-    *)
-      # TODO inform the user that his system is not supported
-      ;;
-  esac
+  cpu_count=$(\grep -c '^[Pp]rocessor' /proc/cpuinfo)
+  if [[ $cpu_count -gt 0 ]]; then
+    printf '%s\n' "$cpu_count"
+    return 0
+  fi
+
+}
+
+segments::load_get_load_avg() {
+  load_avg="$(LC_ALL=C sysctl -n vm.loadavg 2>/dev/null | cut -d ' ' -f 2)"
+  if [[ -n $load_avg ]]; then
+    printf '%s\n' "$load_avg"
+    return 0
+  fi
+
+  local eol
+  read -r load_avg eol </proc/loadavg
+  if [[ -n $load_avg ]]; then
+    printf '%s\n' "$load_avg"
+    return 0
+  fi
 }
 
 segments::load() {
-  segments::init_load
+  local load_avg cpu_count
+  load_avg="$(segments::load_get_load_avg)"
+  cpu_count="$(segments::load_get_cpu_count)"
 
-  local LOAD_AVERAGE
-  get_load_average
-  LOAD_AVERAGE=${LOAD_AVERAGE/./}
-  LOAD_AVERAGE=${LOAD_AVERAGE#0}
-  LOAD_AVERAGE=${LOAD_AVERAGE#0}
-  LOAD_AVERAGE=$((LOAD_AVERAGE / CPU_COUNT))
+  if [[ -z "$load_avg" || -z "$cpu_count" ]]; then
+    debug::log 'No known ways of calculating load on this system'
+    return 1
+  fi
 
-  if [[ $LOAD_AVERAGE -gt $SEGMENTS_LOAD_THRESHOLD ]]; then
-    print_themed_segment 'normal' "$LOAD_AVERAGE"
-  elif [[ $LOAD_AVERAGE -gt $SEGMENTS_LOAD_THRESHOLD_HIGH ]]; then
-    print_themed_segment 'highlight' "$LOAD_AVERAGE"
+  load_avg=${load_avg/./}
+  load_avg=${load_avg##+(0)}
+  load_avg=$((load_avg / cpu_count))
+
+  if [[ $load_avg -gt $SEGMENTS_LOAD_THRESHOLD ]]; then
+    print_themed_segment 'normal' "$load_avg"
+  elif [[ $load_avg -gt $SEGMENTS_LOAD_THRESHOLD_HIGH ]]; then
+    print_themed_segment 'highlight' "$load_avg"
   fi
 }

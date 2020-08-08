@@ -87,6 +87,9 @@ sbp() {
   case $1 in
     'list')
       case $2 in
+        'config') # Show all available segments
+          "$_sbp_themed_helper" 'list_config'
+          ;;
         'segments') # Show all available segments
           "$_sbp_themed_helper" 'list_segments'
           ;;
@@ -169,7 +172,7 @@ _sbp() {
       words=('layout' 'color')
       ;;
     'list')
-      words=('hooks' 'segments' 'themes')
+      words=('config' 'hooks' 'segments' 'themes')
       ;;
     'toggle')
       words=('debug' 'peekaboo')

@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+SBP_THEME_COLOR='default-256'
+SBP_THEME_LAYOUT='plain'
+
+# Hooks will run once before every prompt
+# Run 'sbp list hooks' to list all available hooks
+SBP_HOOKS=('alert')
+
+# Segments are generated before each prompt and can
+# be added, removed and reordered
+# Run 'sbp list segments' to list all available segments
+# Maybe you don't want to run all segments when in
+# a small window?
+
+if [[ "$COLUMNS" -le 120 ]]; then
+  # Let's adjust to the smaller screen
+  SBP_THEME_LAYOUT='lines'
+  SBP_SEGMENTS_LEFT=('path' 'python_env' 'git' 'command')
+else
+  SBP_SEGMENTS_LEFT=('host' 'path' 'python_env' 'k8s' 'git')
+  SBP_SEGMENTS_RIGHT=('command' 'timestamp')
+  SBP_SEGMENTS_LINE_TWO=('prompt_ready')
+fi
+
+# Segment specific settings
+SEGMENTS_K8S_DEFAULT_USER="$USER"
+SEGMENTS_K8S_HIDE_CLUSTER=0
+SEGMENTS_LOAD_THRESHOLD=50
+SEGMENTS_LOAD_THRESHOLD_HIGH=80
+SEGMENTS_RESCUETIME_REFRESH_RATE=600
+SEGMENTS_TIMESTAMP_FORMAT="%H:%M:%S"
+SETTINGS_WTTR_LOCATION='Oslo'
+SETTINGS_WTTR_FORMAT='%p;%t;%w'

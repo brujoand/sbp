@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Color configuration for the segments.
+# See src/colors/*.bash for the color values
+# All segments colors have default values in src/config/colors.conf
+
+# This is how you override them:
+# SEGMENTS_TIMESTAMP_COLOR_PRIMARY=$color2
+# SEGMENTS_TIMESTAMP_COLOR_SECONDARY=$color5

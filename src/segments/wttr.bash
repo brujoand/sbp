@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-location=${SETTINGS_WTTR_LOCATION:-'Oslo'}
-format=${SETTINGS_WTTR_FORMAT:-'%p;%t;%w'}
+location=${SEGMENTS_WTTR_LOCATION:-'Oslo'}
+format=${SEGMENTS_WTTR_FORMAT:-'%p;%t;%w'}
 refresh_rate="${SEGMENTS_WTTR_REFRESH_RATE:-600}"
 
 segments::wttr_refresh() {

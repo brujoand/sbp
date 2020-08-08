@@ -31,6 +31,7 @@ decorate::print_colors() {
   local -n print_colors_result=$1
   local fg_code=$2
   local bg_code=$3
+  local escaped=${4}
   local fg_color bg_color
 
   decorate::print_fg_color 'fg_color' "$fg_code"
@@ -41,23 +42,24 @@ decorate::print_colors() {
 decorate::print_bg_color() {
   local -n print_bg_color_result=$1
   local bg_code=$2
-  local escaped=$3
+  local escaped=${3:-'true'}
 
-  decorate::format_color 'print_bg_color_result' 48 "$bg_code"
+  decorate::format_color 'print_bg_color_result' 48 "$bg_code" "$escaped"
 }
 
 decorate::print_fg_color() {
   local -n print_fg_color_result=$1
   local fg_code=$2
-  local escaped=$3
+  local escaped=${3:-'true'}
 
-  decorate::format_color 'print_fg_color_result' 38 "$fg_code"
+  decorate::format_color 'print_fg_color_result' 38 "$fg_code" "$escaped"
 }
 
 decorate::format_color() {
   local -n format_color_result=$1
   local color_code=$2
   local color_value=$3
+  local escaped=$4
   local color_reset_code=$(( color_code + 1 ))
 
   if [[ -z "$color_value" ]]; then
@@ -68,5 +70,7 @@ decorate::format_color() {
     format_color_result="\e[${color_code};2;${color_value}m"
   fi
 
-  format_color_result="\[${format_color_result}\]"
+  if [[ "$escaped" == 'true' ]]; then
+    format_color_result="\[${format_color_result}\]"
+  fi
 }

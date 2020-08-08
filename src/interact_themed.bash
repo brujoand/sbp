@@ -12,6 +12,13 @@ source "${SBP_PATH}/src/debug.bash"
 
 configure::load_config
 
+list_config() {
+  printf '%s:\n' 'Settings'
+  for setting in $(compgen -A variable | grep '^SEGMENTS_'); do
+    echo "${setting}='${!setting}'"
+  done
+}
+
 list_segments() {
   for segment_path in $(configure::list_feature_files 'segments'); do
     local status='disabled'
@@ -58,7 +65,6 @@ list_layouts() {
 }
 
 show_current_colors() {
-  SETTINGS_SEGMENT_ENABLE_BG_COLOR=1
   printf '    '
   for n in {0..15}; do
     color="color${n}"

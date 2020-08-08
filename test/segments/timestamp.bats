@@ -3,7 +3,7 @@
 load segment_helper
 
 @test "test a normal timestamp" {
-  SETTINGS_TIMESTAMP_FORMAT='%H:%M:%S'
+  SEGMENTS_TIMESTAMP_FORMAT='%H:%M:%S'
   mapfile -t result <<< "$(execute_segment)"
   echo "${result[@]}"
 
