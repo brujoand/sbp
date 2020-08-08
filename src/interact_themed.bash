@@ -13,10 +13,10 @@ source "${SBP_PATH}/src/debug.bash"
 configure::load_config
 
 list_config() {
-  printf '%s:\n' 'Settings'
   for setting in $(compgen -A variable | grep '^SEGMENTS_'); do
-    echo "${setting}='${!setting}'"
-  done
+    local -n value="$setting"
+    printf '%s %s\n' "$setting" "$value"
+  done | column -t
 }
 
 list_segments() {

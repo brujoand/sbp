@@ -9,6 +9,7 @@ _sbp_print_usage() {
   status            - Show the current configuration
   help              - Show this help text
   list
+    config          - List all current settings
     segments        - List all available segments
     hooks           - List all available hooks
     themes          - List all available color themes and layouts

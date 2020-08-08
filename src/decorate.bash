@@ -34,8 +34,8 @@ decorate::print_colors() {
   local escaped=${4}
   local fg_color bg_color
 
-  decorate::print_fg_color 'fg_color' "$fg_code"
-  decorate::print_bg_color 'bg_color' "$bg_code"
+  decorate::print_fg_color 'fg_color' "$fg_code" "$escaped"
+  decorate::print_bg_color 'bg_color' "$bg_code" "$escaped"
   print_colors_result="${fg_color}${bg_color}"
 }
 

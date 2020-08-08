@@ -65,6 +65,7 @@ You can use the `sbp` command for a lot of things:
   status            - Show the current configuration
   help              - Show this help text
   list
+    config          - List all current settings
     segments        - List all available segments
     hooks           - List all available hooks
     themes          - List all available color themes and layouts
