@@ -3,24 +3,13 @@
 shopt -s extglob
 
 segments::load_get_cpu_count() {
-  cpu_count=$(nproc 2>/dev/null)
+  [[ -z $cpu_count ]] && cpu_count=$(nproc 2>/dev/null)
+  [[ -z $cpu_count ]] && cpu_count=$(sysctl -n hw.ncpu)
+  [[ -z $cpu_count ]] && cpu_count=$(\grep -c '^[Pp]rocessor' /proc/cpuinfo)
+
   if [[ $cpu_count -gt 0 ]]; then
     printf '%s\n' "$cpu_count"
-    return 0
   fi
-
-  cpu_count=$(sysctl -n hw.ncpu)
-  if [[ $cpu_count -gt 0 ]]; then
-    printf '%s\n' "$cpu_count"
-    return 0
-  fi
-
-  cpu_count=$(\grep -c '^[Pp]rocessor' /proc/cpuinfo)
-  if [[ $cpu_count -gt 0 ]]; then
-    printf '%s\n' "$cpu_count"
-    return 0
-  fi
-
 }
 
 segments::load_get_load_avg() {
