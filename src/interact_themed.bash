@@ -38,7 +38,7 @@ list_segments() {
     duration=$(debug::tick_timer 2>&1 | tr -d ':')
 
     echo "${segment_name}: ${status}" "$duration"
-  done | column -t -c " "
+  done | column -t
 }
 
 list_hooks() {
