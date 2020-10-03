@@ -14,4 +14,3 @@ file from your favorite color scheme. For instance like so:
 ```
 You can also set the colors to be `xresources` which will use whatever theme is
 set in your terminal/xresources config.
-
