@@ -1,28 +1,6 @@
 #! /usr/bin/env bash
 
-segments::git() {
-  local max_length=$SEGMENTS_MAX_LENGTH
-
-  local incoming_icon="${SEGMENTS_GIT_INCOMING_ICON:-↓}"
-  local outgoing_icon="${SEGMENTS_GIT_OUTGOING_ICON:-↑}"
-
-  local branch_only="${SEGMENTS_GIT_BRANCH_ONLY:-false}"
-
-  local path=${PWD}
-  while [[ $path ]]; do
-    if [[ -d "${path}/.git" ]]; then
-      local git_folder="${path}/.git"
-      break
-    fi
-    path=${path%/*}
-  done
-
-  [[ -z $git_folder ]] && exit 0
-  if [[ $PWD == "$git_folder" ]]; then
-    print_themed_segment 'normal' '.git/'
-    return 0
-  fi
-
+segments::git::native() {
   if [[ $branch_only == false ]]; then
     local git_status
     git_status="$(git status --porcelain --branch 2>/dev/null)"
@@ -66,7 +44,7 @@ segments::git() {
       esac
     done <<<"$git_status"
 
-    local git_state="${additions_icon}${additions#0}${modifications_icon}${modifications#0}${deletions_icon}${deletions#0}${untracked_icon}${untracked#0}"
+    git_state="${additions_icon}${additions#0}${modifications_icon}${modifications#0}${deletions_icon}${deletions#0}${untracked_icon}${untracked#0}"
 
     # git status does not support detached head
     if [[ $branch != 'HEAD' ]]; then
@@ -76,6 +54,75 @@ segments::git() {
     fi
   else
     git_head=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+  fi
+}
+
+segments::git::gitstatus() {
+  # TODO: keep the source from sbp.bash
+  if [[ -n ${GITSTATUS_DIR:-} ]]; then
+    source "$GITSTATUS_DIR" || return
+  elif [[ ${BASH_SOURCE[0]} == */* ]]; then
+    source "${BASH_SOURCE[0]%/*}/gitstatus.plugin.sh" || return
+  else
+    source gitstatus.plugin.sh || return
+  fi
+
+  gitstatus_query "$@" || return 1                # error
+  [[ $VCS_STATUS_RESULT == ok-sync ]] || return 0 # not a git repo
+
+  git_head="${VCS_STATUS_LOCAL_BRANCH:-${VCS_STATUS_TAG:-${VCS_STATUS_COMMIT:-}}}"
+
+  if [[ "$branch_only" == false ]]; then
+    VCS_STATUS_DELETED=$((VCS_STATUS_NUM_STAGED_DELETED + VCS_STATUS_NUM_UNSTAGED_DELETED))
+
+    if [[ $VCS_STATUS_NUM_STAGED_NEW -gt 0  ]]; then
+      git_state=' +'${VCS_STATUS_NUM_STAGED_NEW#0}
+    fi
+    if [[ $VCS_STATUS_NUM_UNSTAGED -gt 0  ]]; then
+      git_state=$git_state' ~'${VCS_STATUS_NUM_UNSTAGED#0}
+    fi
+    if [[ $VCS_STATUS_DELETED -gt 0  ]]; then
+      git_state=$git_state' -'${VCS_STATUS_DELETED#0}
+    fi
+    if [[ $VCS_STATUS_NUM_UNTRACKED -gt 0  ]]; then
+      git_state=$git_state' ?'${VCS_STATUS_NUM_UNTRACKED#0}
+    fi
+    if [[ $VCS_STATUS_COMMITS_AHEAD -gt 0 ]]; then
+      upstream_status="$outgoing_icon$VCS_STATUS_COMMITS_AHEAD "
+    fi
+    if [[ $VCS_STATUS_COMMITS_BEHIND -gt 0 ]]; then
+      upstream_status="$upstream_status $incoming_icon$VCS_STATUS_COMMITS_BEHIND"
+    fi
+  fi
+}
+
+segments::git() {
+  max_length=$SEGMENTS_MAX_LENGTH
+
+  incoming_icon="${SEGMENTS_GIT_INCOMING_ICON:-↓}"
+  outgoing_icon="${SEGMENTS_GIT_OUTGOING_ICON:-↑}"
+
+  branch_only="${SEGMENTS_GIT_BRANCH_ONLY:-false}"
+
+  local path=${PWD}
+  while [[ $path ]]; do
+  if [[ -d "${path}/.git" ]]; then
+      local git_folder="${path}/.git"
+      break
+    fi
+    path=${path%/*}
+  done
+
+  [[ -z $git_folder ]] && exit 0
+  if [[ $PWD == "$git_folder" ]]; then
+    print_themed_segment 'normal' '.git/'
+    return 0
+  fi
+
+  if [[ $SEGMENTS_GIT_GITSTATUS == true ]]; then
+    segments::git::gitstatus
+  else
+    segments::git::native
   fi
 
   git_size=$((${#git_state} + ${#SEGMENTS_GIT_ICON} + ${#git_head} + ${#upstream_status}))

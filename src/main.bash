@@ -1,4 +1,9 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
+
+# turn off history to not pollute the users history with our commands
+# first turn of the history file to not add the set afterwards to it
+export HISTFILE=/dev/null
+set +o history
 
 # shellcheck source=src/debug.bash
 source "${SBP_PATH}/src/debug.bash"
@@ -13,6 +18,10 @@ configure::load_config
 
 readonly COMMAND_EXIT_CODE=$1
 readonly COMMAND_DURATION=$2
+readonly GITSTATUS_DIR=$3
+readonly GITSTATUS_DAEMON_PID=$4
+readonly _GITSTATUS_REQ_FD=$5
+readonly _GITSTATUS_RESP_FD=$6
 
 main::main() {
   execute::execute_prompt_hooks
