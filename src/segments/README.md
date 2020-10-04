@@ -60,6 +60,9 @@ truncation/compacting for that specific segment.
 ## load
   shows the average load of the machine
 
+## nix
+  shows wether you are in a nix-shell or not
+
 ## path
   shows the current path
 
@@ -85,4 +88,3 @@ truncation/compacting for that specific segment.
   Shows the weather based on ´SEGMENTS_WTTR_LOCATION´ and
   ´SEGMENTS_WTTR_FORMAT´, the default values are ´Oslo´ and ´%p;%t;%w´
   respectively.
-

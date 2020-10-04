@@ -17,7 +17,7 @@ if [[ "$COLUMNS" -le 120 ]]; then
   SBP_THEME_LAYOUT='lines'
   SBP_SEGMENTS_LEFT=('path' 'python_env' 'git' 'command')
 else
-  SBP_SEGMENTS_LEFT=('host' 'path' 'python_env' 'k8s' 'git')
+  SBP_SEGMENTS_LEFT=('host' 'path' 'python_env' 'k8s' 'git' 'nix')
   SBP_SEGMENTS_RIGHT=('command' 'timestamp')
   SBP_SEGMENTS_LINE_TWO=('prompt_ready')
 fi
