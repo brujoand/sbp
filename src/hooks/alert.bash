@@ -12,6 +12,12 @@ hooks::alert_notify() {
     (terminal-notifier -title "$title" -message "$message" &)
   elif [[ "$(uname -s)" == "Darwin" ]]; then
     osascript -e "display notification \"$message\" with title \"$title\""
+  elif type ntfy &> /dev/null; then
+    if [[ -z $HOOKS_ALERT_NTFY_BACKEND ]]; then
+      (ntfy -t "$title" send "$message" &)
+    else
+      (ntfy -b $HOOKS_ALERT_NTFY_BACKEND -t "$title" send "$message" &)
+    fi
   elif type notify-send &> /dev/null; then
     (notify-send "$title" "$message" &)
   fi
