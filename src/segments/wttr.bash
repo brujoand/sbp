@@ -16,7 +16,11 @@ segments::wttr_refresh() {
   fi
 
   if [[ -f $SEGMENT_CACHE ]]; then
-    last_update=$(stat -f "%m" "$SEGMENT_CACHE")
+    if [[ $OSTYPE =~ darwin || $(uname) == Darwin ]]; then
+      last_update=$(stat -f "%m" "$SEGMENT_CACHE")
+    else
+      last_update=$(stat -c "%Y" "$SEGMENT_CACHE")
+    fi
   else
     last_update=0
   fi
