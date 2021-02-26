@@ -19,7 +19,7 @@ hooks::alert_notify() {
       (ntfy -b $HOOKS_ALERT_NTFY_BACKEND -t "$title" send "$message" &)
     fi
   elif type notify-send &> /dev/null; then
-    (notify-send "$title" "$message" &)
+    (notify-send --icon=terminal "$title" "$message" &)
   fi
 }
 
