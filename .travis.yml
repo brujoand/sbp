@@ -1,20 +1,22 @@
 language: shell
 dist: bionic
-
 jobs:
   include:
-    - script: ./bin/ci_test_wrapper 'rc'
-    - script: ./bin/ci_test_wrapper '5.0.17'
-    - script: ./bin/ci_test_wrapper '4.4.23'
-    - script: ./bin/ci_test_wrapper '4.3.48'
-    - stage: deploy
-      script: ./bin/package
-      deploy:
-        provider: releases
-        skip_cleanup: true
-        token:
-          secure: c5h0E4QkBWe7Bka6mkowP/z6QEiqwKGV5/E9MhX9COzxhtQGlDa7rYJ7AlS43o9sXOqJR7P8Hq5KJAXqYoOamKpXB7M+1IGlDjeVB8uHBKZ/53Iwj6ZUrnXvmIrbY3X6Cr2cK2JVkmKeHx4MhT3HZKCv+MGbA3EfcIghEk/KSi8GcP84oqMLLvOhXStvVgOh2n80w4KUlqXct7DWBTc8kZAhlp2jFXBXOTdk7ihwGzS98qvHyFEO+asW63PwqpCAj74Qmj9KECIStTWGr/ieArpIuoWMVB3yvmmmZkAcm0hckwdgnwcwS47MWo3PDoUO/QuAy0CoVdWGmkz+NekudXrN7xTuTgP0afA5VF0hX7DtDsu18BoiQonauAfImNz5dYVonqMXqHSVZXcwCuyAs/zfbpFVjrngUnPrZN+rD/NwdAB3EbTIFHdQz3dqsrFhKbeHzg2dQv6NNUn9FY/hD7kol2xODONLk0A8tnZwEVRLEKSA/aBPcjh1gq63im4DpONUpf2EjtHSWVJ/kaqiKgc+kQGeF/KdH36O57qP5ttiZuYmjftiNS2n6vlu2ODgQiBrwVlbTXOdR2+lYLrQKF26L7IvslLX7PJUG9S79OjSxob/+NyuFgKYbD0SUT7nN6enwS1UVi3vO+LOJkWmq3fFULjy3stbcreH9L48iTs=
-        file: sbp-${TRAVIS_TAG}.tar.gz
-        on:
-          tags: true
-        cleanup: 'false'
+  - script: "./bin/ci_test_wrapper 'rc'"
+  - script: "./bin/ci_test_wrapper '5.0.17'"
+  - script: "./bin/ci_test_wrapper '4.4.23'"
+  - script: "./bin/ci_test_wrapper '4.3.48'"
+  - stage: deploy
+    script: "./bin/package"
+    deploy:
+      provider: releases
+      skip_cleanup: true
+      token:
+        secure: c5h0E4QkBWe7Bka6mkowP/z6QEiqwKGV5/E9MhX9COzxhtQGlDa7rYJ7AlS43o9sXOqJR7P8Hq5KJAXqYoOamKpXB7M+1IGlDjeVB8uHBKZ/53Iwj6ZUrnXvmIrbY3X6Cr2cK2JVkmKeHx4MhT3HZKCv+MGbA3EfcIghEk/KSi8GcP84oqMLLvOhXStvVgOh2n80w4KUlqXct7DWBTc8kZAhlp2jFXBXOTdk7ihwGzS98qvHyFEO+asW63PwqpCAj74Qmj9KECIStTWGr/ieArpIuoWMVB3yvmmmZkAcm0hckwdgnwcwS47MWo3PDoUO/QuAy0CoVdWGmkz+NekudXrN7xTuTgP0afA5VF0hX7DtDsu18BoiQonauAfImNz5dYVonqMXqHSVZXcwCuyAs/zfbpFVjrngUnPrZN+rD/NwdAB3EbTIFHdQz3dqsrFhKbeHzg2dQv6NNUn9FY/hD7kol2xODONLk0A8tnZwEVRLEKSA/aBPcjh1gq63im4DpONUpf2EjtHSWVJ/kaqiKgc+kQGeF/KdH36O57qP5ttiZuYmjftiNS2n6vlu2ODgQiBrwVlbTXOdR2+lYLrQKF26L7IvslLX7PJUG9S79OjSxob/+NyuFgKYbD0SUT7nN6enwS1UVi3vO+LOJkWmq3fFULjy3stbcreH9L48iTs=
+      file: sbp-${TRAVIS_TAG}.tar.gz
+      on:
+        tags: true
+      cleanup: 'false'
+env:
+  global:
+    secure: roAB7S38UveB2rG0zo0aUHJZK7rchCmpyqNX2dn646jLW1omyDsRn6oLH6fwZf9kYk4FhJQq7Bdylzb6UGxjLxkphs2W54gmf1qzKu6zmdKLCNCSUP/h3URfyEKgLAuCAQf+pqKfFvGHjWktUSK2OyEVaY48bk0c6cN0Vq1qcWk85jNp/arj+0Sw/2ER/6q5mrKerqv0fl+dlGKd7YWg+fkjOg3ecZ+4R2C/DJckuh2MHxN8FF3H4uvbbIsaXNRaqf7jDGJWtpTPP9FcKlmZbWMOVJDFnaGzESr5omzDOKe1tJysORw944kxtQ9YeyYlrydEFVES+gMh2S/HJruXTSlwlk2FmeaQPjNsARd/b0a1EgCvOZyf/eCL5hw+jvRdjUUzqzQVjJOx5DL2Of5D2t7uKtNHvXf66OEXDsrX/k4z/hNEXDpkqEKfQ4hFZqUdTYSwsjQJM8fcaeXJWhEr7g+lHIb4kPx1WVRHizdSDzz0e43IuM5mXhSlptoJuvgwQ0Uuh9W2/tgXCtQ1mZIT0X2HUVBB9ogv98J/dl593E5TgO/vJ22ujHz8MPsMPFJqv8qagkCZlW2QCV9uHQ/q3s0nX76X03Cz/onUBxRAxroLWIlbuQO39fOEkOf4L3PA6IUG57x81G5g9W+D9R281H0LV5gFQN/P5iv8pWXsODE=

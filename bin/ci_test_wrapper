@@ -2,6 +2,8 @@
 
 BASH=$1
 
+docker login --username brujoand --password "$DOCKER_TOKEN"
+
 docker pull bash:$BASH
 docker run bash:$BASH --version
 docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_test
