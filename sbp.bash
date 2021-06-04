@@ -46,7 +46,7 @@ export -f _sbp_get_current_time
 _sbp_set_prompt() {
   local command_status=$?
   local command_status current_time command_start command_duration
-  [[ -n "$SBP_DEBUG" ]] && debug::start_timer
+  [[ -n "${SBP_DEBUG:-}" ]] && debug::start_timer
   _sbp_get_current_time current_time
   if [[ -f "${SBP_TMP}/execution" ]]; then
     command_start=$(< "${SBP_TMP}/execution")
@@ -65,8 +65,7 @@ _sbp_set_prompt() {
   printf '\e]2;%s\007' "$title"
 
   PS1=$(bash "${SBP_PATH}/src/main.bash" "$command_status" "$command_duration")
-  [[ -n "$SBP_DEBUG" ]] && debug::tick_timer "Done"
-
+  [[ -n "${SBP_DEBUG:-}" ]] && debug::tick_timer "Done"
 }
 
 _sbp_pre_exec() {
