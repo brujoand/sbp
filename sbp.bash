@@ -39,10 +39,9 @@ _sbp_set_prompt() {
     title="${HOSTNAME:-ssh}:${title}"
   fi
   printf '\e]2;%s\007' "$title"
-
-  PS1=$(bash "${SBP_PATH}/src/main.bash" "$command_status" "$command_duration")
+  # gitstatus.plugin.sh requires an interactive shell
+  PS1=$(HISTFILE=/dev/null bash --noediting --noprofile --norc -i "${SBP_PATH}/src/main.bash" "$command_status" "$command_duration" "$GITSTATUS_DIR" "$GITSTATUS_DAEMON_PID" "$_GITSTATUS_REQ_FD" "$_GITSTATUS_RESP_FD")
   [[ -n "$SBP_DEBUG" ]] && debug::tick_timer "Done"
-
 }
 
 _sbp_pre_exec() {
