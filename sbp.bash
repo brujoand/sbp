@@ -9,7 +9,7 @@ source "${SBP_PATH}/src/interact.bash"
 # shellcheck source=src/debug.bash
 source "${SBP_PATH}/src/debug.bash"
 
-if [[ -d "/run/user/${UID}" ]]; then
+if [[ -w "/run/user/${UID}" ]]; then
   SBP_TMP=$(mktemp -d --tmpdir="/run/user/${UID}") && trap 'command rm -rf "$SBP_TMP"' EXIT;
 else
   SBP_TMP=$(mktemp -d) && trap 'command rm -rf "$SBP_TMP"' EXIT;
