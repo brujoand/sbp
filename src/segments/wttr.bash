@@ -5,9 +5,18 @@ format=${SEGMENTS_WTTR_FORMAT:-'%p;%t;%w'}
 refresh_rate="${SEGMENTS_WTTR_REFRESH_RATE:-600}"
 
 segments::wttr_fetch_changes() {
-  curl \
+  web=$(curl -s \
     -H "Accept-Language: ${LANG%_*}" \
-    --compressed "wttr.in/${location}?format=${format}" | tr -d '\n' | tr ';' '\n'
+    --compressed "wttr.in/${location}?format=${format}"; exit $?)
+  rtn_code=$?
+
+  debug::log "wttr fetch return code $rtn_code"
+  debug::log "wttr fetch content $web"
+
+  # shellcheck disable=SC2181
+  if [[ $rtn_code == 0 && ! $web =~ "500 Internal Server Error" && ! $web =~ "502 Bad Gateway" ]]; then
+    echo "$web" | tr -d '\n' | tr ';' '\n'
+  fi
 }
 
 segments::wttr_refresh() {
