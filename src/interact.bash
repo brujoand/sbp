@@ -42,19 +42,19 @@ _sbp_reload() {
 
 _sbp_edit_config() {
   if [[ -n "$EDITOR" ]]; then
-    $EDITOR "${HOME}/.config/sbp/settings.conf"
+    $EDITOR "${SBP_CONFIG}/settings.conf"
   else
     echo "No \$EDITOR set, unable to open config"
-    echo "You can edit it here: ${HOME}/.config/sbp/settings.conf"
+    echo "You can edit it here: ${SBP_CONFIG}/settings.conf"
   fi
 }
 
 _sbp_edit_colors() {
   if [[ -n "$EDITOR" ]]; then
-    $EDITOR "${HOME}/.config/sbp/colors.conf"
+    $EDITOR "${SBP_CONFIG}/colors.conf"
   else
     echo "No \$EDITOR set, unable to open color"
-    echo "You can edit it here: ${HOME}/.config/sbp/colors.conf"
+    echo "You can edit it here: ${SBP_CONFIG}/colors.conf"
   fi
 }
 
@@ -70,7 +70,7 @@ _sbp_peekaboo() {
   local feature=$1
   feature_hook="${SBP_PATH}/src/hooks/${feature}.bash"
   feature_segment="${SBP_PATH}/src/segments/${feature}.bash"
-  peekaboo_folder="${HOME}/.config/sbp/peekaboo"
+  peekaboo_folder="${SBP_CONFIG}/peekaboo"
   mkdir -p "${peekaboo_folder}"
   peekaboo_file="${peekaboo_folder}/${feature}"
 

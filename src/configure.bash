@@ -1,13 +1,13 @@
 #! /usr/bin/env bash
 
-SBP_CONFIG="${HOME}/.config/sbp"
+SBP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/sbp"
 config_file="${SBP_CONFIG}/settings.conf"
 colors_file="${SBP_CONFIG}/colors.conf"
 config_template="${SBP_PATH}/config/settings.conf.template"
 colors_template="${SBP_PATH}/config/colors.conf.template"
 default_colors="${SBP_PATH}/config/colors.conf"
 default_config="${SBP_PATH}/config/settings.conf"
-SBP_CACHE="${SBP_CONFIG}/cache"
+SBP_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/sbp"
 
 configure::list_feature_files() {
   local feature_type=$1
