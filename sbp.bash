@@ -4,6 +4,21 @@
 #   Simple Bash Prompt (SBP)    #
 #################################
 
+# Check the Bash version.
+if [ ! -n "${BASH_VERSION-}" ]; then
+  printf 'sbp: This is not a Bash session. Bash 4.3 or higher is required by sbp.\n' >&2
+  return 1 2>/dev/null || exit 1
+elif [ ! -n "${BASH_VERSINFO-}" ] || ((BASH_VERSINFO[0] < 4 || BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] < 3)); then
+  printf 'sbp: This is Bash %s. Bash 4.3 or higher is required by sbp.\n' "$BASH_VERSION" >&2
+  return 1 2>/dev/null || exit 1
+fi
+
+# Do not set up prompts when it is not an interactive session.
+if [[ $- != *i* ]] && ! return 0 2>/dev/null; then
+  printf 'sbp: This is not an interactive session of Bash.\n' >&2
+  exit 1
+fi
+
 # shellcheck source=src/interact.bash
 source "${SBP_PATH}/src/interact.bash"
 # shellcheck source=src/debug.bash
