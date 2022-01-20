@@ -2,7 +2,7 @@
 
 debug::log() {
   local timestamp file function
-  timestamp=$(date +'%y.%m.%d %H:%M:%S')
+  printf -v timestamp '%(%y.%m.%d %H:%M:%S)T' -1
   file="${BASH_SOURCE[1]##*/}"
   function="${FUNCNAME[1]}"
   >&2 printf '\n[%s] [%s - %s]: \e[31m%s\e[0m\n' "$timestamp" "$file" "$function" "${*}"
@@ -27,4 +27,3 @@ debug::tick_timer() {
   >&2 echo "${timer_spent}ms: $1"
   timer_start=$("$date_cmd" +'%s%3N')
 }
-

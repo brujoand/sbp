@@ -19,11 +19,20 @@ export SBP_TMP
 export SBP_PATH
 export COLUMNS
 
+_sbp_get_current_time() {
+  if [[ ${EPOCHSECONDS-} ]]; then
+    printf -v "$1" %s "$EPOCHSECONDS"
+  else
+    printf -v "$1" '%(%s)T' -1
+  fi
+}
+export -f _sbp_get_current_time
+
 _sbp_set_prompt() {
   local command_status=$?
   local command_status current_time command_start command_duration
   [[ -n "$SBP_DEBUG" ]] && debug::start_timer
-  current_time=$(date +%s)
+  _sbp_get_current_time current_time
   if [[ -f "${SBP_TMP}/execution" ]]; then
     command_start=$(< "${SBP_TMP}/execution")
     command_duration=$(( current_time - command_start ))
@@ -46,7 +55,9 @@ _sbp_set_prompt() {
 }
 
 _sbp_pre_exec() {
-  date +%s > "${SBP_TMP}/execution"
+  local time
+  _sbp_get_current_time time
+  echo "$time" > "${SBP_TMP}/execution"
 }
 
 # shellcheck disable=SC2034

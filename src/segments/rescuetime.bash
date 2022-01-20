@@ -24,7 +24,8 @@ segments::rescuetime_refresh() {
     last_update=0
   fi
 
-  current_time=$(date +%s)
+  local current_time
+  _sbp_get_current_time current_time
   time_since_update=$(( current_time - last_update ))
 
   if [[ "$time_since_update" -lt "$refresh_rate" ]]; then
