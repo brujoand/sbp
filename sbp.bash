@@ -64,6 +64,7 @@ _sbp_set_prompt() {
   fi
   printf '\e]2;%s\007' "$title"
 
+  ((_sbp_set_prompt_count++))
   PS1=$(bash "${SBP_PATH}/src/main.bash" "$command_status" "$command_duration")
   [[ -n "$SBP_DEBUG" ]] && debug::tick_timer "Done"
 
@@ -77,5 +78,7 @@ _sbp_pre_exec() {
 
 # shellcheck disable=SC2034
 PS0="\$(_sbp_pre_exec)"
+
+export _sbp_set_prompt_count=0
 
 [[ "$PROMPT_COMMAND" =~ _sbp_set_prompt ]] || PROMPT_COMMAND="_sbp_set_prompt;$PROMPT_COMMAND"
