@@ -37,7 +37,7 @@ configure::get_feature_file() {
   else
     debug::log "Could not find $local_file"
     debug::log "Could not find $global_file"
-    debug::log "Make sure at least on of them exists"
+    debug::log "Make sure at least one of them exists"
   fi
 
 }
