@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
-BASH=$1
+bash_version=$1
 
-docker login --username brujoand --password "$DOCKER_TOKEN"
+if [[ -z $bash_version ]]; then
+  echo 'No bash version to test on'
+  exit 1
+else
+  echo "Ready to test bash version $bash_version"
+fi
 
-docker pull bash:$BASH
-docker run bash:$BASH --version
-docker run -v $PWD:/bash bash:$BASH /bash/bin/ci_test
+docker pull "bash:${bash_version}"
+docker run "bash:${bash_version}" --version
+docker run -v "${PWD}:/bash" "bash:${bash_version}" /bash/bin/ci_test

@@ -1,0 +1,20 @@
+---
+name: "Pull request: verify"
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  pr-test:
+    name: "Pull request checks"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [rc 5.0.17 4.4.23 4.3.48]
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Execute unit tests"
+        run: ./bin/ci_test_wrapper ${{ matrix.version }}
+        shell: bash
