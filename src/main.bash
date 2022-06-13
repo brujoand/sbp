@@ -27,7 +27,7 @@ main::main() {
   left_segment_count=${#SBP_SEGMENTS_LEFT[@]}
   right_segment_count=${#SBP_SEGMENTS_RIGHT[@]}
   total_segment_count=$(( left_segment_count + right_segment_count ))
-  SEGMENTS_MAX_LENGTH=$(( COLUMNS / total_segment_count ))
+  SEGMENTS_MAX_LENGTH=$(( COLUMNS / (total_segment_count ? total_segment_count : 1) ))
 
   for group in "${segment_groups[@]}"; do
     # Bash doesn't support array -> array, so we use pointers instead :(
