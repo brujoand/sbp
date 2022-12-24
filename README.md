@@ -13,15 +13,6 @@ If something seems wrong, lacking or bad in some way; feel free to rant, review 
 For a live demo of this magic [head over
 here](https://asciinema.org/a/JuTQxC1wfoUr269Tzw8SMejVl)
 
-## A note on the recent changes
-I wanted to add support for truecolors instead of relying on "just" 256 colors.
-To do this I had to break the configuration, and when the flood gates had been
-opened, a lot of things started changing. Suddenly layout changes was pretty
-easy too. After a while speed became and issue, and I had to reduce the number
-of subshells. This led to return by reference which is now the standard way of
-returning results in the code base. So if you're upgrading from an older version
-it's probably a good idea to make a copy of your sbp config and start fresh.
-
 ## Hard Requirements
   - Bash 4.3+
 
@@ -35,11 +26,13 @@ If you don't like powerline then use the 'plain' or 'lines' theme or create your
 own. If you are using Kitty as a terminal then everything should work out of the
 box.
 
-## Installing
+## Developer requirements
+For local development [pre-commit](https://pre-commit.com/),
+[shellcheck](https://www.shellcheck.net/),
+[bats](https://bats-core.readthedocs.io/en/stable/installation.html) and
+[shfmt](https://github.com/mvdan/sh) are needed.
 
-### With brew:
-`brew install brujoand/sbp/sbp`
-This will get you the latest release.
+## Installing
 
 ### With git and the install script
 When you clone this repo, there is an install script located at ´bin/install´.
@@ -124,3 +117,10 @@ You can write your own ansi theme, or use one of the two provided ones, default-
 Why yes! Simply use the 'plain' layout. No fonts needed. Or use the
 [Kitty](https://sw.kovidgoyal.net/kitty/) terminal which will draw most of the
 missing characters for you.
+
+#### The git segment is too slow
+If you're working on a large repository you can speed up git by issuing:
+```
+  $ git config core.fsmonitor true
+  $ git config core.untrackedcache true
+```
