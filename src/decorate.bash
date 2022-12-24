@@ -5,21 +5,21 @@ decorate::calculate_complementing_color() {
   local source_color=$2
   input_colors=()
 
-  if [[ -z "${source_color//[0123456789]}" ]]; then
+  if [[ -z ${source_color//[0123456789]/} ]]; then
     # This is not accurate
-    calculate_complementing_color_result="$(( 255 - source_color ))"
+    calculate_complementing_color_result="$((255 - source_color))"
   else
-    mapfile -t input_colors < <(tr ';' '\n' <<< "$source_color")
+    mapfile -t input_colors < <(tr ';' '\n' <<<"$source_color")
     local red=${input_colors[0]}
     local green=${input_colors[1]}
     local blue=${input_colors[2]}
 
-    red=$(( red * 2126 ))
-    green=$(( green * 7152 ))
-    blue=$(( blue * 722 ))
+    red=$((red * 2126))
+    green=$((green * 7152))
+    blue=$((blue * 722))
 
-    lum=$(( red + green + blue ))
-    if [[ "$lum" -gt 1400000 ]]; then
+    lum=$((red + green + blue))
+    if [[ $lum -gt 1400000 ]]; then
       calculate_complementing_color_result='0;0;0'
     else
       calculate_complementing_color_result='255;255;255'
@@ -60,17 +60,17 @@ decorate::format_color() {
   local color_code=$2
   local color_value=$3
   local escaped=$4
-  local color_reset_code=$(( color_code + 1 ))
+  local color_reset_code=$((color_code + 1))
 
-  if [[ -z "$color_value" ]]; then
+  if [[ -z $color_value ]]; then
     format_color_result="\e[${color_reset_code}m"
-  elif [[ -z "${color_value//[0123456789]}" ]]; then
+  elif [[ -z ${color_value//[0123456789]/} ]]; then
     format_color_result="\e[${color_code};5;${color_value}m"
   else
     format_color_result="\e[${color_code};2;${color_value}m"
   fi
 
-  if [[ "$escaped" == 'true' ]]; then
+  if [[ $escaped == 'true' ]]; then
     format_color_result="\[${format_color_result}\]"
   fi
 }

@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
-apk -U add bats git
+apk -U add git
+
+git clone https://github.com/bats-core/bats-core.git
+cd bats-core || exit 1
+./install.sh /usr/local
 
 /bash/bin/run_tests

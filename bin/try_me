@@ -2,7 +2,7 @@
 
 set -e
 
-base_path=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
+base_path=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 
 sudo docker build -t brujoand/sbp:local "$base_path"
 sudo docker run -it brujoand/sbp:local bash

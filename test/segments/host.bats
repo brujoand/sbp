@@ -6,7 +6,7 @@ load segment_helper
   unset SSH_CLIENT
   export user_id=1000
   USER=${USER:-travis}
-  mapfile -t result <<< "$(execute_segment)"
+  mapfile -t result <<<"$(execute_segment)"
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'
   assert_equal "${result[1]}" "$USER"
@@ -16,7 +16,7 @@ load segment_helper
   export SSH_CLIENT=yes
   export user_id=1000
   USER=${USER:-travis}
-  mapfile -t result <<< "$(execute_segment)"
+  mapfile -t result <<<"$(execute_segment)"
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'
   assert_equal "${result[1]}" "${USER}@${HOSTNAME}"
@@ -26,7 +26,7 @@ load segment_helper
   unset SSH_CLIENT
   export user_id=0
   USER=${USER:-travis}
-  mapfile -t result <<< "$(execute_segment)"
+  mapfile -t result <<<"$(execute_segment)"
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'highlight'
   assert_equal "${result[1]}" "$USER"

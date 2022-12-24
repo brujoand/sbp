@@ -1,7 +1,0 @@
-#! /usr/bin/env bash
-
-base_path=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
-
-cd "$base_path" || exit 1
-
-tar -zcvf "sbp-${TRAVIS_TAG}.tar.gz" sbp.bash src config bin/install README.md LICENSE

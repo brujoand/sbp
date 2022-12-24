@@ -1,7 +1,7 @@
 _sbp_themed_helper="${SBP_PATH}/src/interact_themed.bash"
 
 _sbp_print_usage() {
-  cat << EOF
+  cat <<EOF
   Usage: sbp [command]
 
   Commands:
@@ -29,7 +29,7 @@ _sbp_require_argument() {
   local argument=$1
   local name=$2
 
-  if [[ -z "$argument" ]]; then
+  if [[ -z $argument ]]; then
     echo "Value for required argument '$name' is missing"
     _sbp_print_usage && return 1
   fi
@@ -41,25 +41,25 @@ _sbp_reload() {
 }
 
 _sbp_edit_config() {
-  if [[ -n "$EDITOR" ]]; then
+  if [[ -n $EDITOR ]]; then
     $EDITOR "${SBP_CONFIG}/settings.conf"
   else
-    echo "No \$EDITOR set, unable to open config"
+    echo 'No EDITOR set, unable to open config'
     echo "You can edit it here: ${SBP_CONFIG}/settings.conf"
   fi
 }
 
 _sbp_edit_colors() {
-  if [[ -n "$EDITOR" ]]; then
+  if [[ -n $EDITOR ]]; then
     $EDITOR "${SBP_CONFIG}/colors.conf"
   else
-    echo "No \$EDITOR set, unable to open color"
+    echo 'No EDITOR set, unable to open color'
     echo "You can edit it here: ${SBP_CONFIG}/colors.conf"
   fi
 }
 
 _sbp_toggle_debug() {
-  if [[ -z "$SBP_DEBUG" ]]; then
+  if [[ -z $SBP_DEBUG ]]; then
     SBP_DEBUG=true
   else
     unset SBP_DEBUG
@@ -74,9 +74,8 @@ _sbp_peekaboo() {
   mkdir -p "${peekaboo_folder}"
   peekaboo_file="${peekaboo_folder}/${feature}"
 
-
-  if [[ -f "$feature_hook" || -f "$feature_segment" ]]; then
-    if [[ -f "$peekaboo_file" ]]; then
+  if [[ -f $feature_hook || -f $feature_segment ]]; then
+    if [[ -f $peekaboo_file ]]; then
       command rm "$peekaboo_file"
     else
       touch "$peekaboo_file"
@@ -165,7 +164,7 @@ _sbp() {
   local cur words
   #_get_comp_words_by_ref cur
   cur="${COMP_WORDS[COMP_CWORD]}"
-  prev="${COMP_WORDS[$(( COMP_CWORD - 1 ))]}"
+  prev="${COMP_WORDS[$((COMP_CWORD - 1))]}"
 
   words=()
   case "$prev" in
@@ -205,8 +204,8 @@ _sbp() {
       ;;
   esac
 
-  COMPREPLY=( $( compgen -W "${words[*]}" -- "$cur") )
+  # shellcheck disable=SC2207
+  COMPREPLY=($(compgen -W "${words[*]}" -- "$cur"))
 }
 
 complete -F _sbp sbp
-

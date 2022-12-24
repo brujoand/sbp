@@ -5,12 +5,12 @@
 #################################
 
 # Check the Bash version.
-if [ ! -n "${BASH_VERSION-}" ]; then
+if [ -z "${BASH_VERSION-}" ]; then
   printf 'sbp: This is not a Bash session. Bash 4.3 or higher is required by sbp.\n' >&2
-  return 1 2>/dev/null || exit 1
-elif [ ! -n "${BASH_VERSINFO-}" ] || ((BASH_VERSINFO[0] < 4 || BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] < 3)); then
+  return 1 2>/dev/null
+elif [ -z "${BASH_VERSINFO-}" ] || ((BASH_VERSINFO[0] < 4 || BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] < 3)); then
   printf 'sbp: This is Bash %s. Bash 4.3 or higher is required by sbp.\n' "$BASH_VERSION" >&2
-  return 1 2>/dev/null || exit 1
+  return 1 2>/dev/null
 fi
 
 # Do not set up prompts when it is not an interactive session.
@@ -25,9 +25,9 @@ source "${SBP_PATH}/src/interact.bash"
 source "${SBP_PATH}/src/debug.bash"
 
 if [[ -w "/run/user/${UID}" ]]; then
-  SBP_TMP=$(mktemp -d --tmpdir="/run/user/${UID}") && trap 'command rm -rf "$SBP_TMP"' EXIT;
+  SBP_TMP=$(mktemp -d --tmpdir="/run/user/${UID}") && trap 'command rm -rf "$SBP_TMP"' EXIT
 else
-  SBP_TMP=$(mktemp -d) && trap 'command rm -rf "$SBP_TMP"' EXIT;
+  SBP_TMP=$(mktemp -d) && trap 'command rm -rf "$SBP_TMP"' EXIT
 fi
 
 export SBP_TMP
@@ -46,11 +46,11 @@ export -f _sbp_get_current_time
 _sbp_set_prompt() {
   local command_status=$?
   local command_status current_time command_start command_duration
-  [[ -n "${SBP_DEBUG:-}" ]] && debug::start_timer
+  [[ -n ${SBP_DEBUG-} ]] && debug::start_timer
   _sbp_get_current_time current_time
   if [[ -f "${SBP_TMP}/execution" ]]; then
-    command_start=$(< "${SBP_TMP}/execution")
-    command_duration=$(( current_time - command_start ))
+    command_start=$(<"${SBP_TMP}/execution")
+    command_duration=$((current_time - command_start))
     command rm "${SBP_TMP}/execution"
   else
     command_duration=0
@@ -59,22 +59,22 @@ _sbp_set_prompt() {
 
   # TODO move this somewhere else
   title="${PWD##*/}"
-  if [[ -n "$SSH_CLIENT" ]]; then
+  if [[ -n $SSH_CLIENT ]]; then
     title="${HOSTNAME:-ssh}:${title}"
   fi
   printf '\e]2;%s\007' "$title"
 
   PS1=$(bash "${SBP_PATH}/src/main.bash" "$command_status" "$command_duration")
-  [[ -n "${SBP_DEBUG:-}" ]] && debug::tick_timer "Done"
+  [[ -n ${SBP_DEBUG-} ]] && debug::tick_timer "Done"
 }
 
 _sbp_pre_exec() {
   local time
   _sbp_get_current_time time
-  echo "$time" > "${SBP_TMP}/execution"
+  echo "$time" >"${SBP_TMP}/execution"
 }
 
-# shellcheck disable=SC2034
-PS0="\$(_sbp_pre_exec)"
+# shellcheck disable=SC2034,SC2016
+PS0='$(_sbp_pre_exec)'
 
-[[ "$PROMPT_COMMAND" =~ _sbp_set_prompt ]] || PROMPT_COMMAND="_sbp_set_prompt${PROMPT_COMMAND:+;}$PROMPT_COMMAND"
+[[ $PROMPT_COMMAND =~ _sbp_set_prompt ]] || PROMPT_COMMAND="_sbp_set_prompt${PROMPT_COMMAND:+;}$PROMPT_COMMAND"

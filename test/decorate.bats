@@ -49,4 +49,3 @@ load src_helper
 
   assert_equal "$printed_colors" "$expected_colors"
 }
-

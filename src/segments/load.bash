@@ -32,7 +32,7 @@ segments::load() {
   load_avg="$(segments::load_get_load_avg)"
   cpu_count="$(segments::load_get_cpu_count)"
 
-  if [[ -z "$load_avg" || -z "$cpu_count" ]]; then
+  if [[ -z $load_avg || -z $cpu_count ]]; then
     debug::log 'No known ways of calculating load on this system'
     return 1
   fi

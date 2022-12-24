@@ -6,7 +6,7 @@ setup() {
   export SEGMENTS_MAX_LENGTH=99
   export SEGMENTS_GIT_ICON=''
 
-  cd "$TMP_DIR"
+  cd "$TMP_DIR" || exit 1
   git init &>/dev/null
   git config user.name sbp
   git config user.email sbp@sbp.sbp
@@ -16,7 +16,7 @@ setup() {
 }
 
 @test "test a clean master" {
-  mapfile -t result <<< "$(execute_segment)"
+  mapfile -t result <<<"$(execute_segment)"
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'
   assert_equal "${result[1]}" 'master'
@@ -24,7 +24,7 @@ setup() {
 
 @test "test untracked git segment" {
   touch this and that
-  mapfile -t result <<< "$(execute_segment)"
+  mapfile -t result <<<"$(execute_segment)"
   assert_equal "${#result[@]}" 3
   assert_equal "${result[0]}" 'normal'
   assert_equal "${result[1]}" '?3'
@@ -35,7 +35,7 @@ setup() {
   touch this and that
   git add . &>/dev/null
 
-  mapfile -t result <<< "$(execute_segment)"
+  mapfile -t result <<<"$(execute_segment)"
   echo "${result[@]}"
   assert_equal "${#result[@]}" 3
   assert_equal "${result[0]}" 'normal'
@@ -48,7 +48,7 @@ setup() {
   touch this and that
   git add . &>/dev/null
 
-  mapfile -t result <<< "$(execute_segment)"
+  mapfile -t result <<<"$(execute_segment)"
   echo "${result[@]}"
   assert_equal "${#result[@]}" 4
   assert_equal "${result[0]}" 'normal'

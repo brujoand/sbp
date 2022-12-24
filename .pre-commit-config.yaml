@@ -1,0 +1,22 @@
+---
+repos:
+  - repo: local
+    hooks:
+    - id: shellcheck
+      name: Test shell scripts with shellcheck
+      description: Shell scripts conform to shellcheck
+      entry: shellcheck
+      language: system
+      types: [shell]
+      args: [-e, SC1091, -e, SC2034, -e, SC1090, -e, SC2030, -e, SC2031]
+    - id: shfmt
+      name: Check shell style with shfmt
+      language: system
+      entry: shfmt
+      types: [shell]
+      exclude_types: [csh, perl, python, ruby, tcsh, zsh]
+      args: ['-i', '2', '-ci', '-s', '-w']
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.13.0
+    hooks:
+      - id: gitleaks

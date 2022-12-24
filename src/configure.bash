@@ -11,10 +11,10 @@ SBP_CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/sbp"
 
 configure::list_feature_files() {
   local feature_type=$1
-  IFS=" " read -r -a features <<< "$(\
-    shopt -s nullglob; \
+  IFS=" " read -r -a features <<<"$(
+    shopt -s nullglob
     echo "${SBP_PATH}/src/${feature_type}"/*.bash \
-      "${SBP_CONFIG}/${feature_type}"/*.bash; \
+      "${SBP_CONFIG}/${feature_type}"/*.bash
   )"
 
   for file in "${features[@]}"; do
@@ -30,9 +30,9 @@ configure::get_feature_file() {
   local local_file="${SBP_PATH}/src/${feature_type}s/${feature_name}.bash"
   local global_file="${SBP_CONFIG}/${feature_type}s/${feature_name}.bash"
 
-  if [[ -f "$local_file" ]]; then
+  if [[ -f $local_file ]]; then
     get_feature_file_result="$local_file"
-  elif [[ -f "$global_file" ]]; then
+  elif [[ -f $global_file ]]; then
     get_feature_file_result="$global_file"
   else
     debug::log "Could not find $local_file"
@@ -56,7 +56,7 @@ configure::set_colors() {
   local colors_file
   configure::get_feature_file 'colors_file' 'color' "$color_name"
 
-  if [[ -n "$colors_file" ]]; then
+  if [[ -n $colors_file ]]; then
     source "$colors_file"
   else
     debug::log "Using the default color config"
@@ -70,7 +70,7 @@ configure::set_layout() {
 
   configure::get_feature_file 'layout_file' 'layout' "$layout_name"
 
-  if [[ -n "$layout_file" ]]; then
+  if [[ -n $layout_file ]]; then
     source "$layout_file"
   else
     debug::log "Using the default layout"
@@ -79,15 +79,15 @@ configure::set_layout() {
 }
 
 configure::load_config() {
-  [[ -d "$SBP_CACHE" ]] || mkdir -p "$SBP_CACHE"
+  [[ -d $SBP_CACHE ]] || mkdir -p "$SBP_CACHE"
 
-  if [[ ! -f "$config_file" ]]; then
+  if [[ ! -f $config_file ]]; then
     debug::log "Config file not found: ${config_file}"
     debug::log "Creating it.."
     cp "$config_template" "$config_file"
   fi
 
-  if [[ ! -f "$colors_file" ]]; then
+  if [[ ! -f $colors_file ]]; then
     debug::log "Color config file not found: ${colors_file}"
     debug::log "Creating it.."
     cp "$colors_template" "$colors_file"

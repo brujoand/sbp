@@ -26,8 +26,8 @@ main::main() {
 
   left_segment_count=${#SBP_SEGMENTS_LEFT[@]}
   right_segment_count=${#SBP_SEGMENTS_RIGHT[@]}
-  total_segment_count=$(( left_segment_count + right_segment_count ))
-  SEGMENTS_MAX_LENGTH=$(( COLUMNS / total_segment_count ))
+  total_segment_count=$((left_segment_count + right_segment_count))
+  SEGMENTS_MAX_LENGTH=$((COLUMNS / total_segment_count))
 
   for group in "${segment_groups[@]}"; do
     # Bash doesn't support array -> array, so we use pointers instead :(
@@ -36,7 +36,8 @@ main::main() {
 
     for i in "${!segment_list[@]}"; do
       local segment_name="${segment_list[$i]}"
-      execute::execute_prompt_segment "$segment_name" "$group" > "${SBP_TMP}/${group}.${i}" & pids["$i"]=$!
+      execute::execute_prompt_segment "$segment_name" "$group" >"${SBP_TMP}/${group}.${i}" &
+      pids["$i"]=$!
     done
   done
 
@@ -46,23 +47,24 @@ main::main() {
   # Collect the segments
   for group in "${segment_groups[@]}"; do
     # Bash doesn't support array -> array, so we use pointers instead :(
+    # shellcheck disable=SC2178
     local -n pids="pids_${group}"
 
     for i in "${!pids[@]}"; do
       pid=${pids[$i]}
       wait "$pid"
-      mapfile -t segment_data < "${SBP_TMP}/${group}.${i}"
+      mapfile -t segment_data <"${SBP_TMP}/${group}.${i}"
 
       segment_size=${segment_data[0]}
       segment_value=${segment_data[1]}
-      if [[ -n "$segment_value" ]]; then
-        segments_length["$group"]=$(( ${segments_length["$group"]} + segment_size ))
+      if [[ -n $segment_value ]]; then
+        segments_length["$group"]=$((${segments_length["$group"]} + segment_size))
         segments_output["$group"]="${segments_output["$group"]}${segment_value}"
       fi
     done
   done
 
-  local prompt_gap_size=$(( COLUMNS - segments_length['left'] - segments_length['right'] ))
+  local prompt_gap_size=$((COLUMNS - segments_length['left'] - segments_length['right']))
   print_themed_prompt "${segments_output['left']}" "${segments_output['right']}" "${segments_output[line_two]}" "$prompt_gap_size"
 }
 

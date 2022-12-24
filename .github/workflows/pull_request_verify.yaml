@@ -7,6 +7,15 @@ on:
       - master
 
 jobs:
+  pr-lint:
+    name: "Lint check"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Execute shell linting"
+        uses: luizm/action-sh-checker@master
+        env:
+          SHFMT_OPTS: -i 2 -ci -s
   pr-test:
     name: "Pull request checks"
     runs-on: ubuntu-latest

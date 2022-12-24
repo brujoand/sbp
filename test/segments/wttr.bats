@@ -13,8 +13,8 @@ segments::wttr_fetch_changes() {
 @test "test parsing the wttr segment" {
   SEGMENT_CACHE="${TMP_DIR}/wttr"
   stats="$(segments::wttr_fetch_changes)"
-  echo "$stats" > "$SEGMENT_CACHE"
-  mapfile -t result <<< "$(execute_segment)"
+  echo "$stats" >"$SEGMENT_CACHE"
+  mapfile -t result <<<"$(execute_segment)"
 
   assert_equal "${#result[@]}" 4
   assert_equal "${result[0]}" 'normal'
@@ -27,6 +27,6 @@ segments::wttr_fetch_changes() {
   SEGMENT_CACHE="${TMP_DIR}/wttr"
   command rm -rf "$SEGMENT_CACHE"
   execute_segment
-  [[ -f "$SEGMENT_CACHE" ]]
+  [[ -f $SEGMENT_CACHE ]]
 
 }

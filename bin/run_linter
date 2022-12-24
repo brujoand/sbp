@@ -1,8 +1,0 @@
-#! /usr/bin/env bash
-
-set -e
-
-SBP_PATH=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
-export SBP_PATH
-
-shellcheck -x --severity=error "${SBP_PATH}/sbp.bash" "${SBP_PATH}/src/main.bash"

@@ -9,7 +9,7 @@ execute::execute_nohup_function() {
 }
 
 segments::rescuetime_fetch_changes() {
-  cat << EOF
+  cat <<EOF
 1,6658,1,0
 2,6503,1,2
 3,81,1,1
@@ -20,8 +20,8 @@ EOF
 @test "test parsing the rescuetime segment" {
   SEGMENT_CACHE="${TMP_DIR}/rescuetime"
   stats='77%;3h:20m'
-  echo "$stats" > "$SEGMENT_CACHE"
-  mapfile -t result <<< "$(execute_segment)"
+  echo "$stats" >"$SEGMENT_CACHE"
+  mapfile -t result <<<"$(execute_segment)"
 
   assert_equal "${#result[@]}" 3
   assert_equal "${result[0]}" 'normal'
@@ -35,6 +35,6 @@ EOF
   RESCUETIME_ENDPOINT="http://localhost:8080"
 
   execute_segment
-  [[ -f "$SEGMENT_CACHE" ]]
+  [[ -f $SEGMENT_CACHE ]]
 
 }

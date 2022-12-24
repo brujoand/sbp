@@ -16,10 +16,10 @@ print_themed_prompt() {
   local reset_color
   decorate::print_colors 'reset_color'
 
-  if [[ -n "$right_segments" || -n "$line_two_segments" ]]; then
+  if [[ -n $right_segments || -n $line_two_segments ]]; then
     prefix_upper_size="${#PROMPT_PREFIX_UPPER}"
     left_segments="${PROMPT_PREFIX_UPPER}${left_segments}"
-    prompt_gap_size=$(( prefix_upper_size - prompt_gap_size ))
+    prompt_gap_size=$((prefix_upper_size - prompt_gap_size))
     line_two_segments="${PROMPT_PREFIX_LOWER}${line_two_segments}"
     right_segments="${right_segments}\n"
 
@@ -27,7 +27,7 @@ print_themed_prompt() {
     print_themed_filler 'filler_segment' "$prompt_gap_size"
   fi
 
-  if [[ "$PROMPT_COMPACT" == false ]]; then
+  if [[ $PROMPT_COMPACT == false ]]; then
     left_segments="\n${left_segments}"
   fi
 
@@ -41,10 +41,12 @@ print_themed_filler() {
   local -n print_themed_filler_result=$1
   local filler_size=$2
   # Account for seperator and padding
+  # shellcheck disable=SC2183
   padding=$(printf "%*s" "$filler_size")
   prompt_filler_output="$(print_themed_segment 'filler' "$padding")"
-  mapfile -t segment_output <<< "$prompt_filler_output"
+  mapfile -t segment_output <<<"$prompt_filler_output"
 
+  # shellcheck disable=SC2034
   print_themed_filler_result=${segment_output[1]}
 }
 
@@ -55,30 +57,29 @@ print_themed_segment() {
   local themed_parts
   local segment_length=0
 
-  if [[ "$segment_type" == 'highlight' ]]; then
+  if [[ $segment_type == 'highlight' ]]; then
     PRIMARY_COLOR="$PRIMARY_COLOR_HIGHLIGHT"
   fi
 
-  if [[ "$segment_type" == 'filler' || "$segment_type" == 'prompt_ready' ]]; then
+  if [[ $segment_type == 'filler' || $segment_type == 'prompt_ready' ]]; then
     SEPERATOR_RIGHT=''
     SEPERATOR_LEFT=''
   fi
 
-  seperator_size=$(( ${#SEPERATOR_RIGHT} + ${#SEPERATOR_LEFT} ))
+  seperator_size=$((${#SEPERATOR_RIGHT} + ${#SEPERATOR_LEFT}))
 
   for part in "${segment_parts[@]}"; do
-    [[ -z "$part" ]] && continue
+    [[ -z $part ]] && continue
     part_length="${#part}"
 
-    if [[ -n "$themed_parts" ]]; then
+    if [[ -n $themed_parts ]]; then
       themed_parts="${themed_parts} ${part}"
-      segment_length=$(( segment_length + part_length + 1 ))
+      segment_length=$((segment_length + part_length + 1))
     else
-      segment_length="$(( segment_length + part_length ))"
+      segment_length="$((segment_length + part_length))"
       themed_parts="${part}"
     fi
   done
-
 
   local color
   decorate::print_fg_color 'color' "$PRIMARY_COLOR"
@@ -87,8 +88,7 @@ print_themed_segment() {
   decorate::print_colors 'color_reset'
 
   full_output="${color_reset}${color}${SEPERATOR_LEFT}${themed_parts}${SEPERATOR_RIGHT}"
-  segment_length=$(( segment_length + seperator_size ))
+  segment_length=$((segment_length + seperator_size))
 
   printf '%s\n%s' "$segment_length" "$full_output"
 }
-

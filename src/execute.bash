@@ -17,7 +17,8 @@ execute::get_script() {
 }
 
 execute::execute_nohup_function() {
-  (trap '' HUP INT
+  (
+    trap '' HUP INT
     "$@"
   ) </dev/null &>>"${SBP_CONFIG}/hook.log" &
 }
@@ -27,9 +28,9 @@ execute::execute_prompt_hooks() {
   for hook in "${SBP_HOOKS[@]}"; do
     execute::get_script 'hook_script' 'hook' "$hook"
 
-    if [[ -f "$hook_script" ]]; then
-        source "$hook_script"
-        execute::execute_nohup_function "hooks::${hook}"
+    if [[ -f $hook_script ]]; then
+      source "$hook_script"
+      execute::execute_nohup_function "hooks::${hook}"
     fi
   done
 }
@@ -42,7 +43,7 @@ execute::execute_prompt_segment() {
   local segment_script
   execute::get_script 'segment_script' 'segment' "$segment"
 
-  if [[ -f "$segment_script" ]]; then
+  if [[ -f $segment_script ]]; then
     source "$segment_script"
 
     local -n PRIMARY_COLOR="SEGMENTS_${segment^^}_COLOR_PRIMARY"
@@ -54,7 +55,7 @@ execute::execute_prompt_segment() {
     local -n SPLITTER_COLOR="SEGMENTS_${segment^^}_COLOR_SPLITTER"
 
     local -n max_length_override="SEGMENTS_${segment^^}_MAX_LENGTH"
-    if [[ -n "$max_length_override" ]]; then
+    if [[ -n $max_length_override ]]; then
       SEGMENTS_MAX_LENGTH="$max_length_override"
     fi
 

@@ -4,7 +4,7 @@ load src_helper
 
 setup() {
   export SBP_CONFIG="${TMP_DIR}/local_config"
-  mkdir -p ${SBP_CONFIG}/{hooks,segments,peekabo}
+  mkdir -p "$SBP_CONFIG"/{hooks,segments,peekabo}
 }
 
 # Helpers that override SBP functions
@@ -25,9 +25,9 @@ segments::test_segment() {
   mkfifo "$pipe_name"
 
   export SBP_HOOKS=('alert')
-  echo "hooks::alert() { echo 'success' > "$pipe_name"; }" > "${SBP_CONFIG}/hooks/alert.bash"
+  echo "hooks::alert() { echo 'success' > $pipe_name; }" >"${SBP_CONFIG}/hooks/alert.bash"
   execute::execute_prompt_hooks
-  read result <$pipe_name
+  read -r result <"$pipe_name"
   assert_equal "$result" 'success'
 }
 
@@ -38,8 +38,8 @@ segments::test_segment() {
   SEGMENTS_TEST_SEGMENT_COLOR_SPLITTER=2
   SEGMENTS_TEST_SEGMENT_MAX_LENGTH=3
 
-  echo "true" > "${SBP_CONFIG}/segments/test_segment.bash"
-  mapfile -t result <<< "$(execute::execute_prompt_segment 'test_segment' 'left')"
+  echo "true" >"${SBP_CONFIG}/segments/test_segment.bash"
+  mapfile -t result <<<"$(execute::execute_prompt_segment 'test_segment' 'left')"
   assert_equal "${result[0]}" '0'
   assert_equal "${result[1]}" '1'
   assert_equal "${result[2]}" '2'

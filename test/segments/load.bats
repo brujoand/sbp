@@ -3,7 +3,7 @@
 load segment_helper
 
 setup() {
-  cd "$TMP_DIR"
+  cd "$TMP_DIR" || exit 1
 }
 
 @test "that we can get cpu_cores" {
@@ -27,7 +27,7 @@ setup() {
     echo 4
   }
 
-  mapfile -t result <<< "$(execute_segment)"
+  mapfile -t result <<<"$(execute_segment)"
 
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'

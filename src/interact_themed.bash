@@ -9,7 +9,6 @@ source "${SBP_PATH}/src/execute.bash"
 # shellcheck source=src/debug.bash
 source "${SBP_PATH}/src/debug.bash"
 
-
 configure::load_config
 
 list_config() {
@@ -35,6 +34,7 @@ list_segments() {
 
     debug::start_timer
     (execute::execute_prompt_segment "$segment_name" &>/dev/null)
+    # shellcheck disable=SC2119
     duration=$(debug::tick_timer 2>&1 | tr -d ':')
 
     echo "${segment_name}: ${status}" "$duration"

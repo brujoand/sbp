@@ -4,7 +4,7 @@ load segment_helper
 
 setup() {
   export KUBE_CONFIG="${TMP_DIR}/config"
-  cat << EOF > "$KUBE_CONFIG"
+  cat <<EOF >"$KUBE_CONFIG"
   current-context: project/k8s:443/sbp
   kind: Config
   preferences: {}
@@ -22,7 +22,7 @@ EOF
 }
 
 @test "test normal config k8s segment" {
-  mapfile -t result <<< "$(execute_segment)"
+  mapfile -t result <<<"$(execute_segment)"
 
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'

@@ -5,9 +5,12 @@ format=${SEGMENTS_WTTR_FORMAT:-'%p;%t;%w'}
 refresh_rate="${SEGMENTS_WTTR_REFRESH_RATE:-600}"
 
 segments::wttr_fetch_changes() {
-  web=$(curl -s \
-    -H "Accept-Language: ${LANG%_*}" \
-    --compressed "wttr.in/${location}?format=${format}"; exit $?)
+  web=$(
+    curl -s \
+      -H "Accept-Language: ${LANG%_*}" \
+      --compressed "wttr.in/${location}?format=${format}"
+    exit $?
+  )
   rtn_code=$?
 
   debug::log "wttr fetch return code $rtn_code"

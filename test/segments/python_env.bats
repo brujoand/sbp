@@ -3,12 +3,12 @@
 load segment_helper
 
 setup() {
-  cd "$TMP_DIR"
+  cd "$TMP_DIR" || exit 1
 }
 
 @test "test a variable based python_env segment" {
   VIRTUAL_ENV='3.5'
-  mapfile -t result <<< "$(execute_segment)"
+  mapfile -t result <<<"$(execute_segment)"
 
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'
@@ -17,8 +17,8 @@ setup() {
 
 @test "test a file based python_env segment" {
   version='3.5'
-  echo "$version" > .python-version
-  mapfile -t result <<< "$(execute_segment)"
+  echo "$version" >.python-version
+  mapfile -t result <<<"$(execute_segment)"
 
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'
