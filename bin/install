@@ -3,7 +3,7 @@
 base_path=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 bashrc_path="$HOME"/.bashrc
 
-if ! grep -qE '^SBP_PATH=*' "$bashrc_path"; then
+if [[ -z $SBP_PATH ]]; then
   echo "SBP: adding sbp_path=${base_path} to ~/.bashrc"
   echo "SBP_PATH=${base_path}" >>"$bashrc_path"
 else
@@ -11,7 +11,7 @@ else
   echo "SBP: sbp_path has already been set to '$SBP_PATH'"
 fi
 
-if ! grep -qE "^(source|.) ${base_path}" "$bashrc_path"; then
+if [[ -z $SBP_SOURCED ]]; then
   echo "SBP: adding 'source ${base_path}/sbp.bash' to ~/.bashrc"
   echo "source ${base_path}/sbp.bash" >>"$bashrc_path"
 else
