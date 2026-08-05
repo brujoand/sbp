@@ -48,6 +48,21 @@ truncation/compacting for that specific segment.
   shows the git branch and current status, set ´SEGMENTS_GIT_BRANCH_ONLY=true´
   to speed up execution on large repos. The default value is ´false´.
 
+  Enother option to speed up execution is to use gitstatus as a backend.
+  Install gitstatus and then add the following to your .bashrc_:
+
+  ```
+  if [[ -n ${GITSTATUS_DIR:-} ]]; then
+    source "$GITSTATUS_DIR" || return
+  elif [[ ${BASH_SOURCE[0]} == */* ]]; then
+    source "${BASH_SOURCE[0]%/*}/gitstatus.plugin.sh" || return
+  else
+    source gitstatus.plugin.sh || return
+  fi
+
+  gitstatus_stop && gitstatus_start -s -1 -u -1 -c -1 -d -1
+  ```
+
 ## host
   shows the ${USER} and ${HOSTNAME} if you are logged in through ssh
 
