@@ -41,9 +41,9 @@ segments::load() {
   load_avg=${load_avg##+(0)}
   load_avg=$((load_avg / cpu_count))
 
-  if [[ $load_avg -gt $SEGMENTS_LOAD_THRESHOLD_HIGH ]]; then
+  if [[ $load_avg -ge ${SEGMENTS_LOAD_THRESHOLD_HIGH} ]]; then
     print_themed_segment 'highlight' "$load_avg"
-  elif [[ $load_avg -gt $SEGMENTS_LOAD_THRESHOLD ]]; then
+  elif [[ $load_avg -ge ${SEGMENTS_LOAD_THRESHOLD} ]]; then
     print_themed_segment 'normal' "$load_avg"
   fi
 }

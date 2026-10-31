@@ -15,11 +15,11 @@ setup() {
   git commit -am "inital commit" &>/dev/null
 }
 
-@test "test a clean master" {
+@test "test a clean repository" {
   mapfile -t result <<<"$(execute_segment)"
   assert_equal "${#result[@]}" 2
   assert_equal "${result[0]}" 'normal'
-  assert_equal "${result[1]}" 'master'
+  assert_equal "${result[1]}" 'main'
 }
 
 @test "test untracked git segment" {
@@ -28,7 +28,7 @@ setup() {
   assert_equal "${#result[@]}" 3
   assert_equal "${result[0]}" 'normal'
   assert_equal "${result[1]}" '?3'
-  assert_equal "${result[2]}" 'master'
+  assert_equal "${result[2]}" 'main'
 }
 
 @test "test commited git segment" {
@@ -40,7 +40,7 @@ setup() {
   assert_equal "${#result[@]}" 3
   assert_equal "${result[0]}" 'normal'
   assert_equal "${result[1]}" '+3'
-  assert_equal "${result[2]}" 'master'
+  assert_equal "${result[2]}" 'main'
 }
 
 @test "test we can use an icon with git segment" {
@@ -54,5 +54,5 @@ setup() {
   assert_equal "${result[0]}" 'normal'
   assert_equal "${result[1]}" '+3'
   assert_equal "${result[2]}" "$SEGMENTS_GIT_ICON"
-  assert_equal "${result[3]}" 'master'
+  assert_equal "${result[3]}" 'main'
 }

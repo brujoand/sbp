@@ -5,4 +5,9 @@ set -e
 SBP_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 export SBP_PATH
 
-bats "${SBP_PATH}/test/"
+test_paths=("${SBP_PATH}/test/")
+if [ $# -gt 0 ]; then
+  test_paths=("$@")
+fi
+
+bats --recursive "${test_paths[@]}"
