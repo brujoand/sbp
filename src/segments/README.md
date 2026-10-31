@@ -35,6 +35,13 @@ All segments should adhere to the SEGMENTS_MAX_LENGTH variable, but you can set
 SEGMENTS_${SEGMENT}_MAX_LENGTH to a specific value or -1 to disable
 truncation/compacting for that specific segment.
 
+## 1password
+  Shows a key when the 1Password CLI (`op`) is signed in, and the same key
+  highlighted when it is not. Hidden when `op` is not installed.
+
+  `op whoami` runs on every prompt, and the prompt waits for it. Override the icon
+  with `SEGMENTS_1PASSWORD_ICON`.
+
 ## aws
   Shows the current active aws profile
 
