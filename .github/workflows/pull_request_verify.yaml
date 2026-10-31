@@ -10,25 +10,41 @@ jobs:
   pr-lint:
     name: "Lint check"
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - name: "Execute shell linting"
-        uses: luizm/action-sh-checker@master
+        uses: luizm/action-sh-checker@v0.10.0
         env:
           SHFMT_OPTS: -i 2 -ci -s
 
   pr-test:
     name: "Pull request checks"
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: ${{ matrix.version == 'rc' }}
     strategy:
+      fail-fast: false
       matrix:
         version:
           - rc
-          - 5.0.17
+          - 5.3.20
           - 4.4.23
           - 4.3.48
     steps:
       - uses: actions/checkout@v4
       - name: "Execute unit tests"
         run: ./bin/ci_test_wrapper ${{ matrix.version }}
+        shell: bash
+
+  pr-test-macos:
+    name: "Pull request checks (macOS)"
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Install bash and bats"
+        run: brew install bash bats-core
+      - name: "Execute unit tests"
+        run: ./bin/run_tests
         shell: bash

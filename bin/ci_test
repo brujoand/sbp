@@ -2,7 +2,7 @@
 
 apk -U add git
 
-git clone https://github.com/bats-core/bats-core.git
+git clone --depth 1 --branch v1.14.0 https://github.com/bats-core/bats-core.git
 cd bats-core || exit 1
 ./install.sh /usr/local
 

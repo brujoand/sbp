@@ -117,8 +117,9 @@ pre-commit run --files <changed files>
 ## Gotchas
 
 - **Bash 4.3+ is the floor, and CI proves it.** `pull_request_verify.yaml` runs
-  the suite against bash `rc`, `5.0.17`, `4.4.23`, and `4.3.48` in Docker. Avoid
-  syntax that only exists in 4.4+ or 5.x.
+  the suite against bash `rc` (non-blocking), `5.3.20`, `4.4.23`, and `4.3.48` in
+  Docker, and on macOS with Homebrew's bash. Avoid syntax that only exists in 4.4+
+  or 5.x.
 - `bats` is not installed in the agent environment and the agent has no root, so
   `apt-get install bats` needs the human. Without it `bin/run_tests` cannot run.
 - `bin/run_tests` runs `bats test/`, which does not recurse, so it and CI skip
