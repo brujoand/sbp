@@ -35,6 +35,19 @@ All segments should adhere to the SEGMENTS_MAX_LENGTH variable, but you can set
 SEGMENTS_${SEGMENT}_MAX_LENGTH to a specific value or -1 to disable
 truncation/compacting for that specific segment.
 
+## 1password
+  Shows whether the 1Password CLI (`op`) is signed in, with the account name when
+  it is, and is highlighted when it is not. Hidden when `op` is not installed.
+
+  `op whoami` runs in the background every `SEGMENTS_1PASSWORD_REFRESH_RATE`
+  seconds (default: 60), so the prompt never waits for it. A sign-in or sign-out
+  therefore shows up late: the segment is empty on the first prompt of a shell,
+  and a change appears on the first prompt after the next check. The state is
+  kept per shell because `op` authorizes per terminal.
+
+  The segment shows the account and no vault, because `op` has no active vault:
+  each command chooses its own. Override the icon with `SEGMENTS_1PASSWORD_ICON`.
+
 ## aws
   Shows the current active aws profile
 
