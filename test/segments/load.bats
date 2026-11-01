@@ -18,7 +18,10 @@ setup() {
   [[ -n $result ]]
 }
 
-@test "test a file based python_env segment" {
+@test "test a load between the thresholds" {
+  SEGMENTS_LOAD_THRESHOLD=1
+  SEGMENTS_LOAD_THRESHOLD_HIGH=80
+
   segments::load_get_load_avg() {
     echo 0.25
   }

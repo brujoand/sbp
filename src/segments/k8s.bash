@@ -3,16 +3,37 @@
 
 segments::k8s() {
   [[ -f $KUBECONFIG ]] || return 0
-  context="$(sed -n 's/.*current-context: \(.*\)/\1/p' "$KUBECONFIG")"
+
+  local line context='' namespace='default' entry_name='' entry_namespace=''
+  local -a lines
+  mapfile -t lines <"$KUBECONFIG"
+
+  for line in "${lines[@]}"; do
+    if [[ $line =~ ^[[:space:]]*current-context:[[:space:]]*(.*)$ ]]; then
+      context=${BASH_REMATCH[1]}
+      break
+    fi
+  done
   [[ -z $context ]] && return 0
-  namespace="$(grep -Pzo "(?s)\n\-\s*context:\n(\s+\w[^\n]*\n)*\s*name: ${context}" "${KUBECONFIG}" | tr '\0' '\n' | sed -n 's/ *namespace: \(\w*\)/\1/p')"
-  if [[ -z $namespace ]]; then
-    namespace='default'
-  fi
+
+  for line in "${lines[@]}"; do
+    [[ $line =~ ^[[:space:]]*-[[:space:]] ]] && entry_name='' entry_namespace=''
+
+    if [[ $line =~ ^[-[:space:]]*name:[[:space:]]*(.*)$ ]]; then
+      entry_name=${BASH_REMATCH[1]}
+    elif [[ $line =~ ^[[:space:]]*namespace:[[:space:]]*(.*)$ ]]; then
+      entry_namespace=${BASH_REMATCH[1]}
+    fi
+
+    if [[ $entry_name == "$context" && -n $entry_namespace ]]; then
+      namespace=$entry_namespace
+      break
+    fi
+  done
 
   local segment_icon_char="${SEGMENTS_K8S_ICON:-⎈}"
 
-  if [[ -z $namespace || $SEGMENTS_K8S_HIDE_CLUSTER -eq 1 ]]; then
+  if [[ $SEGMENTS_K8S_HIDE_CLUSTER -eq 1 ]]; then
     segment="${segment_icon_char} ${context}"
   else
     segment="${segment_icon_char} ${context}/${namespace}"

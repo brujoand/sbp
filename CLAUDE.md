@@ -48,7 +48,7 @@ config. These rules cover the render path: `_sbp_set_prompt`, `src/main.bash`,
 | `which x` | `command -v x` |
 | `v=$(internal_fn)` | a nameref out-parameter |
 
-`k8s`, `timestamp` and `terraform` fork on every render: do not copy them. `aws`
+`timestamp` and `terraform` fork on every render: do not copy them. `aws`
 is the model for a segment that reads the environment, and `wttr` for a cached
 background refresh, apart from its `stat` call.
 
@@ -106,7 +106,7 @@ Default branch is `master`. There is no mise here — `pre-commit` expects
 ## Commands
 
 ```bash
-bin/run_tests                    # sets SBP_PATH, runs `bats test/`
+bin/run_tests                    # sets SBP_PATH, runs `bats --recursive test/`
 bats test/segments/git.bats      # single file
 bats -f "<pattern>" test/        # single case
 bin/ci_test_wrapper <bash-version>   # matrix test in Docker
@@ -122,8 +122,6 @@ pre-commit run --files <changed files>
   or 5.x.
 - `bats` is not installed in the agent environment and the agent has no root, so
   `apt-get install bats` needs the human. Without it `bin/run_tests` cannot run.
-- `bin/run_tests` runs `bats test/`, which does not recurse, so it and CI skip
-  `test/segments/` and `test/hooks/`. Use `bats --recursive test/`.
 - `bin/install` appends `SBP_PATH` and a source line to `~/.bashrc`.
 - The README's build badge still points at Travis; the real CI is GitHub Actions.
 - shellcheck runs with `-e SC1091 -e SC2034 -e SC1090 -e SC2030 -e SC2031`;
