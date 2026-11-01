@@ -24,10 +24,23 @@ source "${SBP_PATH}/src/interact.bash"
 # shellcheck source=src/debug.bash
 source "${SBP_PATH}/src/debug.bash"
 
-if [[ -w "/run/user/${UID}" ]]; then
-  SBP_TMP=$(mktemp -d --tmpdir="/run/user/${UID}") && trap 'command rm -rf "$SBP_TMP"' EXIT
-else
-  SBP_TMP=$(mktemp -d) && trap 'command rm -rf "$SBP_TMP"' EXIT
+_sbp_clean_tmp_on_exit() {
+  local existing_trap
+  local -a trap_words
+  existing_trap=$(trap -p EXIT)
+  # Parses as: trap -- 'command' EXIT
+  eval "trap_words=(${existing_trap})"
+  # shellcheck disable=SC2064
+  trap "${trap_words[2]:+${trap_words[2]}$'\n'}command rm -rf \"\$SBP_TMP\"" EXIT
+}
+
+# `sbp reload` sources this file again: keep its temp dir and its trap.
+if [[ -z ${SBP_SOURCED-} ]]; then
+  if [[ -w "/run/user/${UID}" ]]; then
+    SBP_TMP=$(mktemp -d --tmpdir="/run/user/${UID}") && _sbp_clean_tmp_on_exit
+  else
+    SBP_TMP=$(mktemp -d) && _sbp_clean_tmp_on_exit
+  fi
 fi
 
 export SBP_TMP

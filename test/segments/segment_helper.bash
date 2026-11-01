@@ -29,4 +29,8 @@ print_themed_segment() {
 
 export -f print_themed_segment
 
+_sbp_get_current_time() {
+  printf -v "$1" '%(%s)T' -1
+}
+
 source_segment

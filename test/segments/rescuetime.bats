@@ -38,3 +38,13 @@ EOF
   [[ -f $SEGMENT_CACHE ]]
 
 }
+
+@test "test that a stale rescuetime cache is refreshed" {
+  SEGMENT_CACHE="${TMP_DIR}/rescuetime"
+  echo 'stale;stale' >"$SEGMENT_CACHE"
+  touch -t 202001010000 "$SEGMENT_CACHE"
+
+  segments::rescuetime_refresh
+
+  assert_equal "$(<"$SEGMENT_CACHE")" '74%;3h:40m'
+}
