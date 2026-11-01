@@ -11,6 +11,12 @@ setup() {
   [[ $output == *"user trap 3"* ]]
 }
 
+@test "test that sourcing sbp removes its setup helper" {
+  run bash --norc -ic 'source "$SBP_PATH/sbp.bash"; declare -F _sbp_clean_tmp_on_exit || echo "helper removed"'
+
+  [[ $output == *"helper removed"* ]]
+}
+
 @test "test that the temp folder is removed on exit" {
   run bash --norc -ic 'source "$SBP_PATH/sbp.bash"; echo "tmp=$SBP_TMP"'
 

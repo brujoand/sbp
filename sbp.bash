@@ -42,6 +42,7 @@ if [[ -z ${SBP_SOURCED-} ]]; then
     SBP_TMP=$(mktemp -d) && _sbp_clean_tmp_on_exit
   fi
 fi
+unset -f _sbp_clean_tmp_on_exit
 
 export SBP_TMP
 export SBP_PATH

@@ -1,5 +1,6 @@
 _sbp_themed_helper="${SBP_PATH}/src/interact_themed.bash"
-SBP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/sbp"
+# shellcheck source=src/paths.bash
+source "${SBP_PATH}/src/paths.bash"
 
 _sbp_print_usage() {
   cat <<EOF
