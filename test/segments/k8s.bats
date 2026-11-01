@@ -80,6 +80,16 @@ use_context() {
   assert_equal "${result[1]}" '⎈ no-namespace/default'
 }
 
+@test "test that only the k8s namespace value is shown" {
+  local value
+  for value in 'my-ns # a comment' '"my-ns"' "'my-ns'" $'my-ns\r' 'my-ns   '; do
+    printf 'contexts:\n- context:\n    namespace: %s\n  name: prod\ncurrent-context: prod\n' "$value" >"$KUBECONFIG"
+    mapfile -t result <<<"$(execute_segment)"
+
+    assert_equal "${result[1]}" '⎈ prod/my-ns'
+  done
+}
+
 @test "test hiding the k8s namespace" {
   SEGMENTS_K8S_HIDE_CLUSTER=1
   mapfile -t result <<<"$(execute_segment)"

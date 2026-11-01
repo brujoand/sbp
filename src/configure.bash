@@ -1,6 +1,7 @@
 #! /usr/bin/env bash
 
-SBP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/sbp"
+# shellcheck source=src/paths.bash
+source "${SBP_PATH}/src/paths.bash"
 [[ -d ${SBP_CONFIG} ]] || mkdir -p "${SBP_CONFIG}"
 config_file="${SBP_CONFIG}/settings.conf"
 colors_file="${SBP_CONFIG}/colors.conf"

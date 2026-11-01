@@ -38,12 +38,12 @@ config. These rules cover the render path: `_sbp_set_prompt`, `src/main.bash`,
 
 | Instead of | Use |
 | --- | --- |
-| `v=$(cat f)` | `read -r v <f` or `mapfile -t a <f` |
+| `v=$(cat f)` | `IFS= read -r v <f` for the first line, `mapfile -t a <f` for all of them |
 | `$(date +%s)` | `_sbp_get_current_time v` |
 | `$(date +fmt)` | `printf -v v '%(fmt)T' -1` |
-| `basename`, `dirname`, `sed s///` | `${p##*/}`, `${p%/*}`, `${v//a/b}` |
+| `basename`, `dirname`, `sed s///` | `${p##*/}`, `${p%/*}`, `${v/a/b}` (`${v//a/b}` for `s///g`) |
 | `grep`, `awk`, `cut` on a value | `[[ $v =~ re ]]` with `BASH_REMATCH`, `IFS=: read -r` |
-| `tr`, `wc -l` | `${v^^}`, `${v,,}`, `${#a[@]}` |
+| `tr`, `wc -l` | `${v^^}`, `${v,,}`, `${#a[@]}` on an array from `mapfile` |
 | `stat` for cache age | an epoch stored in a file, read with `read` |
 | `which x` | `command -v x` |
 | `v=$(internal_fn)` | a nameref out-parameter |
@@ -82,7 +82,7 @@ background refresh, apart from its `stat` call.
   per shell or terminal belongs in `$SBP_TMP`.
 - **Register a segment** in four places: default colors in `config/colors.conf`
   (`SEGMENTS_<NAME>_COLOR_PRIMARY`, `_SECONDARY`, and `_HIGHLIGHT` variants if it
-  highlights), settings in `config/settings.conf` and its template, docs in
+  highlights), any settings in `config/settings.conf` and its template, docs in
   `src/segments/README.md`, and tests in `test/segments/<name>.bats`.
 
 ## Workflow
@@ -95,7 +95,8 @@ Default branch is `master`. There is no mise here — `pre-commit` expects
 
 `sbp.bash` is the entrypoint. Under `src/`:
 
-- `main.bash`, `configure.bash`, `execute.bash`, `decorate.bash`, `debug.bash`
+- `main.bash`, `configure.bash`, `execute.bash`, `decorate.bash`, `debug.bash`,
+  `paths.bash`
 - `interact.bash` / `interact_themed.bash` — the `sbp` subcommands
   (`sbp edit config`, `sbp reload`, `sbp status`, `sbp list`)
 - `segments/` — one file per prompt segment; `layouts/`, `colors/`, `hooks/`

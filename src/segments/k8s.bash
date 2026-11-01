@@ -5,6 +5,7 @@ segments::k8s() {
   [[ -f $KUBECONFIG ]] || return 0
 
   local line context='' namespace='default' entry_name='' entry_namespace=''
+  local namespace_re='^[[:space:]]*namespace:[[:space:]]*["'\'']?([^[:space:]#"'\'']*)'
   local -a lines
   mapfile -t lines <"$KUBECONFIG"
 
@@ -21,7 +22,7 @@ segments::k8s() {
 
     if [[ $line =~ ^[-[:space:]]*name:[[:space:]]*(.*)$ ]]; then
       entry_name=${BASH_REMATCH[1]}
-    elif [[ $line =~ ^[[:space:]]*namespace:[[:space:]]*(.*)$ ]]; then
+    elif [[ $line =~ $namespace_re ]]; then
       entry_namespace=${BASH_REMATCH[1]}
     fi
 
