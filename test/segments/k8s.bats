@@ -4,6 +4,7 @@ load segment_helper
 
 setup() {
   export KUBECONFIG="${TMP_DIR}/config"
+  export SEGMENTS_MAX_LENGTH=99
   cat <<EOF >"$KUBECONFIG"
 apiVersion: v1
 clusters:
@@ -95,4 +96,13 @@ use_context() {
   mapfile -t result <<<"$(execute_segment)"
 
   assert_equal "${result[1]}" '⎈ prod'
+}
+
+@test "test shortened segment" {
+  export SEGMENTS_MAX_LENGTH=15
+  mapfile -t result <<<"$(execute_segment)"
+
+  assert_equal "${#result[@]}" 2
+  assert_equal "${result[0]}" 'normal'
+  assert_equal "${result[1]}" '⎈ prod/my-nam..' # 15 characters
 }
