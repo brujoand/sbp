@@ -32,12 +32,16 @@ segments::k8s() {
     fi
   done
 
+  local max_length="${SEGMENTS_MAX_LENGTH}"
   local segment_icon_char="${SEGMENTS_K8S_ICON:-⎈}"
 
-  if [[ $SEGMENTS_K8S_HIDE_CLUSTER -eq 1 ]]; then
-    segment="${segment_icon_char} ${context}"
-  else
-    segment="${segment_icon_char} ${context}/${namespace}"
+  segment="${segment_icon_char} ${context}"
+  if [[ -n ${namespace} && ${SEGMENTS_K8S_HIDE_CLUSTER} -ne 1 ]]; then
+    segment="${segment}/${namespace}"
+  fi
+
+  if [[ ${#segment} -gt ${max_length} && ${max_length} -ne -1 ]]; then
+    segment="${segment:0:$((max_length - 2))}.."
   fi
 
   print_themed_segment 'normal' "${segment,,}"
