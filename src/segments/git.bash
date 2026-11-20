@@ -10,7 +10,7 @@ segments::git() {
 
   local path=${PWD}
   while [[ $path ]]; do
-    if [[ -d "${path}/.git" ]]; then
+    if [[ -e "${path}/.git" ]]; then
       local git_folder="${path}/.git"
       break
     fi
